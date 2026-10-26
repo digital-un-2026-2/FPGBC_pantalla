@@ -1,0 +1,84 @@
+[*] FSM LPDT; datapath modelado; temporizador ascendente 0..3 a 40 MHz.
+[dumpfile] "../build/motor_control_TB.vcd"
+[timestart] 0
+[size] 1500 1000
+*-9.000000 0
+[treeopen] motor_control_TB.
+[treeopen] motor_control_TB.dut.
+[signals_width] 330
+[sst_width] 250
+[sst_expanded] 1
+@28
+motor_control_TB.clk
+motor_control_TB.rst
+@800200
+-SOLICITUD Y ESTADO
+@28
+motor_control_TB.solicitud
+motor_control_TB.permiso_arranque
+motor_control_TB.dut.ready
+motor_control_TB.dut.A
+motor_control_TB.aceptado
+motor_control_TB.ocupado
+motor_control_TB.terminado
+@24
+motor_control_TB.dut.state[3:0]
+@820
+motor_control_TB.dut.state_name[320:1]
+@1000200
+-SOLICITUD Y ESTADO
+@800200
+-TIEMPO - carga 0, incrementar hasta 3
+@28
+motor_control_TB.ld_t
+motor_control_TB.inc_t
+@24
+motor_control_TB.tiempo[1:0]
+@28
+motor_control_TB.z_t
+@1000200
+-TIEMPO - carga 0, incrementar hasta 3
+@800200
+-BYTES - selector y paquete
+@24
+motor_control_TB.cantidad_bytes[2:0]
+motor_control_TB.longitud[2:0]
+motor_control_TB.idx[2:0]
+motor_control_TB.pos[2:0]
+@28
+motor_control_TB.ld_len
+motor_control_TB.rst_byte
+motor_control_TB.inc_byte
+motor_control_TB.z_byte
+motor_control_TB.dut.enviando_selector
+motor_control_TB.sel_87
+motor_control_TB.ld_byte
+@22
+motor_control_TB.byte_actual[7:0]
+motor_control_TB.byte_decodificado[7:0]
+@1000200
+-BYTES - selector y paquete
+@800200
+-BITS Y FIN RETENIDO
+@24
+motor_control_TB.indice_bit[2:0]
+@28
+motor_control_TB.rst_bit
+motor_control_TB.inc_bit
+motor_control_TB.z_bit
+motor_control_TB.dut.fin_paquete
+motor_control_TB.dut.salida_pendiente
+@1000200
+-BITS Y FIN RETENIDO
+@800200
+-SALIDA LP - PN [1]=P [0]=N
+@28
+motor_control_TB.sel_fijo
+motor_control_TB.lp_fijo[1:0]
+motor_control_TB.ld_lp
+motor_control_TB.estado_D0[1:0]
+motor_control_TB.lp_esperado[1:0]
+@1000200
+-SALIDA LP - PN [1]=P [0]=N
+[pattern_trace] 1
+[pattern_trace] 0

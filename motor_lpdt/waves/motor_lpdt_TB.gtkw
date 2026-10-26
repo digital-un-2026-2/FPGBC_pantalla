@@ -1,0 +1,71 @@
+[*] Motor LPDT integrado: FSM posedge, datapath negedge, memoria sincrona.
+[dumpfile] "../build/motor_lpdt_TB.vcd"
+[timestart] 0
+[size] 1500 1000
+*-9.000000 0
+[treeopen] motor_lpdt_TB.
+[treeopen] motor_lpdt_TB.dut.
+[signals_width] 330
+[sst_width] 250
+[sst_expanded] 1
+@28
+motor_lpdt_TB.clk
+motor_lpdt_TB.rst
+@800200
+-CONTROL
+@820
+motor_lpdt_TB.dut.ctrl.state_name[320:1]
+@28
+motor_lpdt_TB.solicitud
+motor_lpdt_TB.permiso_arranque
+motor_lpdt_TB.aceptado
+motor_lpdt_TB.ocupado
+motor_lpdt_TB.terminado
+@1000200
+-CONTROL
+@800200
+-TIEMPO
+@28
+motor_lpdt_TB.dut.w_rst_tiempo
+motor_lpdt_TB.dut.w_inc_tiempo
+@24
+motor_lpdt_TB.dut.tiempo_out[1:0]
+@28
+motor_lpdt_TB.dut.w_z_t
+@1000200
+-TIEMPO
+@800200
+-ALMACEN Y BYTES
+@24
+motor_lpdt_TB.cantidad_bytes[2:0]
+motor_lpdt_TB.dut.w_longitud_out[2:0]
+motor_lpdt_TB.dut.w_indice_byte[2:0]
+motor_lpdt_TB.pos[2:0]
+@22
+motor_lpdt_TB.byte_almacen[7:0]
+motor_lpdt_TB.dut.w_byte_actual[7:0]
+motor_lpdt_TB.byte_decodificado[7:0]
+@28
+motor_lpdt_TB.dut.w_sel_87
+motor_lpdt_TB.dut.w_ld_byte_actual
+motor_lpdt_TB.dut.w_inc_indice_byte
+motor_lpdt_TB.dut.w_z_byte
+@1000200
+-ALMACEN Y BYTES
+@800200
+-BITS Y SALIDA LP
+@24
+motor_lpdt_TB.dut.w_sel_bit_contador[2:0]
+@28
+motor_lpdt_TB.dut.w_z_bit
+motor_lpdt_TB.dut.ctrl.salida_pendiente
+motor_lpdt_TB.dut.w_mux_bit_out
+motor_lpdt_TB.dut.w_sel_fijo
+motor_lpdt_TB.dut.w_lp_fijo[1:0]
+motor_lpdt_TB.dut.w_ld_estado_D0
+motor_lpdt_TB.estado_D0[1:0]
+motor_lpdt_TB.lp_esperado[1:0]
+@1000200
+-BITS Y SALIDA LP
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,7 @@
+# Configuración local del editor y temporales de diagrams.net.
+/.nvim/
+.*.drawio.dtmp
+
+# Archivos de trabajo locales, no destinados a GitHub.
+/AGENTS.md
+/ejemplo.drawio

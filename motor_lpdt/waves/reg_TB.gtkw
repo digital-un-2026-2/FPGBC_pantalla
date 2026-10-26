@@ -1,0 +1,52 @@
+[*] Registro con habilitacion, captura en negedge, reloj de 40 MHz.
+[dumpfile] "../build/reg_TB.vcd"
+[timestart] 0
+[size] 1400 900
+*-19.000000 0
+[treeopen] reg_TB.
+[signals_width] 330
+[sst_width] 250
+[sst_expanded] 1
+@28
+reg_TB.clk
+@800200
+-BYTE - selector LPDT / paquete DSI (hex)
+@28
+reg_TB.byte_register.ld
+@22
+reg_TB.byte_in[7:0]
+reg_TB.byte_out[7:0]
+reg_TB.expected_byte[7:0]
+@1000200
+-BYTE - selector LPDT / paquete DSI (hex)
+@800200
+-WC - longitud payload (hex)
+@28
+reg_TB.wc_register.ld
+@22
+reg_TB.wc_in[15:0]
+reg_TB.wc_out[15:0]
+reg_TB.expected_wc[15:0]
+@1000200
+-WC - longitud payload (hex)
+@800200
+-LONGITUD - paquete inicial (decimal)
+@28
+reg_TB.length_register.ld
+@24
+reg_TB.length_in[2:0]
+reg_TB.length_out[2:0]
+reg_TB.expected_length[2:0]
+@1000200
+-LONGITUD - paquete inicial (decimal)
+@800200
+-FLAG - registro de un bit
+@28
+reg_TB.flag_register.ld
+reg_TB.flag_in
+reg_TB.flag_out
+reg_TB.expected_flag
+@1000200
+-FLAG - registro de un bit
+[pattern_trace] 1
+[pattern_trace] 0

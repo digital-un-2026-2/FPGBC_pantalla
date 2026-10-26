@@ -1,0 +1,46 @@
+[*] Vista del test de los tres contadores LPDT, reloj de 40 MHz.
+[dumpfile] "../build/count_TB.vcd"
+[timestart] 0
+[size] 1400 900
+*-19.000000 0
+[treeopen] count_TB.
+[signals_width] 330
+[sst_width] 250
+[sst_expanded] 1
+@28
+count_TB.clk
+@800200
+-TIEMPO - 4 periodos / 100 ns
+@28
+count_TB.time_counter.rst
+count_TB.time_counter.inc
+@24
+count_TB.time_counter.count_out[2:0]
+@28
+count_TB.time_comp.z
+@1000200
+-TIEMPO - 4 periodos / 100 ns
+@800200
+-BIT - indice 0 a 7
+@28
+count_TB.bit_counter.rst
+count_TB.bit_counter.inc
+@24
+count_TB.bit_counter.count_out[2:0]
+@28
+count_TB.bit_comp.z
+@1000200
+-BIT - indice 0 a 7
+@800200
+-BYTE DSI - indice 0 a 3 (sin selector 87)
+@28
+count_TB.byte_counter.rst
+count_TB.byte_counter.inc
+@24
+count_TB.byte_counter.count_out[1:0]
+@28
+count_TB.byte_comp.z
+@1000200
+-BYTE DSI - indice 0 a 3 (sin selector 87)
+[pattern_trace] 1
+[pattern_trace] 0
