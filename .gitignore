@@ -5,3 +5,6 @@
 # Archivos de trabajo locales, no destinados a GitHub.
 /AGENTS.md
 /ejemplo.drawio
+
+# Entorno local de Pixi (el manifiesto y el lock sí se versionan).
+/.pixi/

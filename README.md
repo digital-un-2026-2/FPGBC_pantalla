@@ -17,6 +17,23 @@ Una simulación correcta no demuestra conformidad D-PHY ni recepción del panel.
 
 ## Inicio rápido
 
+### Entorno con Pixi (Linux x86_64)
+
+Instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:
+
+```sh
+pixi install --locked
+pixi run test                    # Todas las pruebas del motor LPDT
+pixi run sim                     # Prueba integrada y GTKWave
+```
+
+`pixi.toml` y `pixi.lock` definen el entorno reproducible con Make, Icarus
+Verilog y GTKWave. La primera instalación necesita Internet. Para trabajar
+directamente con estas herramientas, entra con `pixi shell` y sal con `exit`.
+El entorno local `.pixi/` no se versiona. No se requiere conectar la FPGA.
+
+### Alternativa con herramientas del sistema
+
 Necesitas `make` e Icarus Verilog (`iverilog`, `vvp`); para ver ondas, `gtkwave`.
 Desde la raíz:
 
