@@ -4,6 +4,9 @@
 
 ## Capas distintas
 
+Introducción y términos: [arquitectura explicada](../../docs/arquitectura.md).
+Este documento detalla el transporte, no el procedimiento de carga en FPGA.
+
 | Especificación | Responsabilidad |
 |---|---|
 | DCS | Significado de comandos: reset, sleep, display on, etc. |
@@ -21,8 +24,10 @@ Convención: `lp[1] = P`, `lp[0] = N`. LP-11 es reposo; LP-10 y LP-01 son
 Mark-1 y Mark-0 según contexto; LP-00 es Space. Son estados lógicos, no una
 autorización para aplicar tensiones arbitrarias.
 
-En esta etapa D0 transporta el comando, CLK/D1 permanecen en LP-11 y los drivers
-HS no conducen. Esa preparación es externa al motor RTL actual.
+Para una futura transmisión al panel por esta vía, D0 transportará el comando,
+CLK/D1 deberán permanecer en LP-11 y los drivers HS no deberán conducir. Esa
+preparación es externa al motor RTL actual. El target LiteX de depuración
+mantiene D0 interno: no implementa todavía esa conexión ni sus drivers.
 
 ```text
 Reposo LP-11
@@ -73,7 +78,7 @@ Son parámetros iniciales, **no certificación de conformidad**.
 | Mark de cada bit | 100 ns | 4 | Motor |
 | Space de cada bit | 100 ns | 4 | Motor |
 | Mark-1 de salida | 100 ns | 4 | Motor |
-| Reposo inicial propuesto | 200 µs | 8000 | Supervisor pendiente |
+| Reposo inicial propuesto | 200 µs | 8000 | Futuro supervisor del panel, no el supervisor CSR actual |
 
 Mark + Space = 200 ns por bit: **5 Mbit/s**, 1,6 µs por byte.
 Para el vector inicial: entrada 0,4 µs + cinco bytes 8 µs + salida 0,1 µs =

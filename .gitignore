@@ -1,6 +1,7 @@
 # Configuración local del editor y temporales de diagrams.net.
 /.nvim/
 .*.drawio.dtmp
+/book_oct27_2026.pdf
 
 # Archivos de trabajo locales, no destinados a GitHub.
 /AGENTS.md
@@ -8,3 +9,14 @@
 
 # Entorno local de Pixi (el manifiesto y el lock sí se versionan).
 /.pixi/
+/.toolchain/
+
+# Productos de LiteX, simulaciones y pruebas de entorno.
+/build/
+/build_test/
+/eda_test.log
+*.vcd
+
+# Cachés de Python; las fuentes y configuraciones sí se versionan.
+__pycache__/
+*.py[cod]
