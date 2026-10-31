@@ -22,4 +22,4 @@ pixi run python -m gateware.targets.debug
 
 El wrapper necesita las fuentes de `motor_lpdt/src/`, añadidas explícitamente
 por el target. Para su contrato, consultar [el motor](../../motor_lpdt/README.md).
-Las simulaciones actuales no cubren por completo el supervisor CSR.
+Las simulaciones del motor no cubren el supervisor CSR ni la integración LiteX.

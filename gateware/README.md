@@ -11,7 +11,6 @@ genera hardware; no necesita una CPU ejecutándolo dentro de la FPGA.
 | [cores/](cores/README.md) | Bloques: wrapper del motor, supervisor y registros de diagnóstico |
 | [platforms/](platforms/README.md) | Modelo de FPGA, reloj y asignación física de pines |
 | [targets/](targets/README.md) | Diseños completos que reúnen los bloques |
-| [sim/](sim/README.md) | Exportadores y testbenches del reset y del wrapper |
 
 Desde la raíz, dentro de `pixi shell`:
 

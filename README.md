@@ -58,7 +58,7 @@ El [índice de documentación](docs/README.md) reúne las referencias detalladas
 | Carpeta | Para qué sirve |
 |---|---|
 | [motor_lpdt/](motor_lpdt/README.md) | Motor Verilog original, contrato de interfaz y pruebas |
-| [gateware/](gateware/README.md) | Integración LiteX, plataforma FPGBC y simulaciones del wrapper |
+| [gateware/](gateware/README.md) | Integración LiteX y plataforma FPGBC |
 | [scripts/](scripts/README.md) | Herramientas de entorno y prueba interna desde el PC |
 | [test/](test/README.md) | Prueba experimental del entorno EDA; no es la regresión LPDT |
 | [docs/](docs/README.md) | Arquitectura, procedimientos y hardware |

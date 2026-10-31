@@ -81,15 +81,13 @@ Sin Pixi, con Make e Icarus instalados: `make -C motor_lpdt test-all`.
 **`make -C motor_lpdt test` ejecuta solo la integrada**, no las cinco.
 Cobertura y límites: [testbenches originales](../motor_lpdt/TB/README.md).
 
-## 3. Simular el reloj/reset y el wrapper LiteX
+## 3. Alcance de las simulaciones
 
-Son pruebas separadas de las anteriores. Los comandos completos están en
-[gateware/sim](../gateware/sim/README.md):
-
-- `crg_TB`: comprueba el reset de arranque.
-- `lpdt_TB`: comprueba una transacción a través del wrapper del motor.
-
-No comprueban el supervisor CSR completo ni el puente UARTWishbone.
+Las pruebas de `motor_lpdt/TB/` verifican el motor Verilog y sus auxiliares.
+No simulan la integración LiteX, el reset de arranque, el supervisor CSR ni el
+puente UARTWishbone. No hay actualmente una prueba automatizada de simulación
+para esa integración; las capturas internas en FPGA complementan las pruebas
+del motor, pero no sustituyen esa cobertura pendiente.
 
 ## 4. Generar el diseño y sintetizar
 
@@ -243,7 +241,6 @@ comandos sobre D-PHY. Las esperas reales y la secuencia del panel siguen pendien
 | Nivel | Qué demuestra | Qué no demuestra |
 |---|---|---|
 | Testbenches originales | Comportamiento lógico del RTL en los casos cubiertos | Circuito colocado o señales eléctricas |
-| Simulación del wrapper | Reset de arranque y una transacción integrada | Supervisor CSR completo o UART |
 | Build e informes revisados | Implementación y timing de esa configuración | Compatibilidad eléctrica del panel |
 | Captura interna correcta | Estados y datos muestreados dentro de la FPGA | Recepción, ejecución DCS o imagen visible |
 

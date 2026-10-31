@@ -114,9 +114,9 @@ El RTL usa posedge y negedge: revisar los caminos de medio ciclo a 40 MHz
 (12,5 ns) en los informes nuevos, no reutilizar el resultado del target anterior.
 Comprobar también los caminos combinacionales del almacén hacia el motor.
 
-Hay exportadores y dos simulaciones en `gateware/sim/`: reset de arranque y
-wrapper con una transacción. No se incluyen en `pixi run test`, que ejecuta
-solo las cinco pruebas del RTL original. Tampoco cubren el supervisor CSR completo.
+`pixi run test` ejecuta solo las cinco pruebas del RTL original en
+`motor_lpdt/TB/`. No hay actualmente una simulación automatizada de la
+integración LiteX, incluido su reset de arranque, supervisor CSR y UARTWishbone.
 
 Durante la revisión documental se encontraron un bitstream, un informe de
 implementación y capturas locales, incluido un resumen `PASS` de la secuencia
