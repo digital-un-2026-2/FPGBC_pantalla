@@ -1,16 +1,41 @@
 [workspace]
 name = "fpgbc-pantalla"
 version = "0.1.0"
-description = "Entorno de desarrollo y simulación del motor LPDT"
+description = "Entorno de FPGA, LiteX y simulación del motor LPDT"
 channels = ["conda-forge", "litex-hub"]
 platforms = ["linux-64"]
+preview = ["pixi-build"]
+
+[activation.env]
+TOOLCHAIN_NAME = "xpack-riscv-none-elf-gcc-15.2.0-1"
+TOOLCHAIN_DIR = "$PIXI_PROJECT_ROOT/.toolchain/$TOOLCHAIN_NAME"
+PATH = "$TOOLCHAIN_DIR/bin:$PATH"
 
 [dependencies]
 make = "*"
 iverilog = "12.*"
 gtkwave = "*"
+python = "3.11.*"
+yosys = ">=0.7"
+openfpgaloader = ">=1.1.1"
+meson = ">=1.12.1,<2"
+ninja = ">=1.13.2,<2"
+
+[pypi-dependencies]
+migen = { git = "https://github.com/m-labs/migen.git", branch = "master" }
+litex = { git = "https://github.com/enjoy-digital/litex.git", branch = "master" }
+litex-boards = { git = "https://github.com/litex-hub/litex-boards.git", branch = "master" }
+litescope = { git = "https://github.com/enjoy-digital/litescope.git", branch = "master" }
+apycula = "*"
+yowasp-nextpnr-himbaechel-gowin = "*"
+litespi = { git = "https://github.com/litex-hub/litespi.git", branch = "master" }
+pythondata-software-picolibc = { git = "https://github.com/litex-hub/pythondata-software-picolibc.git", branch = "master" }
+pythondata-software-compiler_rt = { git = "https://github.com/litex-hub/pythondata-software-compiler_rt.git", branch = "master" }
+pythondata-cpu-vexriscv = { git = "https://github.com/litex-hub/pythondata-cpu-vexriscv.git", branch = "master" }
 
 [tasks]
+setup-env = "bash scripts/setup_env.sh"
+test-EDA = "bash test/env/eda_test.sh"
 test = "make -C motor_lpdt test-all"
 sim = "make -C motor_lpdt sim"
 wave = "make -C motor_lpdt wave"

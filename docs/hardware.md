@@ -1,13 +1,17 @@
 # Hardware y precauciones
 
-[Inicio](../README.md) · [LPDT](../motor_lpdt/docs/lpdt.md) · [Arquitectura](arquitectura.md)
+[Inicio](../README.md) · [Flujo de trabajo](flujo_de_trabajo.md) · [Arquitectura](arquitectura.md)
+
+Este documento reúne los datos físicos y las precauciones. El procedimiento de
+síntesis y carga está en el manual de trabajo. La confirmación del pinout por el
+responsable no equivale a una validación eléctrica completa de D-PHY.
 
 ## Datos disponibles
 
 | Elemento | Estado |
 |---|---|
 | Placa | FunnyPlaying FPGBC; revisión pendiente |
-| FPGA | Gowin GW2AR, EQ144 según el usuario; referencia y velocidad pendientes |
+| FPGA | Gowin GW2AR-LV18EQ144PC8/I7, referencia confirmada por el responsable |
 | Pantalla | LCD-49754 según el usuario; sufijo completo pendiente |
 | Enlace | Un par CLK y dos pares de datos: D0 y D1 |
 | Reloj de control | 40 MHz, periodo 25 ns; no es el reloj HS |
@@ -21,6 +25,31 @@ justificación para adoptar sus temporizaciones de vídeo.
 Se prevé DCS Software Reset: requiere un receptor DSI operativo y no garantiza
 recuperar cualquier fallo físico. Los seis conductores DSI no incluyen
 alimentación, tierra ni retroiluminación.
+
+## Conexiones de la integración de depuración
+
+Referencia y pinout confirmados por el responsable para `gateware/platforms/fpgbc.py`:
+
+| Recurso | Pin de FPGA | Declaración del target |
+|---|---:|---|
+| Reloj de control | 11 | 40 MHz, `LVCMOS33` |
+| UART RX | 28 | Entrada de recepción en la FPGA, `LVCMOS33` |
+| UART TX | 27 | Salida de transmisión de la FPGA, `LVCMOS33` |
+
+UART es el enlace serie de depuración, no DSI. RX y TX se nombran desde la FPGA:
+el transmisor del adaptador se conecta al receptor de la FPGA y viceversa,
+con referencia de tierra común y niveles compatibles. No aplicar estos
+estándares de 3,3 V a las ramas LP del panel.
+
+La carga de configuración usa openFPGALoader con un FT232RL y la asignación
+`TXD:CTS:RTS:RXD` indicada por el responsable. Esa asignación depende del
+programador y cableado; no confundirla con los pines UART 28/27. La UART de
+depuración se ha usado en `/dev/ttyACM2`, pero Linux puede asignar otro puerto.
+Consultar los [comandos y comprobaciones](flujo_de_trabajo.md#5-cargar-temporalmente-en-la-fpga).
+
+El target actual **no exporta `estado_D0` al panel**. Esto no resuelve por sí
+solo el estado de los pines no utilizados: revisar su configuración y los bancos
+conectados a la pantalla antes de cargar incluso una prueba interna.
 
 ## Mapa físico
 

@@ -1,69 +1,80 @@
 # FPGBC_pantalla
 
-Desarrollo de un **host MIPI DSI de dos lanes de datos** para la pantalla de
-una consola [FunnyPlaying FPGBC](https://funnyplaying.com/products/fpgbc-kit),
-reutilizando la solución eléctrica de su placa.
+Desarrollo de un **host MIPI DSI** para la pantalla de la consola
+[FunnyPlaying FPGBC](https://funnyplaying.com/products/fpgbc-kit).
+Un host es el emisor: prepara los comandos y la imagen que recibe la pantalla.
+DSI es el protocolo usado para transportarlos.
 
-## Estado
+El objetivo es llevar la imagen de una PPU (bloque que produce píxeles) hasta
+la pantalla, usando dos canales de datos. **Todavía no es un controlador de
+pantalla completo ni eléctricamente validado.**
 
-- Motor LPDT en Verilog: control, datapath y testbenches unitarios e integrado.
-- Vector inicial: `87 05 01 00 10` (selector LPDT + paquete DSI Software Reset).
-- Simulación con Icarus Verilog y vistas de señales para GTKWave.
-- Pendientes: validación eléctrica, inicialización del panel, transmisión HS
-  e integración con PPU y RISC-V.
+## Qué funciona y qué falta
 
-**No es todavía un host DSI completo ni un controlador validado en la pantalla.**
-Una simulación correcta no demuestra conformidad D-PHY ni recepción del panel.
+| Estado | Contenido |
+|---|---|
+| Implementado | Motor LPDT en Verilog: convierte paquetes preparados en estados lógicos de baja potencia; pruebas unitarias e integrada |
+| Integración de depuración | LiteX conecta el motor a registros controlables desde el PC y a LiteScope, un capturador de señales internas |
+| Flujo disponible | Simulación, síntesis para FPGBC, carga temporal en FPGA y pruebas internas por UART |
+| Pendiente | Conectar y validar la capa eléctrica, inicializar el panel, transmitir imagen en alta velocidad e integrar PPU/RISC-V |
 
-## Inicio rápido
+**El target de depuración no conecta la salida LPDT al panel.** Una captura
+correcta demuestra comportamiento lógico interno, no recepción de la pantalla.
 
-### Entorno con Pixi (Linux x86_64)
+## Primera prueba: sin conectar la FPGA
 
-Instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:
+En Linux x86_64, instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:
 
 ```sh
 pixi install --locked
-pixi run test                    # Todas las pruebas del motor LPDT
-pixi run sim                     # Prueba integrada y GTKWave
+pixi run test                    # Las cinco pruebas del motor original
+pixi run sim                     # Prueba integrada y visor GTKWave
 ```
 
-`pixi.toml` y `pixi.lock` definen el entorno reproducible con Make, Icarus
-Verilog y GTKWave. La primera instalación necesita Internet. Para trabajar
-directamente con estas herramientas, entra con `pixi shell` y sal con `exit`.
-El entorno local `.pixi/` no se versiona. No se requiere conectar la FPGA.
-
-### Alternativa con herramientas del sistema
-
-Necesitas `make` e Icarus Verilog (`iverilog`, `vvp`); para ver ondas, `gtkwave`.
-Desde la raíz:
+Para trabajar con las herramientas directamente:
 
 ```sh
-make -C motor_lpdt test            # Compilar y ejecutar la prueba integrada
-make -C motor_lpdt sim             # Ejecutar y abrir GTKWave
-make -C motor_lpdt test-all        # Ejecutar todas las pruebas del módulo
+pixi shell
+# Aquí están disponibles python, iverilog, yosys, etc.
+exit                            # Salir del entorno
 ```
 
-Los `.out` y `.vcd` se generan en `motor_lpdt/build/` y no se versionan. Los `.gtkw`
-de `motor_lpdt/waves/` sí: guardan la vista, no los datos. Tras clonar, `sim` genera
-las ondas y carga la vista correspondiente.
+La primera instalación requiere Internet. `pixi.toml` y `pixi.lock` se
+versionan; `.pixi/`, las ondas y los resultados de compilación no.
+
+## Qué leer
+
+1. [Arquitectura explicada](docs/arquitectura.md): de la PPU a la pantalla,
+   significado de los términos y diferencia entre lo previsto y lo existente.
+2. [Flujo de trabajo](docs/flujo_de_trabajo.md): entorno, simulaciones, síntesis,
+   carga en SRAM y capturas en FPGA, paso a paso.
+3. [Hardware y seguridad](docs/hardware.md): revisar **antes de programar**.
+4. [Depuración LiteX](docs/litex_debug.md): registros, supervisor y analizador.
+
+El [índice de documentación](docs/README.md) reúne las referencias detalladas.
 
 ## Organización
 
-| Ruta | Contenido |
+| Carpeta | Para qué sirve |
 |---|---|
-| [motor_lpdt/](motor_lpdt/README.md) | Fuentes, pruebas, ondas y documentación del motor |
-| [docs/hardware.md](docs/hardware.md) | Conexiones, medidas y precauciones |
-| [docs/arquitectura.md](docs/arquitectura.md) | Arquitectura prevista y pendientes |
+| [motor_lpdt/](motor_lpdt/README.md) | Motor Verilog original, contrato de interfaz y pruebas |
+| [gateware/](gateware/README.md) | Integración LiteX, plataforma FPGBC y simulaciones del wrapper |
+| [scripts/](scripts/README.md) | Herramientas de entorno y prueba interna desde el PC |
+| [test/](test/README.md) | Prueba experimental del entorno EDA; no es la regresión LPDT |
+| [docs/](docs/README.md) | Arquitectura, procedimientos y hardware |
+| `build/` | Archivos generados de LiteX y capturas; no editar ni versionar |
 
-Cada módulo tendrá su propia carpeta; DSI, PHY y demás bloques se añadirán
-cuando comience su desarrollo. Los [diagramas del motor](motor_lpdt/README.md#diagramas)
-se pueden consultar directamente en GitHub.
+Los comandos de los manuales parten de la raíz del repositorio. No ejecutar
+`setup-env` o `test-EDA` como preparación automática: el primero modifica el
+sistema con `sudo` y el segundo intenta programar un diseño de otra placa.
 
 ## Hardware de trabajo
 
-FPGA Gowin GW2AR en EQ144 según identificación del usuario; pantalla LCD-49754,
-con variante completa pendiente. El periférico dispone de **40 MHz**; no es el
-reloj HS. El RESET físico del panel no es accesible y se prevé reset por DCS.
+FPGA **GW2AR-LV18EQ144PC8/I7**, reloj de control de **40 MHz** y pantalla
+LCD-49754, cuya variante completa sigue pendiente. El reloj de control no es
+el reloj de transmisión de alta velocidad. El RESET físico del panel no es
+accesible; se prevé un comando de reset por DSI.
 
-No programar la FPGA ni modificar alimentaciones, resistencias o configuración
-eléctrica sin revisar las E/S y contar con autorización del responsable.
+No escribir flash ni modificar alimentaciones, resistencias o E/S sin revisión
+y autorización. La prueba interna tampoco sustituye la revisión de los pines
+no utilizados y de los bancos conectados al panel.

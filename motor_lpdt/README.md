@@ -10,10 +10,25 @@ build/    Productos de simulación ignorados por Git
 docs/     Protocolo y diagramas (fuente drawio y vistas SVG)
 ```
 
+## Para qué sirve
+
+Este es el motor de transmisión LPDT: recibe un paquete preparado de 1–7 bytes,
+añade el selector `87` y produce los estados lógicos del par D0 hasta volver
+al reposo. No genera imagen, ECC/CRC ni señales eléctricas para el panel.
+RTL es la descripción de registros y lógica; aquí está escrita en Verilog.
+La FSM (máquina de estados) coordina el datapath, los registros y contadores
+que almacenan y desplazan los datos.
+
+Los README de [fuentes](src/README.md), [pruebas](TB/README.md),
+[ondas](waves/README.md) y [documentos](docs/README.md) explican cada carpeta.
+Para LiteX y la FPGA, consultar el [flujo general](../docs/flujo_de_trabajo.md).
+Los términos se explican en la [arquitectura](../docs/arquitectura.md).
+
 ## Simulación
 
 Requisitos: `make`, Icarus Verilog (`iverilog`, `vvp`) y, para ondas, `gtkwave`.
-Desde la raíz del repositorio:
+Desde la raíz del repositorio, el entorno reproducible permite `pixi run test`
+para las cinco pruebas. Dentro de `pixi shell`, o con herramientas del sistema:
 
 ```sh
 make -C motor_lpdt test            # Compilar y ejecutar sin GUI
@@ -30,7 +45,8 @@ reemplazarlas. Las simulaciones se ejecutan dentro de `build/`.
 
 Los `.gtkw` guardan selección, formato y agrupación de señales, **no sus datos**.
 Se suben a Git sin `.out` ni `.vcd`: tras clonar, `sim` genera ambos y abre la
-vista. `wave` requiere que el VCD ya exista. No hay cadena de síntesis definida.
+vista. `wave` requiere que el VCD ya exista. Este Makefile solo simula;
+la síntesis del motor integrado se realiza desde [gateware](../gateware/README.md).
 
 ## Contrato de `motor_lpdt`
 
