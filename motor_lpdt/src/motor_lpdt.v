@@ -54,6 +54,7 @@ module motor_lpdt (
   ) byte_actual (
       .clk(clk),
       .ld(w_ld_byte_actual),
+      .rst(1'b0),
       .reg_in(w_mux_byte_out),
       .reg_out(w_byte_actual)
   );
@@ -81,6 +82,7 @@ module motor_lpdt (
   ) reg_estado_D0 (
       .clk(clk),
       .ld(w_ld_estado_D0),
+      .rst(1'b0),
       .reg_in(w_mux_mark_out),
       .reg_out(estado_D0)
   );
@@ -90,6 +92,7 @@ module motor_lpdt (
   ) reg_longitud (
       .clk(clk),
       .ld(w_ld_longitud),
+      .rst(1'b0),
       .reg_in(cantidad_bytes),
       .reg_out(w_longitud_out)
   );
