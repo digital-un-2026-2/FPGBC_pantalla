@@ -27,7 +27,7 @@ En Linux x86_64, instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:
 
 ```sh
 pixi install --locked
-pixi run test                    # Las cinco pruebas del motor original
+pixi run test                    # Seis pruebas, incluidos modos de 7 y 15 bytes
 pixi run sim                     # Prueba integrada y visor GTKWave
 ```
 

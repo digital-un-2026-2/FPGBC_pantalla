@@ -1,11 +1,13 @@
-module motor_control (
+module motor_control #(
+    parameter ANCHO_LONGITUD = 3
+) (
     input clk,
     input rst,
     input z_byte,
     input z_t,
     input z_bit,
     input permiso_arranque,
-    input [2:0] idx,
+    input [ANCHO_LONGITUD-1:0] idx,
     input solicitud,
 
     output reg ld_len,
@@ -23,7 +25,7 @@ module motor_control (
     output reg aceptado,
     output reg ocupado,
     output reg terminado,
-    output [2:0] pos
+    output [ANCHO_LONGITUD-1:0] pos
 );
   parameter IDLE     = 4'b0000;
   parameter ESC_10   = 4'b0001;
@@ -38,6 +40,7 @@ module motor_control (
   reg [3:0] state;
   reg enviando_selector;
   reg salida_pendiente;
+  localparam [ANCHO_LONGITUD-1:0] UNO = 1;
   wire ready = (state == IDLE) & permiso_arranque & !rst;
   wire A = solicitud & ready;
   wire fin_paquete = !enviando_selector & z_bit & z_byte;
@@ -45,9 +48,9 @@ module motor_control (
   // Anticipar la lectura durante el byte anterior, no al incrementar idx.
   // Al cargar DATA[0], el flag selector ya cambió en posedge, pero idx sigue 0.
   // No solicitar idx+1 durante esa media fase ni fuera del último byte válido.
-  assign pos = (rst || state == IDLE || enviando_selector || rst_byte) ? 3'd0 :
+  assign pos = (rst || state == IDLE || enviando_selector || rst_byte) ? {ANCHO_LONGITUD{1'b0}} :
                (ld_byte && !sel_87 && !inc_byte) ? idx :
-               (!z_byte ? idx + 3'd1 : idx);
+                (!z_byte ? idx + UNO : idx);
 
   // La FSM entrega órdenes en posedge; el datapath las captura en negedge.
   // El temporizador ascendente carga 0 con ld_t y activa z_t al llegar a 3.

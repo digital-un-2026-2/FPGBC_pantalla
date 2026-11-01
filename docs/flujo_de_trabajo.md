@@ -68,7 +68,7 @@ pixi run wave
 
 | Orden | Resultado |
 |---|---|
-| `test` | Compila y ejecuta las cinco pruebas originales |
+| `test` | Compila y ejecuta las seis pruebas, incluidos modos de 7 y 15 bytes |
 | `test TARGET=reg` mediante Make | Prueba solo el registro `reg_0.v` |
 | `sim` | Ejecuta la integrada y abre GTKWave |
 | `wave` | Abre ondas existentes; no vuelve a ejecutar la prueba |
@@ -78,7 +78,8 @@ guardan qué señales mostrar, no sus datos. Los fallos y timeouts de los
 testbenches terminan con `$fatal`.
 
 Sin Pixi, con Make e Icarus instalados: `make -C motor_lpdt test-all`.
-**`make -C motor_lpdt test` ejecuta solo la integrada**, no las cinco.
+**`make -C motor_lpdt test` ejecuta solo la integrada de 7 bytes**, no las seis.
+Para la ampliada: `pixi run make -C motor_lpdt test TARGET=motor_lpdt_15`.
 Cobertura y límites: [testbenches originales](../motor_lpdt/TB/README.md).
 
 ## 3. Alcance de las simulaciones

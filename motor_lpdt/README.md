@@ -12,7 +12,8 @@ docs/     Protocolo y diagramas (fuente drawio y vistas SVG)
 
 ## Para qué sirve
 
-Este es el motor de transmisión LPDT: recibe un paquete preparado de 1–7 bytes,
+Este es el motor de transmisión LPDT: recibe un paquete preparado de 1–7 bytes
+por defecto, o 1–15 con `ANCHO_LONGITUD=4`,
 añade el selector `87` y produce los estados lógicos del par D0 hasta volver
 al reposo. No genera imagen, ECC/CRC ni señales eléctricas para el panel.
 RTL es la descripción de registros y lógica; aquí está escrita en Verilog.
@@ -28,7 +29,7 @@ Los términos se explican en la [arquitectura](../docs/arquitectura.md).
 
 Requisitos: `make`, Icarus Verilog (`iverilog`, `vvp`) y, para ondas, `gtkwave`.
 Desde la raíz del repositorio, el entorno reproducible permite `pixi run test`
-para las cinco pruebas. Dentro de `pixi shell`, o con herramientas del sistema:
+para las seis pruebas (incluido el modo de 15 bytes). Dentro de `pixi shell`, o con herramientas del sistema:
 
 ```sh
 make -C motor_lpdt test            # Compilar y ejecutar sin GUI
@@ -56,8 +57,8 @@ la síntesis del motor integrado se realiza desde [gateware](../gateware/README.
 | `rst` | Reset interno; mantener durante un posedge y el negedge siguiente |
 | `permiso_arranque` | Autoriza aceptar; presupone reposo y drivers preparados |
 | `solicitud` | Petición por nivel, muestreada en posedge cuando está en IDLE |
-| `cantidad_bytes[2:0]` | 1–7 bytes, sin contar el selector `87`; cero se rechaza |
-| `pos[2:0]` | Dirección anticipada del almacén externo |
+| `cantidad_bytes[ANCHO_LONGITUD-1:0]` | 1–7 por defecto, 1–15 con ancho 4; sin selector `87`; cero se rechaza |
+| `pos[ANCHO_LONGITUD-1:0]` | Dirección anticipada del almacén externo |
 | `byte_almacen[7:0]` | Byte solicitado; debe estar estable antes del negedge de carga |
 | `aceptado` | Pulso de un ciclo al aceptar la petición |
 | `ocupado` | Transacción en curso |
@@ -78,6 +79,43 @@ puede aceptarse de nuevo. Retirar el permiso no aborta un envío en marcha.
 (12,5 ns después); entonces baja `ocupado`. No confirma recepción ni ejecución
 DCS. El reset aborta sin emitir `terminado`; el supervisor debe gestionar la
 recuperación. Antes del reset no se garantiza una salida LP conocida.
+
+## Ampliación parametrizada del recorrido de bytes
+
+`ANCHO_LONGITUD=3` conserva la interfaz original; `4` permite los paquetes
+de inicialización de hasta 15 bytes. Los modos verificados son 3 y 4.
+Ejemplo de instancia: `motor_lpdt #(.ANCHO_LONGITUD(4)) motor (...)`.
+
+Flujo (sin cambios):
+
+```text
+IDLE → aceptar y capturar longitud → entrada Escape → selector 87
+     → bytes 0…longitud−1 → salida LP-11 → terminado → IDLE
+```
+
+Datapath, con W = ANCHO_LONGITUD:
+
+```text
+cantidad_bytes[W] → registro longitud[W] ────────┐
+contador indice_byte[W] → indice_byte + 1 ──────┴→ comparador último byte
+          └→ anticipación POS[W] → almacén externo → byte_actual[8]
+                                                      └→ mux bit (índice[3]) → D0[2]
+```
+
+FSM: conserva IDLE, ESC_10, ESC_00_A, ESC_01, ESC_00_B, MARK, SPACE,
+EXIT_10 y DONE, con las mismas transiciones. Solo se amplían IDX/POS y su
+aritmética; no se añaden estados, registros de salida ni pausas entre bytes.
+El contador de bits sigue siendo de 3 bits y el de tiempo de 2 bits.
+
+La longitud se captura en el negedge posterior a la aceptación. El almacén
+debe seguir cumpliendo la anticipación de POS; para ROM de paquetes, revisar
+`POS → suma de base → ROM → carga de byte` y el presupuesto de medio ciclo
+de 12,5 ns. Longitud cero se rechaza; reset aborta sin `terminado`.
+No se fragmentan paquetes ni se generan ECC/CRC dentro del motor.
+
+El wrapper `MotorLPDT(ancho_longitud=4)` permite seleccionar el ancho; el
+supervisor CSR y el target de depuración existentes conservan su modo 1–7.
+Esta ampliación no implementa el secuenciador ni valida recepción del panel.
 
 ## Límites actuales
 

@@ -1,15 +1,17 @@
-// Paquete completo e inmutable hasta terminado. Longitud válida: 1..7 bytes.
+// Paquete completo e inmutable hasta terminado. Ancho 3: 1..7; ancho 4: 1..15.
 // El almacén responde a POS con antelación al negedge de carga del byte.
 // Reset interno: mantener rst durante un posedge y el negedge posterior.
 // permiso_arranque presupone reposo D-PHY y drivers ya preparados externamente.
-module motor_lpdt (
+module motor_lpdt #(
+    parameter ANCHO_LONGITUD = 3
+) (
     input clk,
     input rst,
 
     input permiso_arranque,
     input solicitud,
 
-    input [2:0] cantidad_bytes,
+    input [ANCHO_LONGITUD-1:0] cantidad_bytes,
     input [7:0] byte_almacen,
 
 
@@ -17,7 +19,7 @@ module motor_lpdt (
     output ocupado,
     output terminado,
 
-    output [2:0] pos,
+    output [ANCHO_LONGITUD-1:0] pos,
     output [1:0] estado_D0
 );
 
@@ -37,8 +39,9 @@ module motor_lpdt (
 
   wire w_ld_longitud;
 
-  wire [2:0] w_longitud_out;
-  wire [2:0] w_indice_byte;
+  wire [ANCHO_LONGITUD-1:0] w_longitud_out;
+  wire [ANCHO_LONGITUD-1:0] w_indice_byte;
+  localparam [ANCHO_LONGITUD-1:0] UNO = 1;
 
   mux #(
       .INPUTS(2),
@@ -88,7 +91,7 @@ module motor_lpdt (
   );
 
   reg_0 #(
-      .BITS(3)
+      .BITS(ANCHO_LONGITUD)
   ) reg_longitud (
       .clk(clk),
       .ld(w_ld_longitud),
@@ -100,7 +103,7 @@ module motor_lpdt (
   wire w_rst_indice_byte;
   wire w_inc_indice_byte;
   count #(
-      .BITS(3)
+      .BITS(ANCHO_LONGITUD)
   ) count_indice_byte (
       .clk(clk),
       .rst(w_rst_indice_byte),
@@ -110,9 +113,9 @@ module motor_lpdt (
 
   wire w_z_byte;
   comp #(
-      .BITS(3)
+      .BITS(ANCHO_LONGITUD)
   ) comp_byte (
-      .A(w_indice_byte + 3'd1),
+      .A(w_indice_byte + UNO),
       .B(w_longitud_out),
       .z(w_z_byte)
   );
@@ -157,13 +160,15 @@ module motor_lpdt (
       .z(w_z_bit)
   );
 
-  motor_control ctrl (
+  motor_control #(
+      .ANCHO_LONGITUD(ANCHO_LONGITUD)
+  ) ctrl (
       .clk(clk),
       .rst(rst),
       .z_byte(w_z_byte),
       .z_t(w_z_t),
       .z_bit(w_z_bit),
-      .permiso_arranque(permiso_arranque && (cantidad_bytes != 3'd0)),
+      .permiso_arranque(permiso_arranque && (cantidad_bytes != {ANCHO_LONGITUD{1'b0}})),
       .idx(w_indice_byte),
       .solicitud(solicitud),
       .ld_len(w_ld_longitud),

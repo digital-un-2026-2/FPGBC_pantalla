@@ -19,6 +19,7 @@ make -C motor_lpdt sim
 | `mux` | Cinco configuraciones, selección y orden de entradas; selectores binarios fuera de rango producen cero |
 | `motor_control` | FSM con datapath modelado; vector inicial, longitudes 1–4, permiso, avisos y reset por estado |
 | `motor_lpdt` | FSM y datapath RTL reales, con almacén síncrono modelado; longitudes 1–7, longitud cero, permiso y reset por estado |
+| `motor_lpdt_15` | Mismo test integrado con ancho 4; todas las longitudes 1–15, cruce 7→8, paquete BE de 15 bytes y aborto después del índice 7 |
 
 Los dos tests del motor comparan P/N ciclo a ciclo y reconstruyen
 `87 05 01 00 10`, LSB primero; para ese vector comprueban 340 ciclos (8,5 µs).
@@ -26,7 +27,11 @@ También prueban patrones `00/FF/55/AA` y solicitudes adicionales durante envío
 El integrado comprueba posiciones válidas, salida en negedge y aviso final
 posterior al retorno efectivo a LP-11. Tras los abortos se prueba otro envío.
 
-Verificación local: los cinco targets finalizaron en `PASS` con `test-all`.
+Los integrados comprueban también que retirar permiso tras aceptar no aborta,
+y que no aparecen nuevos envíos al quedar en reposo sin solicitud.
+El paquete BE comprueba transporte, no valida independientemente su ECC/CRC.
+
+Verificación local: los seis targets finalizaron en `PASS` con `test-all`.
 Icarus emitió advertencias de `timescale` heredado de los testbenches, sin
 errores de compilación ni de simulación. Esto no equivale a validar la placa.
 
@@ -55,4 +60,3 @@ Se generan `motor_lpdt/build/<target>_TB.vcd` y `.out`; las vistas están en
 La FSM muestra `state_name` en ASCII con `BENCH`, activado por el Makefile:
 0 IDLE, 1 ESC_10, 2 ESC_00_A, 3 ESC_01, 4 ESC_00_B, 5 MARK, 6 SPACE,
 7 EXIT_10, 8 DONE. Las vistas no sustituyen las comprobaciones automáticas.
-
