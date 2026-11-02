@@ -19,6 +19,13 @@
 - [Cobertura de pruebas](../motor_lpdt/TB/README.md): qué se comprueba y qué falta.
 - [Diagramas](../motor_lpdt/README.md#diagramas): fuente Draw.io, PDF y SVG.
 
+## Secuenciador de inicialización
+
+- [Función, interfaz y comandos](../secuenciador_init/README.md).
+- [Fuentes y ROM](../secuenciador_init/src/README.md): responsabilidad de cada módulo.
+- [Pruebas y límites](../secuenciador_init/TB/README.md).
+- [Flujo, datapath y FSM](../secuenciador_init/README.md#diagramas): Draw.io, PDF y SVG.
+
 Los procedimientos generales viven en `flujo_de_trabajo.md`; los README locales
 explican las carpetas y enlazan esos procedimientos. Los diagramas son
 conceptuales: para usar el motor prevalece su contrato RTL.

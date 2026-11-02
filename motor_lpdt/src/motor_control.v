@@ -40,6 +40,13 @@ module motor_control #(
   reg [3:0] state;
   reg enviando_selector;
   reg salida_pendiente;
+  reg reinicio;
+  reg inicio;
+  reg avance_fase;
+  reg ultimo_bit;
+  reg ultimo_byte;
+  reg selector_previo;
+  reg fin_transaccion;
   localparam [ANCHO_LONGITUD-1:0] UNO = 1;
   wire ready = (state == IDLE) & permiso_arranque & !rst;
   wire A = solicitud & ready;
@@ -52,142 +59,158 @@ module motor_control #(
                (ld_byte && !sel_87 && !inc_byte) ? idx :
                 (!z_byte ? idx + UNO : idx);
 
-  // La FSM entrega órdenes en posedge; el datapath las captura en negedge.
-  // El temporizador ascendente carga 0 con ld_t y activa z_t al llegar a 3.
-  // No realimentar z_t combinacionalmente hacia controles del mismo negedge.
   always @(posedge clk) begin
     if (rst) begin
       state <= IDLE;
       enviando_selector <= 1'b0;
       salida_pendiente <= 1'b0;
-      ld_len <= 1'b0;
-      sel_87 <= 1'b0;
-      ld_byte <= 1'b0;
-      rst_byte <= 1'b1;
-      inc_byte <= 1'b0;
-      rst_bit <= 1'b1;
-      inc_bit <= 1'b0;
-      ld_t <= 1'b1;
-      inc_t <= 1'b0;
-      sel_fijo <= 1'b1;
-      lp_fijo <= 2'b11;
-      ld_lp <= 1'b1;
-      aceptado <= 1'b0;
-      ocupado <= 1'b0;
-      terminado <= 1'b0;
+      reinicio <= 1'b1;
+      inicio <= 1'b0;
+      avance_fase <= 1'b0;
+      ultimo_bit <= 1'b0;
+      ultimo_byte <= 1'b0;
+      selector_previo <= 1'b0;
+      fin_transaccion <= 1'b0;
     end else begin
-      // Valores de retención del datapath: no habilitar cargas ni avances.
-      ld_len <= 1'b0;
-      sel_87 <= 1'b0;
-      ld_byte <= 1'b0;
-      rst_byte <= 1'b0;
-      inc_byte <= 1'b0;
-      rst_bit <= 1'b0;
-      inc_bit <= 1'b0;
-      ld_t <= 1'b0;
-      inc_t <= 1'b0;
-      sel_fijo <= 1'b1;
-      lp_fijo <= 2'b11;
-      ld_lp <= 1'b0;
-      aceptado <= 1'b0;
-      terminado <= 1'b0;
+      reinicio <= 1'b0;
+      inicio <= 1'b0;
+      avance_fase <= 1'b0;
+      fin_transaccion <= 1'b0;
 
       case (state)
         IDLE: begin
-          ocupado <= 1'b0;
           if (A) begin
             state <= ESC_10;
             enviando_selector <= 1'b1;
             salida_pendiente <= 1'b0;
-            aceptado <= 1'b1;
-            ocupado <= 1'b1;
-            ld_len <= 1'b1;
-            sel_87 <= 1'b1;
-            ld_byte <= 1'b1;
-            rst_byte <= 1'b1;
-            rst_bit <= 1'b1;
-            ld_t <= 1'b1;
-            lp_fijo <= 2'b10;
-            ld_lp <= 1'b1;
+            inicio <= 1'b1;
           end
         end
         ESC_10, ESC_00_A, ESC_01, ESC_00_B: begin
-          ocupado <= 1'b1;
-          inc_t <= !z_t;
-          ld_t <= z_t;
-          ld_lp <= z_t;
-          case (state)
-            ESC_10: begin
-              lp_fijo <= 2'b00;
-              if (z_t) state <= ESC_00_A;
-            end
-            ESC_00_A: begin
-              lp_fijo <= 2'b01;
-              if (z_t) state <= ESC_01;
-            end
-            ESC_01: begin
-              lp_fijo <= 2'b00;
-              if (z_t) state <= ESC_00_B;
-            end
-            ESC_00_B: begin
-              sel_fijo <= 1'b0;
-              if (z_t) state <= MARK;
-            end
-          endcase
+          avance_fase <= z_t;
+          if (z_t) begin
+            case (state)
+              ESC_10: state <= ESC_00_A;
+              ESC_00_A: state <= ESC_01;
+              ESC_01: state <= ESC_00_B;
+              ESC_00_B: state <= MARK;
+            endcase
+          end
         end
         MARK: begin
-          ocupado <= 1'b1;
-          inc_t <= !z_t;
-          ld_t <= z_t;
-          ld_lp <= z_t;
-          lp_fijo <= 2'b00;
+          avance_fase <= z_t;
           if (z_t) begin
             state <= SPACE;
-            // Flags e índices aún describen el Mark terminado.
             salida_pendiente <= fin_paquete;
-            inc_bit <= !z_bit;
-            rst_bit <= z_bit;
-            ld_byte <= z_bit & !fin_paquete;
-            inc_byte <= z_bit & !enviando_selector & !z_byte;
+            ultimo_bit <= z_bit;
+            ultimo_byte <= z_byte;
+            selector_previo <= enviando_selector;
             if (z_bit) enviando_selector <= 1'b0;
           end
         end
         SPACE: begin
-          ocupado <= 1'b1;
-          inc_t <= !z_t;
-          ld_t <= z_t;
-          ld_lp <= z_t;
-          sel_fijo <= salida_pendiente;
-          lp_fijo <= 2'b10;
+          avance_fase <= z_t;
           if (z_t) begin
             if (salida_pendiente) state <= EXIT_10;
             else state <= MARK;
           end
         end
         EXIT_10: begin
-          ocupado <= 1'b1;
-          inc_t <= !z_t;
-          ld_lp <= z_t;
-          lp_fijo <= 2'b11;
+          avance_fase <= z_t;
           if (z_t) state <= DONE;
         end
         DONE: begin
-          // El negedge anterior ya cargó LP-11: no adelantar el aviso.
           state <= IDLE;
-          ocupado <= 1'b0;
-          terminado <= 1'b1;
+          fin_transaccion <= 1'b1;
         end
         default: begin
           state <= IDLE;
           enviando_selector <= 1'b0;
           salida_pendiente <= 1'b0;
-          ocupado <= 1'b0;
-          rst_byte <= 1'b1;
-          rst_bit <= 1'b1;
-          ld_t <= 1'b1;
-          ld_lp <= 1'b1;
+          reinicio <= 1'b1;
         end
       endcase
+    end
+  end
+
+  always @(*) begin
+    ld_len = 1'b0;
+    sel_87 = 1'b0;
+    ld_byte = 1'b0;
+    rst_byte = 1'b0;
+    inc_byte = 1'b0;
+    rst_bit = 1'b0;
+    inc_bit = 1'b0;
+    ld_t = 1'b0;
+    inc_t = 1'b0;
+    sel_fijo = 1'b1;
+    lp_fijo = 2'b11;
+    ld_lp = 1'b0;
+    aceptado = 1'b0;
+    ocupado = 1'b0;
+    terminado = 1'b0;
+
+    case (state)
+      IDLE: begin
+        terminado = fin_transaccion;
+      end
+      ESC_10, ESC_00_A, ESC_01, ESC_00_B, MARK, SPACE, EXIT_10: begin
+        ocupado = 1'b1;
+        inc_t = !avance_fase && !inicio;
+        ld_t = avance_fase || inicio;
+        ld_lp = avance_fase || inicio;
+        case (state)
+          ESC_10: begin
+            lp_fijo = 2'b10;
+            aceptado = inicio;
+            ld_len = inicio;
+            sel_87 = inicio;
+            ld_byte = inicio;
+            rst_byte = inicio;
+            rst_bit = inicio;
+          end
+          ESC_00_A: lp_fijo = 2'b00;
+          ESC_01: lp_fijo = 2'b01;
+          ESC_00_B: lp_fijo = 2'b00;
+          MARK: sel_fijo = 1'b0;
+          SPACE: begin
+            lp_fijo = 2'b00;
+            inc_bit = avance_fase && !ultimo_bit;
+            rst_bit = avance_fase && ultimo_bit;
+            ld_byte = avance_fase && ultimo_bit && !salida_pendiente;
+            inc_byte = avance_fase && ultimo_bit && !selector_previo && !ultimo_byte;
+          end
+          EXIT_10: lp_fijo = 2'b10;
+        endcase
+      end
+      DONE: begin
+        ocupado = 1'b1;
+        ld_lp = avance_fase;
+      end
+      default: begin
+        rst_byte = 1'b1;
+        rst_bit = 1'b1;
+        ld_t = 1'b1;
+        ld_lp = 1'b1;
+      end
+    endcase
+
+    if (reinicio) begin
+      ld_len = 1'b0;
+      sel_87 = 1'b0;
+      ld_byte = 1'b0;
+      rst_byte = 1'b1;
+      inc_byte = 1'b0;
+      rst_bit = 1'b1;
+      inc_bit = 1'b0;
+      ld_t = 1'b1;
+      inc_t = 1'b0;
+      sel_fijo = 1'b1;
+      lp_fijo = 2'b11;
+      ld_lp = 1'b1;
+      aceptado = 1'b0;
+      ocupado = 1'b0;
+      terminado = 1'b0;
     end
   end
 

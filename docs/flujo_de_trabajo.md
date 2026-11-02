@@ -84,6 +84,22 @@ Cobertura y límites: [testbenches originales](../motor_lpdt/TB/README.md).
 
 ## 3. Alcance de las simulaciones
 
+### Secuenciador autónomo, sin FPGA
+
+```sh
+pixi run make -C secuenciador_init test                 # FSM con modelos e inyección de fallos
+pixi run make -C secuenciador_init test TARGET=secuenciador_init  # ROM y motor reales
+pixi run make -C secuenciador_init test-all             # Ambas pruebas
+pixi run make -C secuenciador_init sim TARGET=secuenciador_init  # Simular y abrir FST
+pixi run make -C secuenciador_init wave TARGET=secuenciador_init # Abrir FST existente
+```
+
+La integrada reconstruye los 11 paquetes desde D0 y comprueba ECC/CRC y
+285 ms de esperas DCS sin reducirlas; solo acorta algunos tiempos de arranque.
+`test` no genera ondas en esta prueba; `sim` sí. Resultados en
+`build/secuenciador_init/`. [Interfaz, diagramas y límites](../secuenciador_init/README.md).
+`pixi run test` sigue ejecutando únicamente la regresión del motor.
+
 Las pruebas de `motor_lpdt/TB/` verifican el motor Verilog y sus auxiliares.
 No simulan la integración LiteX, el reset de arranque, el supervisor CSR ni el
 puente UARTWishbone. No hay actualmente una prueba automatizada de simulación

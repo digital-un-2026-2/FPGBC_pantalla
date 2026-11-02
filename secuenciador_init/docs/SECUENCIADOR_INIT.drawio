@@ -1,118 +1,118 @@
 <mxfile host="Electron" pages="3">
   <diagram id="init-flujo" name="SECUENCIADOR_INIT">
-    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="2500" math="0" shadow="0">
+    <mxGraphModel dx="1638" dy="2455" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="2500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="titulo" value="SECUENCIADOR DE INICIALIZACIÓN" style="text;html=1;whiteSpace=wrap;align=center;fontSize=22;" vertex="1" parent="1">
-          <mxGeometry x="360" y="30" width="500" height="40" as="geometry" />
+        <mxCell id="titulo" parent="1" style="text;html=1;whiteSpace=wrap;align=center;fontSize=22;" value="SECUENCIADOR DE INICIALIZACIÓN" vertex="1">
+          <mxGeometry height="40" width="500" x="360" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="inicio" value="SECUENCIADOR&lt;br&gt;INIT" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="540" y="100" width="140" height="60" as="geometry" />
+        <mxCell id="inicio" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;" value="SECUENCIADOR&lt;br&gt;INIT" vertex="1">
+          <mxGeometry height="60" width="140" x="540" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="reset" value="solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;preparar_lp = 0&lt;br&gt;init_completa = 0&lt;br&gt;init_en_curso = 0&lt;br&gt;fallo = 0; paso = 0&lt;br&gt;Reset coordinado del motor" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="460" y="200" width="300" height="140" as="geometry" />
+        <mxCell id="reset" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;preparar_lp = 0&lt;br&gt;init_completa = 0&lt;br&gt;init_en_curso = 0&lt;br&gt;fallo = 0; paso = 0&lt;br&gt;Reset coordinado del motor" vertex="1">
+          <mxGeometry height="140" width="300" x="460" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="rst" value="¿rst == 0?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="530" y="380" width="160" height="70" as="geometry" />
+        <mxCell id="rst" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿rst == 0?" vertex="1">
+          <mxGeometry height="70" width="160" x="530" y="380" as="geometry" />
         </mxCell>
-        <mxCell id="estabilizar" value="init_en_curso = 1&lt;br&gt;Esperar T_ESTABILIZACION" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="460" y="490" width="300" height="60" as="geometry" />
+        <mxCell id="estabilizar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="init_en_curso = 1&lt;br&gt;Contador a 0; contar hasta T_ESTABILIZACION" vertex="1">
+          <mxGeometry height="60" width="300" x="460" y="490" as="geometry" />
         </mxCell>
-        <mxCell id="preparar" value="preparar_lp = 1&lt;br&gt;Iniciar timeout de preparación" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="460" y="590" width="300" height="60" as="geometry" />
+        <mxCell id="preparar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="preparar_lp = 1&lt;br&gt;Iniciar timeout de preparación" vertex="1">
+          <mxGeometry height="60" width="300" x="460" y="590" as="geometry" />
         </mxCell>
-        <mxCell id="lp" value="¿lp_preparada == 1?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="500" y="690" width="220" height="80" as="geometry" />
+        <mxCell id="lp" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿lp_preparada == 1?" vertex="1">
+          <mxGeometry height="80" width="220" x="500" y="690" as="geometry" />
         </mxCell>
-        <mxCell id="reposo" value="Esperar T_REPOSO_INICIAL&lt;br&gt;Sin solicitar envío" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="460" y="810" width="300" height="60" as="geometry" />
+        <mxCell id="reposo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="Contador a 0; contar hasta T_REPOSO_INICIAL&lt;br&gt;Sin solicitar envío" vertex="1">
+          <mxGeometry height="60" width="300" x="460" y="810" as="geometry" />
         </mxCell>
-        <mxCell id="descriptor" value="base_activa = ROM_DESC[paso].base&lt;br&gt;longitud_activa = ROM_DESC[paso].longitud&lt;br&gt;espera_activa = ROM_DESC[paso].espera" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="420" y="910" width="380" height="80" as="geometry" />
+        <mxCell id="descriptor" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="base_activa = ROM_DESC[paso].base&lt;br&gt;longitud_activa = ROM_DESC[paso].longitud&lt;br&gt;espera_activa = ROM_DESC[paso].espera" vertex="1">
+          <mxGeometry height="80" width="380" x="420" y="910" as="geometry" />
         </mxCell>
-        <mxCell id="valido" value="¿Descriptor válido?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="500" y="1030" width="220" height="80" as="geometry" />
+        <mxCell id="valido" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿Descriptor válido?" vertex="1">
+          <mxGeometry height="80" width="220" x="500" y="1030" as="geometry" />
         </mxCell>
-        <mxCell id="paquete" value="cantidad_bytes = longitud_activa&lt;br&gt;Preparar lectura de ROM_PAQUETES&lt;br&gt;Respetar latencia antes de solicitar" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="440" y="1150" width="340" height="80" as="geometry" />
+        <mxCell id="paquete" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="cantidad_bytes = longitud_activa&lt;br&gt;Preparar lectura de ROM_PAQUETES&lt;br&gt;Respetar latencia antes de solicitar" vertex="1">
+          <mxGeometry height="80" width="340" x="440" y="1150" as="geometry" />
         </mxCell>
-        <mxCell id="solicitar" value="permiso_arranque = 1&lt;br&gt;solicitud = 1&lt;br&gt;Iniciar timeout de aceptación" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="460" y="1270" width="300" height="70" as="geometry" />
+        <mxCell id="solicitar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="permiso_arranque = 1&lt;br&gt;solicitud = 1&lt;br&gt;Iniciar timeout de aceptación" vertex="1">
+          <mxGeometry height="70" width="300" x="460" y="1270" as="geometry" />
         </mxCell>
-        <mxCell id="aceptado" value="¿aceptado == 1?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="510" y="1380" width="200" height="80" as="geometry" />
+        <mxCell id="aceptado" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿aceptado == 1?" vertex="1">
+          <mxGeometry height="80" width="200" x="510" y="1380" as="geometry" />
         </mxCell>
-        <mxCell id="transmitir" value="solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;Conservar base y longitud activas&lt;br&gt;Iniciar timeout de transmisión" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="450" y="1500" width="320" height="90" as="geometry" />
+        <mxCell id="transmitir" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;Conservar base y longitud activas&lt;br&gt;Iniciar timeout de transmisión" vertex="1">
+          <mxGeometry height="90" width="320" x="450" y="1500" as="geometry" />
         </mxCell>
-        <mxCell id="terminado" value="¿terminado == 1?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="510" y="1630" width="200" height="80" as="geometry" />
+        <mxCell id="terminado" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿terminado == 1?" vertex="1">
+          <mxGeometry height="80" width="200" x="510" y="1630" as="geometry" />
         </mxCell>
-        <mxCell id="espera" value="Esperar espera_activa&lt;br&gt;Desde que se observa terminado&lt;br&gt;Sin solicitar otro envío" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="450" y="1750" width="320" height="80" as="geometry" />
+        <mxCell id="espera" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="Contador a 0; contar hasta espera_activa&lt;br&gt;Desde que se observa terminado&lt;br&gt;Sin solicitar otro envío" vertex="1">
+          <mxGeometry height="80" width="320" x="450" y="1750" as="geometry" />
         </mxCell>
-        <mxCell id="ultimo" value="¿paso == 10?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="520" y="1870" width="180" height="80" as="geometry" />
+        <mxCell id="ultimo" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿paso == 10?" vertex="1">
+          <mxGeometry height="80" width="180" x="520" y="1870" as="geometry" />
         </mxCell>
-        <mxCell id="avanzar" value="paso = paso + 1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="250" y="1885" width="180" height="50" as="geometry" />
+        <mxCell id="avanzar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="paso = paso + 1" vertex="1">
+          <mxGeometry height="50" width="180" x="250" y="1885" as="geometry" />
         </mxCell>
-        <mxCell id="fin" value="init_completa = 1&lt;br&gt;init_en_curso = 0&lt;br&gt;Mantener preparar_lp = 1&lt;br&gt;Sin nuevos envíos; esperar reset o fallo" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="440" y="2000" width="340" height="90" as="geometry" />
+        <mxCell id="fin" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="init_completa = 1&lt;br&gt;init_en_curso = 0&lt;br&gt;Mantener preparar_lp = 1&lt;br&gt;Sin nuevos envíos; esperar reset o fallo" vertex="1">
+          <mxGeometry height="90" width="340" x="440" y="2000" as="geometry" />
         </mxCell>
-        <mxCell id="tlp" value="¿Timeout?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="220" y="695" width="140" height="70" as="geometry" />
+        <mxCell id="tlp" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿Timeout?" vertex="1">
+          <mxGeometry height="70" width="140" x="220" y="695" as="geometry" />
         </mxCell>
-        <mxCell id="ta" value="¿Timeout?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="220" y="1385" width="140" height="70" as="geometry" />
+        <mxCell id="ta" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿Timeout?" vertex="1">
+          <mxGeometry height="70" width="140" x="220" y="1385" as="geometry" />
         </mxCell>
-        <mxCell id="tt" value="¿Timeout?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="220" y="1635" width="140" height="70" as="geometry" />
+        <mxCell id="tt" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿Timeout?" vertex="1">
+          <mxGeometry height="70" width="140" x="220" y="1635" as="geometry" />
         </mxCell>
-        <mxCell id="flp" value="F" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="270" y="805" width="40" height="40" as="geometry" />
+        <mxCell id="flp" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="40" width="40" x="270" y="805" as="geometry" />
         </mxCell>
-        <mxCell id="fa" value="F" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="270" y="1495" width="40" height="40" as="geometry" />
+        <mxCell id="fa" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="40" width="40" x="270" y="1495" as="geometry" />
         </mxCell>
-        <mxCell id="ft" value="F" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="270" y="1745" width="40" height="40" as="geometry" />
+        <mxCell id="ft" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="40" width="40" x="270" y="1745" as="geometry" />
         </mxCell>
-        <mxCell id="fv" value="F" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="820" y="1050" width="40" height="40" as="geometry" />
+        <mxCell id="fv" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="40" width="40" x="820" y="1050" as="geometry" />
         </mxCell>
-        <mxCell id="motor" value="MOTOR LPDT (externo)&lt;br&gt;&lt;br&gt;Recibe: solicitud, permiso_arranque,&lt;br&gt;cantidad_bytes, byte_almacen.&lt;br&gt;Entrega: aceptado, ocupado, terminado, pos.&lt;br&gt;&lt;br&gt;Añade 87 y transmite el paquete.&lt;br&gt;estado_D0 → interfaz física → D0_P/N.&lt;br&gt;El supervisor no controla sus bits.&lt;br&gt;&lt;br&gt;Retirar permiso NO aborta.&lt;br&gt;Motor: control posedge, datos negedge.&lt;br&gt;Conservar caminos de medio ciclo: 12,5 ns." style="whiteSpace=wrap;html=1;align=left;spacing=12;" vertex="1" parent="1">
-          <mxGeometry x="970" y="100" width="420" height="280" as="geometry" />
+        <mxCell id="motor" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=12;" value="MOTOR LPDT (externo)&lt;br&gt;&lt;br&gt;Recibe: solicitud, permiso_arranque,&lt;br&gt;cantidad_bytes, byte_almacen.&lt;br&gt;Entrega: aceptado, ocupado, terminado, pos.&lt;br&gt;&lt;br&gt;Añade 87 y transmite el paquete.&lt;br&gt;estado_D0 → interfaz física → D0_P/N.&lt;br&gt;El supervisor no controla sus bits.&lt;br&gt;&lt;br&gt;Retirar permiso NO aborta.&lt;br&gt;Motor: control posedge, datos negedge.&lt;br&gt;Conservar caminos de medio ciclo: 12,5 ns." vertex="1">
+          <mxGeometry height="280" width="420" x="970" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="rom" value="ROM_PAQUETES (interna)&lt;br&gt;&lt;br&gt;Durante el envío:&lt;br&gt;dirección = base_activa + pos&lt;br&gt;byte_almacen = ROM_PAQUETES[dirección]&lt;br&gt;&lt;br&gt;Paquetes completos con ECC/CRC, sin 87.&lt;br&gt;Lectura anticipada; sin handshake por byte.&lt;br&gt;Latencia pendiente de cerrar en datapath.&lt;br&gt;&lt;br&gt;Motor actual: 1–7 bytes.&lt;br&gt;DEPENDENCIA: ampliación a 1–15 bytes.&lt;br&gt;No fragmentar paquetes largos." style="whiteSpace=wrap;html=1;align=left;spacing=12;" vertex="1" parent="1">
-          <mxGeometry x="970" y="410" width="420" height="280" as="geometry" />
+        <mxCell id="rom" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=12;" value="ROM_PAQUETES (interna)&lt;br&gt;&lt;br&gt;dirección = base_activa + pos&lt;br&gt;byte_almacen = ROM_PAQUETES[dirección]&lt;br&gt;&lt;br&gt;75 bytes con ECC/CRC, sin selector 87.&lt;br&gt;Lectura combinacional anticipada.&lt;br&gt;Sin handshake por byte ni registro adicional.&lt;br&gt;&lt;br&gt;Motor externo: ANCHO_LONGITUD = 4.&lt;br&gt;Admite 1–15 bytes, sin fragmentar paquetes.&lt;br&gt;Timing físico de 12,5 ns pendiente de validar." vertex="1">
+          <mxGeometry height="280" width="420" x="970" y="410" as="geometry" />
         </mxCell>
-        <mxCell id="phy" value="INTERFAZ FÍSICA LP (externa)&lt;br&gt;&lt;br&gt;preparar_lp → petición de configuración.&lt;br&gt;lp_preparada → condición interna de drivers.&lt;br&gt;No es respuesta del panel ni power-good.&lt;br&gt;&lt;br&gt;CLK/D1 en LP-11; D0 sigue al motor.&lt;br&gt;Drivers HS sin conducir.&lt;br&gt;Sin RESET físico ni GPIO de backlight.&lt;br&gt;Seguridad eléctrica pendiente de validar." style="whiteSpace=wrap;html=1;align=left;spacing=12;" vertex="1" parent="1">
-          <mxGeometry x="970" y="720" width="420" height="230" as="geometry" />
+        <mxCell id="phy" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=12;" value="INTERFAZ FÍSICA LP (externa)&lt;br&gt;&lt;br&gt;preparar_lp → petición de configuración.&lt;br&gt;lp_preparada → condición interna de drivers.&lt;br&gt;No es respuesta del panel ni power-good.&lt;br&gt;&lt;br&gt;CLK/D1 en LP-11; D0 sigue al motor.&lt;br&gt;Drivers HS sin conducir.&lt;br&gt;Sin RESET físico ni GPIO de backlight.&lt;br&gt;Seguridad eléctrica pendiente de validar." vertex="1">
+          <mxGeometry height="230" width="420" x="970" y="720" as="geometry" />
         </mxCell>
-        <mxCell id="secuencia" value="ROM_DESC · REFERENCIA POR VALIDAR&lt;br&gt;Paso: comando y parámetros hex → espera&lt;br&gt;&lt;br&gt;0: 01 → 20 ms&lt;br&gt;1: B0 00 → 5 ms&lt;br&gt;2: E4 00 00 00 00 08 → 0&lt;br&gt;3: D0 45 45 71 → 0&lt;br&gt;4: 6F 01 → 0&lt;br&gt;5: 11 → 120 ms&lt;br&gt;6: D0 52 4A 71 → 0&lt;br&gt;7: BE FF 0F 00 18 04 04 00 5D → 0&lt;br&gt;8: BB 2F → 0&lt;br&gt;9: B0 2F → 20 ms&lt;br&gt;10: 29 → 120 ms&lt;br&gt;&lt;br&gt;0: sin espera DCS adicional; no elimina&lt;br&gt;restricciones entre transacciones.&lt;br&gt;20 ms tras 01: propuesta dentro de 10–20 ms.&lt;br&gt;285 ms + preparación + transmisión." style="whiteSpace=wrap;html=1;align=left;spacing=12;" vertex="1" parent="1">
-          <mxGeometry x="970" y="980" width="420" height="380" as="geometry" />
+        <mxCell id="secuencia" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=12;" value="ROM_DESC · REFERENCIA POR VALIDAR&lt;br&gt;Paso: comando y parámetros hex → espera&lt;br&gt;&lt;br&gt;0: 01 → 20 ms&lt;br&gt;1: B0 00 → 5 ms&lt;br&gt;2: E4 00 00 00 00 08 → 0&lt;br&gt;3: D0 45 45 71 → 0&lt;br&gt;4: 6F 01 → 0&lt;br&gt;5: 11 → 120 ms&lt;br&gt;6: D0 52 4A 71 → 0&lt;br&gt;7: BE FF 0F 00 18 04 04 00 5D → 0&lt;br&gt;8: BB 2F → 0&lt;br&gt;9: B0 2F → 20 ms&lt;br&gt;10: 29 → 120 ms&lt;br&gt;&lt;br&gt;0: sin espera DCS adicional; no elimina&lt;br&gt;restricciones entre transacciones.&lt;br&gt;20 ms tras 01: propuesta dentro de 10–20 ms.&lt;br&gt;285 ms + preparación + transmisión." vertex="1">
+          <mxGeometry height="380" width="420" x="970" y="980" as="geometry" />
         </mxCell>
-        <mxCell id="fallo" value="F · FALLO ENCLAVADO&lt;br&gt;&lt;br&gt;Guardar primera causa; fallo = 1&lt;br&gt;init_completa = 0; init_en_curso = 0&lt;br&gt;solicitud = 0; permiso_arranque = 0&lt;br&gt;Mantener reset del motor, no del supervisor.&lt;br&gt;Conservar petición LP si estaba activa.&lt;br&gt;&lt;br&gt;Sin avance ni reintentos automáticos.&lt;br&gt;Salir únicamente mediante reset interno.&lt;br&gt;Todos los círculos F remiten a este bloque.&lt;br&gt;No garantiza recuperar físicamente el panel." style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;align=left;spacing=12;" vertex="1" parent="1">
-          <mxGeometry x="970" y="1400" width="420" height="260" as="geometry" />
+        <mxCell id="fallo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;align=left;spacing=12;" value="F · FALLO ENCLAVADO&lt;br&gt;&lt;br&gt;Guardar primera causa; fallo = 1&lt;br&gt;init_completa = 0; init_en_curso = 0&lt;br&gt;solicitud = 0; permiso_arranque = 0&lt;br&gt;Mantener reset del motor, no del supervisor.&lt;br&gt;Conservar petición LP si estaba activa.&lt;br&gt;&lt;br&gt;Sin avance ni reintentos automáticos.&lt;br&gt;Salir únicamente mediante reset interno.&lt;br&gt;Todos los círculos F remiten a este bloque.&lt;br&gt;No garantiza recuperar físicamente el panel." vertex="1">
+          <mxGeometry height="260" width="420" x="970" y="1400" as="geometry" />
         </mxCell>
-        <mxCell id="global" value="REGLAS GLOBALES&lt;br&gt;&lt;br&gt;rst tiene prioridad: volver al inicio.&lt;br&gt;Reset motor: un posedge y el negedge siguiente.&lt;br&gt;Reset aborta sin terminado.&lt;br&gt;&lt;br&gt;Tras adquirir lp_preparada, perderla → F.&lt;br&gt;También en LISTO mientras se conserve LP.&lt;br&gt;Incoherencia de handshake → F.&lt;br&gt;ocupado no sustituye terminado.&lt;br&gt;Timeouts pendientes de dimensionar.&lt;br&gt;Controles síncronos al reloj de 40 MHz." style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="970" y="1700" width="420" height="240" as="geometry" />
+        <mxCell id="global" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;" value="REGLAS GLOBALES&lt;br&gt;&lt;br&gt;rst tiene prioridad: volver al inicio.&lt;br&gt;Reset motor: un posedge y el negedge siguiente.&lt;br&gt;Reset aborta sin terminado.&lt;br&gt;&lt;br&gt;Tras adquirir lp_preparada, perderla → F.&lt;br&gt;También en LISTO mientras se conserve LP.&lt;br&gt;Incoherencia de handshake → F.&lt;br&gt;ocupado no sustituye terminado.&lt;br&gt;Timeouts configurables: valores de trabajo.&lt;br&gt;Controles síncronos al reloj de 40 MHz." vertex="1">
+          <mxGeometry height="240" width="420" x="970" y="1700" as="geometry" />
         </mxCell>
-        <mxCell id="tiempos" value="T_ESTABILIZACION: configurable, pendiente.&lt;br&gt;No mide ni garantiza alimentaciones.&lt;br&gt;T_REPOSO_INICIAL: propuesta de 200 µs.&lt;br&gt;No es temporización física validada." style="text;html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
-          <mxGeometry x="80" y="490" width="290" height="100" as="geometry" />
+        <mxCell id="tiempos" parent="1" style="text;html=1;whiteSpace=wrap;align=left;" value="T_ESTABILIZACION: 20 ms configurable.&lt;br&gt;No mide ni garantiza alimentaciones.&lt;br&gt;T_REPOSO_INICIAL: 200 µs configurable.&lt;br&gt;Valores físicos pendientes de validar." vertex="1">
+          <mxGeometry height="100" width="290" x="80" y="490" as="geometry" />
         </mxCell>
-        <mxCell id="pie" value="PROPUESTA DE DISEÑO · NO RTL IMPLEMENTADO&lt;br&gt;Notación como ejemplo.drawio: = asignación; == comparación. Una caja no representa necesariamente un ciclo ni un estado.&lt;br&gt;Las esperas terminan antes de avanzar. init_completa solo indica secuencia emitida y tiempos cumplidos, no recepción ni imagen visible.&lt;br&gt;Base: AGENTS.md y contrato RTL del motor. Sin CPU, PC, HS, BTA ni control de backlight. Sin validación eléctrica." style="text;html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
-          <mxGeometry x="200" y="2180" width="1190" height="110" as="geometry" />
+        <mxCell id="pie" parent="1" style="text;html=1;whiteSpace=wrap;align=left;" value="FLUJO DEL RTL IMPLEMENTADO · VERIFICACIÓN LÓGICA EN SIMULACIÓN&lt;br&gt;Notación: = asignación; == comparación. Una caja no representa necesariamente un ciclo ni un estado.&lt;br&gt;init_completa indica secuencia emitida y tiempos cumplidos; no confirma recepción ni imagen visible.&lt;br&gt;Sin CPU, PC, drivers LP/HS, BTA ni control de backlight. Interfaz física y validación eléctrica pendientes." vertex="1">
+          <mxGeometry height="110" width="1190" x="200" y="2180" as="geometry" />
         </mxCell>
-        <mxCell id="e01" edge="1" parent="1" source="inicio" target="reset" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+        <mxCell id="e01" edge="1" parent="1" source="inicio" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="reset">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e02" edge="1" parent="1" source="reset" target="rst" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+        <mxCell id="e02" edge="1" parent="1" source="reset" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="rst">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e03" value="No" edge="1" parent="1" source="rst" target="reset" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;">
+        <mxCell id="e03" edge="1" parent="1" source="rst" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" target="reset" value="No">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="850" y="415" />
@@ -120,22 +120,22 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e04" value="Sí" edge="1" parent="1" source="rst" target="estabilizar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e04" edge="1" parent="1" source="rst" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="estabilizar" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e05" value="Retardo cumplido" edge="1" parent="1" source="estabilizar" target="preparar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e05" edge="1" parent="1" source="estabilizar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="preparar" value="Retardo cumplido">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e06" edge="1" parent="1" source="preparar" target="lp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e06" edge="1" parent="1" source="preparar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="lp">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e07" value="Sí" edge="1" parent="1" source="lp" target="reposo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e07" edge="1" parent="1" source="lp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="reposo" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e08" value="No" edge="1" parent="1" source="lp" target="tlp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+        <mxCell id="e08" edge="1" parent="1" source="lp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="tlp" value="No">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e09" value="No" edge="1" parent="1" source="tlp" target="lp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;">
+        <mxCell id="e09" edge="1" parent="1" source="tlp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;" target="lp" value="No">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="290" y="675" />
@@ -143,31 +143,31 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e10" value="Sí" edge="1" parent="1" source="tlp" target="flp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e10" edge="1" parent="1" source="tlp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="flp" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e11" value="Reposo cumplido" edge="1" parent="1" source="reposo" target="descriptor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e11" edge="1" parent="1" source="reposo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="descriptor" value="Reposo cumplido">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e12" edge="1" parent="1" source="descriptor" target="valido" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e12" edge="1" parent="1" source="descriptor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="valido">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e13" value="No" edge="1" parent="1" source="valido" target="fv" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+        <mxCell id="e13" edge="1" parent="1" source="valido" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="fv" value="No">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e14" value="Sí" edge="1" parent="1" source="valido" target="paquete" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e14" edge="1" parent="1" source="valido" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="paquete" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e15" value="Datos preparados" edge="1" parent="1" source="paquete" target="solicitar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e15" edge="1" parent="1" source="paquete" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="solicitar" value="Datos preparados">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e16" edge="1" parent="1" source="solicitar" target="aceptado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e16" edge="1" parent="1" source="solicitar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="aceptado">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e17" value="No" edge="1" parent="1" source="aceptado" target="ta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+        <mxCell id="e17" edge="1" parent="1" source="aceptado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="ta" value="No">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e18" value="No" edge="1" parent="1" source="ta" target="aceptado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;">
+        <mxCell id="e18" edge="1" parent="1" source="ta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;" target="aceptado" value="No">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="290" y="1360" />
@@ -175,19 +175,19 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e19" value="Sí" edge="1" parent="1" source="ta" target="fa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e19" edge="1" parent="1" source="ta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="fa" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e20" value="Sí" edge="1" parent="1" source="aceptado" target="transmitir" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e20" edge="1" parent="1" source="aceptado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="transmitir" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e21" edge="1" parent="1" source="transmitir" target="terminado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e21" edge="1" parent="1" source="transmitir" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="terminado">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e22" value="No" edge="1" parent="1" source="terminado" target="tt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+        <mxCell id="e22" edge="1" parent="1" source="terminado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="tt" value="No">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e23" value="No" edge="1" parent="1" source="tt" target="terminado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;">
+        <mxCell id="e23" edge="1" parent="1" source="tt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;" target="terminado" value="No">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="290" y="1610" />
@@ -195,19 +195,19 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e24" value="Sí" edge="1" parent="1" source="tt" target="ft" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e24" edge="1" parent="1" source="tt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="ft" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e25" value="Sí" edge="1" parent="1" source="terminado" target="espera" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e25" edge="1" parent="1" source="terminado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="espera" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e26" value="Espera cumplida" edge="1" parent="1" source="espera" target="ultimo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e26" edge="1" parent="1" source="espera" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="ultimo" value="Espera cumplida">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e27" value="No" edge="1" parent="1" source="ultimo" target="avanzar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+        <mxCell id="e27" edge="1" parent="1" source="ultimo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="avanzar" value="No">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e28" edge="1" parent="1" source="avanzar" target="descriptor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;">
+        <mxCell id="e28" edge="1" parent="1" source="avanzar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" target="descriptor">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="140" y="1910" />
@@ -215,21 +215,21 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e29" value="Sí" edge="1" parent="1" source="ultimo" target="fin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;">
+        <mxCell id="e29" edge="1" parent="1" source="ultimo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="fin" value="Sí">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="init-datapath" name="Datapath">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="2600" pageHeight="2550" math="0" shadow="0">
+    <mxGraphModel dx="1008" dy="1511" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2600" pageHeight="2550" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="dp-title" parent="1" style="text;html=1;align=left;fontSize=26;" value="SECUENCIADOR INIT · DATAPATH PROPUESTO" vertex="1">
+        <mxCell id="dp-title" parent="1" style="text;html=1;align=left;fontSize=26;" value="SECUENCIADOR INIT · DATAPATH IMPLEMENTADO" vertex="1">
           <mxGeometry height="50" width="2200" x="70" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="dp-step" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;PASO&lt;/b&gt;&lt;br&gt;CONTADOR [4]" vertex="1">
+        <mxCell id="dp-step" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;PASO&lt;/b&gt;&lt;br&gt;count.v [4]" vertex="1">
           <mxGeometry height="140" width="220" x="180" y="300" as="geometry" />
         </mxCell>
         <mxCell id="step-rst" parent="dp-step" style="text;html=1;fontSize=15;" value="RST" vertex="1">
@@ -241,7 +241,7 @@
         <mxCell id="step-q" parent="dp-step" style="text;html=1;fontSize=17;align=right;" value="Q" vertex="1">
           <mxGeometry height="25" width="30" x="185" y="75" as="geometry" />
         </mxCell>
-        <mxCell id="step-clk" parent="dp-step" style="text;html=1;fontSize=15;" value="▷CLK" vertex="1">
+        <mxCell id="step-clk" parent="dp-step" style="text;html=1;fontSize=15;" value="↓CLK" vertex="1">
           <mxGeometry height="25" width="70" x="145" y="115" as="geometry" />
         </mxCell>
         <mxCell id="dp-step-pins" parent="1" style="text;html=1;whiteSpace=wrap;align=center;fontSize=16;" value="rst | rst_paso" vertex="1">
@@ -256,7 +256,7 @@
         <mxCell id="desc-q" parent="dp-desc" style="text;html=1;fontSize=15;align=right;" value="DATA [34]" vertex="1">
           <mxGeometry height="25" width="100" x="195" y="45" as="geometry" />
         </mxCell>
-        <mxCell id="dp-active" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;DESC_ACTIVO&lt;/b&gt;&lt;br&gt;REG [34]" vertex="1">
+        <mxCell id="dp-active" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;DESC_ACTIVO&lt;/b&gt;&lt;br&gt;reg_0.v [34]" vertex="1">
           <mxGeometry height="180" width="270" x="940" y="300" as="geometry" />
         </mxCell>
         <mxCell id="active-ld" parent="dp-active" style="text;html=1;fontSize=15;" value="LD" vertex="1">
@@ -271,7 +271,7 @@
         <mxCell id="active-q" parent="dp-active" style="text;html=1;fontSize=17;align=right;" value="Q" vertex="1">
           <mxGeometry height="25" width="30" x="235" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="active-clk" parent="dp-active" style="text;html=1;fontSize=15;" value="▷CLK" vertex="1">
+        <mxCell id="active-clk" parent="dp-active" style="text;html=1;fontSize=15;" value="↓CLK" vertex="1">
           <mxGeometry height="25" width="70" x="195" y="150" as="geometry" />
         </mxCell>
         <mxCell id="dp-active-pins" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=16;" value="ld_desc" vertex="1">
@@ -331,7 +331,7 @@
         <mxCell id="dp-len" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=16;" value="longitud_activa [4]" vertex="1">
           <mxGeometry height="40" width="220" x="1740" y="190" as="geometry" />
         </mxCell>
-        <mxCell id="dp-last" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="COMP&lt;br&gt;A == B" vertex="1">
+        <mxCell id="dp-last" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="comp.v [4]&lt;br&gt;A == B" vertex="1">
           <mxGeometry height="100" width="220" x="180" y="570" as="geometry" />
         </mxCell>
         <mxCell id="last-a" parent="dp-last" style="text;html=1;fontSize=16;" value="A" vertex="1">
@@ -349,37 +349,31 @@
         <mxCell id="dp-constants" parent="1" style="text;html=1;fontSize=17;align=right;" value="T_ESTABILIZACION [W]" vertex="1">
           <mxGeometry height="30" width="360" x="100" y="810" as="geometry" />
         </mxCell>
-        <mxCell id="dp-mux" parent="1" style="align=center;html=1;strokeWidth=1;whiteSpace=wrap;fontSize=18;" value="MUX&lt;br&gt;6:1&lt;br&gt;[W]" vertex="1">
+        <mxCell id="dp-mux" parent="1" style="align=center;html=1;strokeWidth=1;whiteSpace=wrap;fontSize=18;" value="mux.v&lt;br&gt;6:1&lt;br&gt;[W]" vertex="1">
           <mxGeometry height="320" width="100" x="570" y="800" as="geometry" />
         </mxCell>
         <mxCell id="dp-mux-sel" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=16;" value="sel_t [3]" vertex="1">
           <mxGeometry height="30" width="160" x="540" y="1160" as="geometry" />
         </mxCell>
-        <mxCell id="dp-timer" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;TIEMPO&lt;/b&gt;&lt;br&gt;CONTADOR DESC. [W]" vertex="1">
+        <mxCell id="dp-timer" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;TIEMPO&lt;/b&gt;&lt;br&gt;count.v [W]&lt;br&gt;ASCENDENTE" vertex="1">
           <mxGeometry height="190" width="310" x="820" y="840" as="geometry" />
         </mxCell>
         <mxCell id="timer-rst" parent="dp-timer" style="text;html=1;fontSize=15;" value="RST" vertex="1">
           <mxGeometry height="25" width="45" as="geometry" />
         </mxCell>
-        <mxCell id="timer-ld" parent="dp-timer" style="text;html=1;fontSize=15;" value="LD" vertex="1">
-          <mxGeometry height="25" width="45" y="25" as="geometry" />
-        </mxCell>
-        <mxCell id="timer-dec" parent="dp-timer" style="text;html=1;fontSize=15;" value="DEC" vertex="1">
+        <mxCell id="timer-inc" parent="dp-timer" style="text;html=1;fontSize=15;" value="INC" vertex="1">
           <mxGeometry height="25" width="45" y="50" as="geometry" />
-        </mxCell>
-        <mxCell id="timer-d" parent="dp-timer" style="text;html=1;fontSize=17;" value="D" vertex="1">
-          <mxGeometry height="25" width="30" x="5" y="125" as="geometry" />
         </mxCell>
         <mxCell id="timer-q" parent="dp-timer" style="text;html=1;fontSize=17;align=right;" value="Q" vertex="1">
           <mxGeometry height="25" width="30" x="275" y="65" as="geometry" />
         </mxCell>
-        <mxCell id="timer-clk" parent="dp-timer" style="text;html=1;fontSize=15;" value="▷CLK" vertex="1">
+        <mxCell id="timer-clk" parent="dp-timer" style="text;html=1;fontSize=15;" value="↓CLK" vertex="1">
           <mxGeometry height="25" width="70" x="230" y="160" as="geometry" />
         </mxCell>
         <mxCell id="dp-timer-pins" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=16;" value="rst | rst_t" vertex="1">
           <mxGeometry height="30" width="150" x="760" y="750" as="geometry" />
         </mxCell>
-        <mxCell id="dp-zero" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="COMP&lt;br&gt;A == B" vertex="1">
+        <mxCell id="dp-zero" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="comp.v [W]&lt;br&gt;A == B" vertex="1">
           <mxGeometry height="120" width="170" x="1260" y="870" as="geometry" />
         </mxCell>
         <mxCell id="zero-a" parent="dp-zero" style="text;html=1;fontSize=16;" value="A" vertex="1">
@@ -391,7 +385,7 @@
         <mxCell id="zero-z" parent="dp-zero" style="text;html=1;fontSize=16;align=right;" value="Z" vertex="1">
           <mxGeometry height="25" width="25" x="140" y="45" as="geometry" />
         </mxCell>
-        <mxCell id="dp-err" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;CAUSA_FALLO&lt;/b&gt;&lt;br&gt;REG [3]" vertex="1">
+        <mxCell id="dp-err" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;CAUSA_FALLO&lt;/b&gt;&lt;br&gt;reg_0.v [3]" vertex="1">
           <mxGeometry height="150" width="280" x="1590" y="840" as="geometry" />
         </mxCell>
         <mxCell id="err-ld" parent="dp-err" style="text;html=1;fontSize=15;" value="LD" vertex="1">
@@ -406,7 +400,7 @@
         <mxCell id="err-q" parent="dp-err" style="text;html=1;fontSize=17;align=right;" value="Q" vertex="1">
           <mxGeometry height="25" width="30" x="245" y="65" as="geometry" />
         </mxCell>
-        <mxCell id="err-clk" parent="dp-err" style="text;html=1;fontSize=15;" value="▷CLK" vertex="1">
+        <mxCell id="err-clk" parent="dp-err" style="text;html=1;fontSize=15;" value="↓CLK" vertex="1">
           <mxGeometry height="25" width="70" x="200" y="125" as="geometry" />
         </mxCell>
         <mxCell id="dp-err-pins" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=16;" value="ld_causa" vertex="1">
@@ -418,7 +412,7 @@
         <mxCell id="dp-fsm" parent="1" style="whiteSpace=wrap;html=1;fontSize=24;strokeWidth=2;" value="&lt;b&gt;FSM&lt;/b&gt;" vertex="1">
           <mxGeometry height="1130" width="640" x="800" y="1270" as="geometry" />
         </mxCell>
-        <mxCell id="fsm-clk" parent="dp-fsm" style="text;html=1;fontSize=16;" value="▷CLK" vertex="1">
+        <mxCell id="fsm-clk" parent="dp-fsm" style="text;html=1;fontSize=16;" value="↑CLK" vertex="1">
           <mxGeometry height="30" width="90" x="280" y="1090" as="geometry" />
         </mxCell>
         <mxCell id="fi-last" parent="dp-fsm" style="text;html=1;align=left;fontSize=18;" value="ultimo_paso" vertex="1">
@@ -460,10 +454,7 @@
         <mxCell id="fo-rstt" parent="dp-fsm" style="text;html=1;align=right;fontSize=18;" value="rst_t" vertex="1">
           <mxGeometry height="30" width="210" x="425" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="fo-ldt" parent="dp-fsm" style="text;html=1;align=right;fontSize=18;" value="ld_t" vertex="1">
-          <mxGeometry height="30" width="210" x="425" y="350" as="geometry" />
-        </mxCell>
-        <mxCell id="fo-dect" parent="dp-fsm" style="text;html=1;align=right;fontSize=18;" value="dec_t" vertex="1">
+        <mxCell id="fo-inct" parent="dp-fsm" style="text;html=1;align=right;fontSize=18;" value="inc_t" vertex="1">
           <mxGeometry height="30" width="210" x="425" y="410" as="geometry" />
         </mxCell>
         <mxCell id="fo-ldc" parent="dp-fsm" style="text;html=1;align=right;fontSize=18;" value="ld_causa" vertex="1">
@@ -559,8 +550,15 @@
         <mxCell id="dp-e14" edge="1" parent="1" source="dp-mux-sel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=1;" target="dp-mux">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="dp-e15" edge="1" parent="1" source="dp-mux" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="timer-d" value="límite [W]">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="dp-e15" edge="1" parent="1" source="dp-mux" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;labelBackgroundColor=#ffffff;" target="zero-b" value="limite_t [W]">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="960" />
+              <mxPoint x="710" y="1110" />
+              <mxPoint x="1200" y="1110" />
+              <mxPoint x="1200" y="962.5" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="dp-e16" edge="1" parent="1" source="dp-timer-pins" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;" target="timer-rst">
           <mxGeometry relative="1" as="geometry" />
@@ -607,26 +605,14 @@
         <mxCell id="pin-e4" edge="1" parent="1" source="last-z" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="last-out">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="timer-ld-label" parent="1" style="text;html=1;fontSize=16;" value="ld_t" vertex="1">
-          <mxGeometry height="25" width="70" x="730" y="865" as="geometry" />
-        </mxCell>
-        <mxCell id="timer-dec-label" parent="1" style="text;html=1;fontSize=16;" value="dec_t" vertex="1">
+        <mxCell id="timer-inc-label" parent="1" style="text;html=1;fontSize=16;" value="inc_t" vertex="1">
           <mxGeometry height="25" width="70" x="730" y="890" as="geometry" />
         </mxCell>
-        <mxCell id="pin-e5" edge="1" parent="1" source="timer-ld-label" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="timer-ld">
+        <mxCell id="pin-e6" edge="1" parent="1" source="timer-inc-label" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="timer-inc">
           <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="pin-e6" edge="1" parent="1" source="timer-dec-label" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="timer-dec">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="zero-k" parent="1" style="text;html=1;fontSize=16;" value="0 [W]" vertex="1">
-          <mxGeometry height="25" width="80" x="1160" y="970" as="geometry" />
         </mxCell>
         <mxCell id="zero-out" parent="1" style="text;html=1;fontSize=16;" value="fin_t → FSM" vertex="1">
           <mxGeometry height="30" width="180" x="1390" y="750" as="geometry" />
-        </mxCell>
-        <mxCell id="pin-e7" edge="1" parent="1" source="zero-k" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="zero-b">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="pin-e8" edge="1" parent="1" source="zero-z" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="zero-out">
           <mxGeometry relative="1" as="geometry" />
@@ -709,7 +695,7 @@
         <mxCell id="fsm-clock-wire" edge="1" parent="1" source="fsm-clock-net" style="endArrow=classic;html=1;entryX=0.5;entryY=1;" target="fsm-clk">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="net-key" parent="1" style="text;html=1;fontSize=17;" value="Etiquetas iguales = misma red · clk = 40 MHz, posedge · W ≥ 23 · Motor [4]: ampliación pendiente" vertex="1">
+        <mxCell id="net-key" parent="1" style="text;html=1;fontSize=17;" value="FSM ↑posedge · count.v / reg_0.v ↓negedge · mux.v / comp.v combinacionales · reg_0 RESET_VALUE=0 · 40 MHz · W ≥ 23 · Motor externo [4]: implementado" vertex="1">
           <mxGeometry height="35" width="2300" x="70" y="100" as="geometry" />
         </mxCell>
         <mxCell id="fi-h1" parent="1" style="text;html=1;fontSize=18;fontStyle=1;" value="ENTRADAS · DATAPATH INTERNO" vertex="1">
@@ -787,10 +773,7 @@
         <mxCell id="so-rstt" parent="1" style="text;html=1;align=left;fontSize=18;" value="OR con rst → TIEMPO.RST" vertex="1">
           <mxGeometry height="30" width="570" x="1700" y="1560" as="geometry" />
         </mxCell>
-        <mxCell id="so-ldt" parent="1" style="text;html=1;align=left;fontSize=18;" value="TIEMPO.LD" vertex="1">
-          <mxGeometry height="30" width="570" x="1700" y="1620" as="geometry" />
-        </mxCell>
-        <mxCell id="so-dect" parent="1" style="text;html=1;align=left;fontSize=18;" value="TIEMPO.DEC" vertex="1">
+        <mxCell id="so-inct" parent="1" style="text;html=1;align=left;fontSize=18;" value="TIEMPO.INC" vertex="1">
           <mxGeometry height="30" width="570" x="1700" y="1680" as="geometry" />
         </mxCell>
         <mxCell id="so-ldc" parent="1" style="text;html=1;align=left;fontSize=18;" value="CAUSA_FALLO.LD" vertex="1">
@@ -832,10 +815,7 @@
         <mxCell id="wo-rstt" edge="1" parent="1" source="fo-rstt" style="endArrow=classic;html=1;exitX=1;exitY=0.5;" target="so-rstt">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="wo-ldt" edge="1" parent="1" source="fo-ldt" style="endArrow=classic;html=1;exitX=1;exitY=0.5;" target="so-ldt">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="wo-dect" edge="1" parent="1" source="fo-dect" style="endArrow=classic;html=1;exitX=1;exitY=0.5;" target="so-dect">
+        <mxCell id="wo-inct" edge="1" parent="1" source="fo-inct" style="endArrow=classic;html=1;exitX=1;exitY=0.5;" target="so-inct">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wo-ldc" edge="1" parent="1" source="fo-ldc" style="endArrow=classic;html=1;exitX=1;exitY=0.5;" target="so-ldc">
@@ -865,24 +845,18 @@
         <mxCell id="wo-fail" edge="1" parent="1" source="fo-fail" style="endArrow=classic;html=1;exitX=1;exitY=0.5;" target="so-fail">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="w7eK2Im4f_tYndPckaiz-3" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="740" y="890" as="sourcePoint" />
-            <mxPoint x="790" y="840" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="init-fsm" name="FSM">
-    <mxGraphModel dx="4400" dy="1511" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3400" pageHeight="3150" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="3400" pageHeight="3150" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="f-title" parent="1" style="text;html=1;fontSize=30;" value="SECUENCIADOR INIT · FSM PROPUESTA" vertex="1">
+        <mxCell id="f-title" parent="1" style="text;html=1;fontSize=30;" value="SECUENCIADOR INIT · FSM IMPLEMENTADA" vertex="1">
           <mxGeometry height="50" width="2800" x="100" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="f-clock" parent="1" style="text;html=1;fontSize=19;" value="posedge clk · Controles aplicados en el flanco que cierra el estado · Salidas no indicadas = 0 · Registros sin habilitación retienen Q" vertex="1">
+        <mxCell id="f-clock" parent="1" style="text;html=1;fontSize=19;" value="Estado y flags registrados en posedge; controles decodificados combinacionalmente; datapath captura en negedge. fin_t_reg captura fin_t en posedge. Salidas no indicadas = 0." vertex="1">
           <mxGeometry height="40" width="3150" x="100" y="100" as="geometry" />
         </mxCell>
         <mxCell id="f-global" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontSize=19;" value="Prioridad: rst; pérdida LP; incoherencia; descriptor inválido; evento válido antes de timeout.&lt;br&gt;E = cualquier error habilitado. Cada conector F conduce a FALLO; no es un estado adicional.&lt;br&gt;En la transición F: capturar primera causa, retirar solicitud/permiso, abortar motor y anular otras habilitaciones.&lt;br&gt;init_en_curso = 1 salvo LISTO/FALLO. preparar_lp = 1 salvo ARRANQUE/ESTABILIZAR. rst_motor = rst OR abortar_motor." vertex="1">
@@ -891,19 +865,19 @@
         <mxCell id="f-start" parent="1" style="ellipse;html=1;fontSize=20;" value="rst" vertex="1">
           <mxGeometry height="65" width="65" x="90" y="305" as="geometry" />
         </mxCell>
-        <mxCell id="s-boot" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ARRANQUE&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;rst_paso = 1&lt;br&gt;sel_t = 0&lt;br&gt;ld_t = 1&lt;br&gt;preparar_lp = 0&lt;br&gt;init_en_curso = 1" vertex="1">
+        <mxCell id="s-boot" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ARRANQUE&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;rst_paso = 1&lt;br&gt;sel_t = 0&lt;br&gt;rst_t = 1&lt;br&gt;preparar_lp = 0&lt;br&gt;init_en_curso = 1" vertex="1">
           <mxGeometry height="400" width="400" x="180" y="360" as="geometry" />
         </mxCell>
-        <mxCell id="s-stab" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ESTABILIZAR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;dec_t = NOT fin_t&lt;br&gt;preparar_lp = 0" vertex="1">
+        <mxCell id="s-stab" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ESTABILIZAR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 0&lt;br&gt;inc_t = NOT fin_t_reg&lt;br&gt;preparar_lp = 0" vertex="1">
           <mxGeometry height="400" width="400" x="800" y="360" as="geometry" />
         </mxCell>
-        <mxCell id="s-prepload" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;CARGAR_PREPARACION&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 3&lt;br&gt;ld_t = 1&lt;br&gt;preparar_lp = 1" vertex="1">
+        <mxCell id="s-prepload" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ARMAR_PREPARACION&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 3&lt;br&gt;rst_t = 1&lt;br&gt;preparar_lp = 1" vertex="1">
           <mxGeometry height="400" width="400" x="1420" y="360" as="geometry" />
         </mxCell>
-        <mxCell id="s-prep" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;PREPARAR_LP&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;dec_t = NOT fin_t&lt;br&gt;sel_t = 1&lt;br&gt;ld_t = lp_preparada" vertex="1">
+        <mxCell id="s-prep" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;PREPARAR_LP&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 3&lt;br&gt;inc_t = NOT fin_t_reg&lt;br&gt;&lt;br&gt;Al salir por lp_preparada:&lt;br&gt;rst_t = 1; inc_t = 0&lt;br&gt;sel_t = 1" vertex="1">
           <mxGeometry height="400" width="400" x="2040" y="360" as="geometry" />
         </mxCell>
-        <mxCell id="s-rest" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;REPOSO_INICIAL&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;dec_t = NOT fin_t&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0" vertex="1">
+        <mxCell id="s-rest" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;REPOSO_INICIAL&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 1&lt;br&gt;inc_t = NOT fin_t_reg&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0" vertex="1">
           <mxGeometry height="400" width="400" x="2660" y="360" as="geometry" />
         </mxCell>
         <mxCell id="s-desc" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;CARGAR_DESCRIPTOR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;ld_desc = 1&lt;br&gt;D = ROM_DESC[paso]" vertex="1">
@@ -915,22 +889,22 @@
         <mxCell id="s-data" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;PREPARAR_PAQUETE&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;Base y longitud estables&lt;br&gt;ROM combinacional → motor" vertex="1">
           <mxGeometry height="400" width="400" x="1420" y="1080" as="geometry" />
         </mxCell>
-        <mxCell id="s-reqload" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;CARGAR_ACEPTACION&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 4&lt;br&gt;ld_t = 1&lt;br&gt;solicitud = 0" vertex="1">
+        <mxCell id="s-reqload" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ARMAR_ACEPTACION&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 4&lt;br&gt;rst_t = 1&lt;br&gt;solicitud = 0" vertex="1">
           <mxGeometry height="400" width="400" x="800" y="1080" as="geometry" />
         </mxCell>
-        <mxCell id="s-req" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;SOLICITAR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;solicitud = NOT aceptado&lt;br&gt;permiso_arranque = NOT aceptado&lt;br&gt;dec_t = NOT fin_t&lt;br&gt;sel_t = 5&lt;br&gt;ld_t = aceptado" vertex="1">
+        <mxCell id="s-req" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=19;" value="&lt;b&gt;SOLICITAR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;solicitud = 1&lt;br&gt;permiso_arranque = 1&lt;br&gt;sel_t = 4&lt;br&gt;inc_t = NOT fin_t_reg&lt;br&gt;&lt;br&gt;Al salir por aceptado:&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;rst_t = 1; inc_t = 0; sel_t = 5" vertex="1">
           <mxGeometry height="400" width="400" x="180" y="1080" as="geometry" />
         </mxCell>
-        <mxCell id="s-tx" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;TRANSMITIR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;dec_t = NOT fin_t&lt;br&gt;sel_t = 2&lt;br&gt;ld_t = terminado" vertex="1">
+        <mxCell id="s-tx" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=19;" value="&lt;b&gt;TRANSMITIR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0&lt;br&gt;sel_t = 5&lt;br&gt;inc_t = NOT fin_t_reg&lt;br&gt;&lt;br&gt;Al salir por terminado:&lt;br&gt;rst_t = 1; inc_t = 0; sel_t = 2" vertex="1">
           <mxGeometry height="400" width="400" x="180" y="1800" as="geometry" />
         </mxCell>
-        <mxCell id="s-wait" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ESPERAR_COMANDO&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;dec_t = NOT fin_t&lt;br&gt;solicitud = 0&lt;br&gt;ld_desc = 0" vertex="1">
+        <mxCell id="s-wait" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;ESPERAR_COMANDO&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;sel_t = 2&lt;br&gt;inc_t = NOT fin_t_reg&lt;br&gt;solicitud = 0&lt;br&gt;ld_desc = 0" vertex="1">
           <mxGeometry height="400" width="400" x="800" y="1800" as="geometry" />
         </mxCell>
         <mxCell id="s-next" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;AVANZAR&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;inc_paso = 1&lt;br&gt;ld_desc = 0" vertex="1">
           <mxGeometry height="400" width="400" x="1420" y="1800" as="geometry" />
         </mxCell>
-        <mxCell id="s-ready" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;LISTO&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;init_completa = NOT E&lt;br&gt;init_en_curso = 0&lt;br&gt;preparar_lp = 1&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0" vertex="1">
+        <mxCell id="s-ready" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;LISTO&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;init_completa = 1&lt;br&gt;init_en_curso = 0&lt;br&gt;preparar_lp = 1&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0" vertex="1">
           <mxGeometry height="400" width="400" x="2040" y="1800" as="geometry" />
         </mxCell>
         <mxCell id="s-fail" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=20;" value="&lt;b&gt;FALLO&lt;/b&gt;&lt;br&gt;______________________&lt;br&gt;&lt;br&gt;fallo = 1&lt;br&gt;init_en_curso = 0&lt;br&gt;init_completa = 0&lt;br&gt;abortar_motor = 1&lt;br&gt;preparar_lp = 1&lt;br&gt;ld_causa = 0&lt;br&gt;solicitud = 0&lt;br&gt;permiso_arranque = 0" vertex="1">
@@ -996,7 +970,9 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="t15" edge="1" parent="1" source="f-error-in" style="html=1;endArrow=classic;fontSize=18;labelBackgroundColor=#ffffff;" target="s-fail" value="ld_causa = 1&lt;br&gt;causa_fsm = causa_E">
-          <mxGeometry relative="1" as="geometry"><mxPoint x="190" y="0" as="offset" /></mxGeometry>
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="190" as="offset" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="l-stab" edge="1" parent="1" source="s-stab" style="edgeStyle=orthogonalEdgeStyle;curved=1;html=1;endArrow=classic;exitX=0.25;exitY=0.07;entryX=0.75;entryY=0.07;fontSize=19;" target="s-stab" value="NOT fin_t">
           <mxGeometry relative="1" as="geometry">
@@ -1065,29 +1041,61 @@
         <mxCell id="f-mux" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=18;fontSize=20;" value="&lt;b&gt;sel_t [3]&lt;/b&gt;&lt;br&gt;0: T_ESTABILIZACION&lt;br&gt;1: T_REPOSO_INICIAL&lt;br&gt;2: espera_activa&lt;br&gt;3: TIMEOUT_PREPARACION&lt;br&gt;4: TIMEOUT_ACEPTACION&lt;br&gt;5: TIMEOUT_TRANSMISION" vertex="1">
           <mxGeometry height="290" width="550" x="140" y="2540" as="geometry" />
         </mxCell>
-        <mxCell id="f-errors" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=18;fontSize=20;" value="&lt;b&gt;CAPTURA Y ENCLAVAMIENTO&lt;/b&gt;&lt;br&gt;&lt;br&gt;En el posedge de detección:&lt;br&gt;CAUSA_FALLO ← causa_E; estado ← FALLO.&lt;br&gt;solicitud = 0; permiso_arranque = 0; abortar_motor = 1.&lt;br&gt;Ningún avance, carga de descriptor o temporización en ese flanco.&lt;br&gt;&lt;br&gt;En FALLO: no volver a cargar la causa. Sin reintentos.&lt;br&gt;Solo rst borra la causa y reinicia desde ARRANQUE.&lt;br&gt;Prioridad de causas simultáneas: 5, 6, 4, 1, 2, 3.&lt;br&gt;Transiciones normales: NOT E y NOT rst." vertex="1">
+        <mxCell id="f-errors" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=18;fontSize=20;" value="&lt;b&gt;CAPTURA Y ENCLAVAMIENTO&lt;/b&gt;&lt;br&gt;&lt;br&gt;Posedge de detección: estado ← FALLO.&lt;br&gt;Registrar ld_causa = 1; causa_fsm = causa_E.&lt;br&gt;Registrar solicitud = 0; permiso_arranque = 0; abortar_motor = 1.&lt;br&gt;Anular LD/INC/RST locales restantes.&lt;br&gt;Negedge siguiente: reg_0.v captura CAUSA_FALLO.&lt;br&gt;Posedge posterior: ld_causa = 0; conservar causa.&lt;br&gt;&lt;br&gt;Sin reintentos. Solo rst borra la causa y reinicia.&lt;br&gt;Prioridad de causas simultáneas: 5, 6, 4, 1, 2, 3.&lt;br&gt;Transiciones normales: NOT E y NOT rst." vertex="1">
           <mxGeometry height="340" width="1140" x="770" y="2540" as="geometry" />
         </mxCell>
         <mxCell id="f-handshake" parent="1" style="whiteSpace=wrap;html=1;align=left;spacing=18;fontSize=20;" value="&lt;b&gt;Incoherencia de handshake&lt;/b&gt;&lt;br&gt;&lt;br&gt;SOLICITAR: terminado OR (aceptado XOR ocupado)&lt;br&gt;TRANSMITIR: aceptado OR (ocupado == terminado)&lt;br&gt;Resto tras pedir LP: aceptado OR ocupado OR terminado&lt;br&gt;No evaluar durante rst, ARRANQUE, ESTABILIZAR ni FALLO.&lt;br&gt;&lt;br&gt;Entrada válida en TRANSMITIR: aceptado observado con ocupado.&lt;br&gt;Salida válida: terminado observado sin ocupado." vertex="1">
           <mxGeometry height="340" width="1200" x="1990" y="2540" as="geometry" />
         </mxCell>
-        <mxCell id="f-time" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=19;" value="LD tiene prioridad sobre DEC. Carga N en E0; Q llega a 0 tras N periodos; transición por fin_t en el posedge siguiente.&lt;br&gt;N=0: transición en el posedge siguiente, sin descuento. Espera DCS desde la observación de terminado, no desde aceptado.&lt;br&gt;Especificación gráfica, sin RTL. Motor de 15 bytes y validación física pendientes." vertex="1">
+        <mxCell id="f-time" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=19;" value="fin_t = (TIEMPO == limite_t). fin_t_reg se captura en posedge; evita realimentación combinacional al contador negedge. RST &gt; INC.&lt;br&gt;reiniciar_intervalo fuerza rst_t=1 e inc_t=0 durante el primer ciclo del nuevo intervalo; reinicio anula controles tras reset.&lt;br&gt;Espera tras terminado: P0 emite rst_t; D0 borra; D1…DN cuentan; P(N+1) termina: (N+1) ciclos desde P0. N=0: sin incrementos.&lt;br&gt;Estado/flags en posedge; count.v/reg_0.v en negedge; salidas y mux.v/comp.v combinacionales. Sin validación de timing físico." vertex="1">
           <mxGeometry height="105" width="3050" x="140" y="2950" as="geometry" />
         </mxCell>
-        <mxCell id="err-prep-f" value="F" style="ellipse;html=1;fontSize=22;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="2210" y="960" width="60" height="60" as="geometry" /></mxCell>
-        <mxCell id="err-prep-edge" source="s-prep" target="err-prep-f" value="fin_t AND NOT lp_preparada&lt;br&gt;causa_E = 1 (timeout preparación)" edge="1" parent="1" style="html=1;endArrow=classic;fontSize=19;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#ffffff;"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="err-valid-f" value="F" style="ellipse;html=1;fontSize=22;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="2210" y="1640" width="60" height="60" as="geometry" /></mxCell>
-        <mxCell id="err-valid-edge" source="s-valid" target="err-valid-f" value="NOT descriptor_valido&lt;br&gt;causa_E = 4 (descriptor inválido)" edge="1" parent="1" style="html=1;endArrow=classic;fontSize=19;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#ffffff;"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="err-ack-f" value="F" style="ellipse;html=1;fontSize=22;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="620" y="1580" width="60" height="60" as="geometry" /></mxCell>
-        <mxCell id="err-ack-edge" source="s-req" target="err-ack-f" value="fin_t AND NOT aceptado&lt;br&gt;causa_E = 2 (timeout aceptación)" edge="1" parent="1" style="html=1;endArrow=classic;fontSize=19;exitX=0.85;exitY=0.85;entryX=0.5;entryY=0;labelBackgroundColor=#ffffff;"><mxGeometry relative="1" as="geometry"><mxPoint x="95" y="0" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="err-tx-f" value="F" style="ellipse;html=1;fontSize=22;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="620" y="1750" width="60" height="60" as="geometry" /></mxCell>
-        <mxCell id="err-tx-edge" source="s-tx" target="err-tx-f" value="fin_t AND NOT terminado&lt;br&gt;causa_E = 3 (timeout transmisión)" edge="1" parent="1" style="html=1;endArrow=classic;fontSize=19;exitX=0.85;exitY=0.15;entryX=0;entryY=0.5;labelBackgroundColor=#ffffff;"><mxGeometry relative="1" as="geometry"><mxPoint x="0" y="-130" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="err-lp-monitor" value="&lt;b&gt;SUPERVISIÓN LP&lt;/b&gt;&lt;br&gt;Desde REPOSO_INICIAL hasta LISTO&lt;br&gt;E_LP = NOT lp_preparada" style="whiteSpace=wrap;html=1;fontSize=20;" vertex="1" parent="1"><mxGeometry x="180" y="810" width="500" height="120" as="geometry" /></mxCell>
-        <mxCell id="err-lp-f" value="F" style="ellipse;html=1;fontSize=22;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="880" y="840" width="60" height="60" as="geometry" /></mxCell>
-        <mxCell id="err-lp-edge" source="err-lp-monitor" target="err-lp-f" value="E_LP&lt;br&gt;causa_E = 5" edge="1" parent="1" style="html=1;endArrow=classic;fontSize=19;labelBackgroundColor=#ffffff;"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="err-hs-monitor" value="&lt;b&gt;SUPERVISIÓN HANDSHAKE&lt;/b&gt;&lt;br&gt;E_PROTO = incoherencia según estado&lt;br&gt;Condiciones en la tabla inferior" style="whiteSpace=wrap;html=1;fontSize=20;" vertex="1" parent="1"><mxGeometry x="1080" y="810" width="500" height="120" as="geometry" /></mxCell>
-        <mxCell id="err-hs-f" value="F" style="ellipse;html=1;fontSize=22;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="1810" y="840" width="60" height="60" as="geometry" /></mxCell>
-        <mxCell id="err-hs-edge" source="err-hs-monitor" target="err-hs-f" value="E_PROTO&lt;br&gt;causa_E = 6" edge="1" parent="1" style="html=1;endArrow=classic;fontSize=19;labelBackgroundColor=#ffffff;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="err-prep-f" parent="1" style="ellipse;html=1;fontSize=22;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="60" width="60" x="2210" y="960" as="geometry" />
+        </mxCell>
+        <mxCell id="err-prep-edge" edge="1" parent="1" source="s-prep" style="html=1;endArrow=classic;fontSize=19;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#ffffff;" target="err-prep-f" value="fin_t AND NOT lp_preparada&lt;br&gt;causa_E = 1 (timeout preparación)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="err-valid-f" parent="1" style="ellipse;html=1;fontSize=22;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="60" width="60" x="2210" y="1640" as="geometry" />
+        </mxCell>
+        <mxCell id="err-valid-edge" edge="1" parent="1" source="s-valid" style="html=1;endArrow=classic;fontSize=19;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#ffffff;" target="err-valid-f" value="NOT descriptor_valido&lt;br&gt;causa_E = 4 (descriptor inválido)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="err-ack-f" parent="1" style="ellipse;html=1;fontSize=22;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="60" width="60" x="620" y="1580" as="geometry" />
+        </mxCell>
+        <mxCell id="err-ack-edge" edge="1" parent="1" source="s-req" style="html=1;endArrow=classic;fontSize=19;exitX=0.85;exitY=0.85;entryX=0.5;entryY=0;labelBackgroundColor=#ffffff;" target="err-ack-f" value="fin_t AND NOT aceptado&lt;br&gt;causa_E = 2 (timeout aceptación)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="err-tx-f" parent="1" style="ellipse;html=1;fontSize=22;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="60" width="60" x="620" y="1750" as="geometry" />
+        </mxCell>
+        <mxCell id="err-tx-edge" edge="1" parent="1" source="s-tx" style="html=1;endArrow=classic;fontSize=19;exitX=0.85;exitY=0.15;entryX=0;entryY=0.5;labelBackgroundColor=#ffffff;" target="err-tx-f" value="fin_t AND NOT terminado&lt;br&gt;causa_E = 3 (timeout transmisión)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-130" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="err-lp-monitor" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;" value="&lt;b&gt;SUPERVISIÓN LP&lt;/b&gt;&lt;br&gt;Desde REPOSO_INICIAL hasta LISTO&lt;br&gt;E_LP = NOT lp_preparada" vertex="1">
+          <mxGeometry height="120" width="500" x="180" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="err-lp-f" parent="1" style="ellipse;html=1;fontSize=22;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="60" width="60" x="880" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="err-lp-edge" edge="1" parent="1" source="err-lp-monitor" style="html=1;endArrow=classic;fontSize=19;labelBackgroundColor=#ffffff;" target="err-lp-f" value="E_LP&lt;br&gt;causa_E = 5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="err-hs-monitor" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;" value="&lt;b&gt;SUPERVISIÓN HANDSHAKE&lt;/b&gt;&lt;br&gt;E_PROTO = incoherencia según estado&lt;br&gt;Condiciones en la tabla inferior" vertex="1">
+          <mxGeometry height="120" width="500" x="1080" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="err-hs-f" parent="1" style="ellipse;html=1;fontSize=22;strokeWidth=2;" value="F" vertex="1">
+          <mxGeometry height="60" width="60" x="1810" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="err-hs-edge" edge="1" parent="1" source="err-hs-monitor" style="html=1;endArrow=classic;fontSize=19;labelBackgroundColor=#ffffff;" target="err-hs-f" value="E_PROTO&lt;br&gt;causa_E = 6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
