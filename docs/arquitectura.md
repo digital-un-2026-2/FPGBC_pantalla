@@ -18,7 +18,7 @@ PPU → adaptador → buffers → preparación de paquetes DSI ──┐
                                                 planificador
                                                         │
 COMANDOS                                                │
-Software → preparación de paquetes DSI ───────────────────┘
+Secuenciador autónomo / preparación de paquetes DSI ──────┘
                                                         │
                               ┌─────────────────────────┴──────────────┐
                               ▼                                        ▼
@@ -77,14 +77,15 @@ de baja potencia. En este proyecto es la primera vía de transporte desarrollada
 
 Ejemplo: un Software Reset se prepara como `05 01 00 10`:
 
-1. El software prepara el paquete completo, incluida su protección ECC.
+1. La ROM del secuenciador conserva el paquete completo, incluido ECC/CRC;
+   en el arnés de depuración lo prepara el software del PC.
 2. Un supervisor conserva una copia estable y pide al motor que lo envíe.
 3. El motor espera permiso, acepta la petición y añade el selector LPDT `87`.
 4. Codifica cada bit en los estados lógicos del par D0, en orden LSB primero
    (primero el bit de menor peso del byte).
 5. Regresa al reposo LP-11 y emite `terminado`.
-6. Un futuro controlador deberá respetar las esperas del panel y preparar
-   el siguiente comando. `terminado` **no confirma que el panel lo recibió**.
+6. El secuenciador respeta las esperas de su ROM antes del siguiente comando.
+   `terminado` **no confirma que el panel lo recibió**.
 
 Los estados LP-00, LP-01, LP-10 y LP-11 nombran los valores lógicos de los
 conductores P y N. No son valores de tensión ni autorizan usar 3,3 V.
@@ -131,6 +132,11 @@ El supervisor de esta prueba admite paquetes de 1–7 bytes, rechaza órdenes
 mientras está ocupado y no tiene cola. No implementa todavía el supervisor
 completo del panel, ni sus esperas o recuperación eléctrica.
 
+Separado de LiteX, [secuenciador_init](../secuenciador_init/README.md) implementa
+el arranque autónomo: 11 paquetes fijos, temporizadores y fallos enclavados.
+Su prueba integrada usa el motor real con ancho 4 (hasta 15 bytes).
+La interfaz física LP sigue pendiente: no se ha validado el arranque en el panel.
+
 ## 5. Reloj y límites de la prueba
 
 El reloj de control es de **40 MHz**: un ciclo dura **25 ns**. La lógica de
@@ -150,8 +156,8 @@ drivers HS/LP, CLK/D1, recepción del panel ni conformidad D-PHY.
 1. Completar pruebas del motor y del supervisor CSR, incluidos reset, rechazos
    y envíos consecutivos; revisar timing del diseño integrado.
 2. Validar la PHY LP y las E/S antes de conectar la salida lógica al panel.
-3. Implementar el supervisor real de inicialización, reposo, esperas DCS y
-   recuperación. Confirmar la variante exacta de pantalla.
+3. Integrar el secuenciador autónomo con la interfaz LP y validar su secuencia
+   en el panel. Completar fallos integrados y confirmar la variante de pantalla.
 4. Desarrollar HS: reloj, serialización, cambios LP/HS y reparto entre canales.
 5. Añadir paquetes de imagen, buffers, adaptación e integración con PPU.
 6. Definir la integración RISC-V y evaluar recepción de respuestas del panel.

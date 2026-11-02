@@ -81,20 +81,30 @@ de fabricación confirmada. Las vías no convierten niveles ni protocolos.
 
 | Banco | Pin VCCIO | Medición del usuario | Ramas |
 |---|---:|---:|---|
-| BANK0 | 127 | 1,30 V | GPIO/LP |
+| BANK0 | 127 | 1,21 V | GPIO/LP |
 | BANK1 | 109 | 2,52 V | Diferenciales/HS |
 
 UG229 identifica esos VCCIO para EQ144 y variantes; el pin 108 es VCC del núcleo.
-Fecha, precisión y condiciones detalladas de medida no están registradas.
-2,52 V es coherente con 2,5 V nominales, pero **1,30 V no certifica compatibilidad
-con LVCMOS12**. Verificar límites de la FPGA exacta y precisión de medida.
+El responsable corrigió la lectura de BANK0 a **1,21 V**, medida con multímetro
+identificado como «unit-t utc33c» (comunicación del 2026-11-02); sustituye la
+lectura anterior de 1,30 V. Fecha de la medición, precisión y condiciones
+detalladas de alimentación/carga pendientes de registrar.
+1,21 V está dentro del rango de VCCIO de salida LVCMOS12 de **1,14–1,26 V**
+(DS226-2.7E, tabla 3-10). 2,52 V es coherente con 2,5 V nominales.
+Estas lecturas no validan niveles, transitorios ni conformidad D-PHY sobre los
+conductores del panel.
 
 ## Drivers y seguridad
 
 - VCCIO no determina por sí solo la tensión sobre el conductor. No aplicar
-  3,3 V a LP ni asumir que 1,30 V está dentro de tolerancia para 1,2 V.
+  3,3 V a LP; la lectura de 1,21 V del banco no sustituye la validación de sus
+  salidas sobre el panel.
 - Durante LPDT, el driver HS no debe conducir: se necesita controlar su
   habilitación real, no solo sus datos internos.
+- UG289-2.2.1E documenta buffers `TBUF`/`TLVDS_TBUF` con salida habilitada
+  por `OEN=0`. Alta impedancia requiere revisar también pulls, keeper y
+  terminaciones. Durante configuración existen pull-ups débiles fuera del
+  control del RTL; la interfaz física sigue sin implementar.
 - En HS, las ramas GPIO pueden conducirse a cero para participar en la carga
   resistiva de referencia. No asumir alta impedancia sin validar la solución.
 - Las seis resistencias de rama **no son una terminación entre P y N**.
@@ -115,6 +125,7 @@ con LVCMOS12**. Verificar límites de la FPGA exacta y precisión de medida.
 - [Gowin UG229](https://cdn.gowinsemi.com.cn/UG229E.pdf): tablas 3-4 a 3-6, encapsulados y alimentaciones.
 - [Gowin DS226](https://cdn.gowinsemi.com.cn/DS226E.pdf): familia GW2AR.
 - [Gowin IPUG948](https://cdn.gowinsemi.com.cn/IPUG948E.pdf): sección 4.2, figura 4-3, topología TLVDS con ramas de 100 Ω.
+- [Gowin UG289](https://cdn.gowinsemi.com.cn/UG289E.pdf): GPIO, buffers, pulls y configuración. IPUG948-2.3E remite la red resistiva a TN100; la figura 4-3 citada corresponde a revisiones anteriores.
 - [Gowin: soluciones MIPI](https://www.gowinsemi.com/en/market/white_papers/44).
 
 Las notas e IP de fabricantes pueden tener restricciones propias; no convierten

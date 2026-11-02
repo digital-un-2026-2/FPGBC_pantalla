@@ -114,7 +114,7 @@ El RTL usa posedge y negedge: revisar los caminos de medio ciclo a 40 MHz
 (12,5 ns) en los informes nuevos, no reutilizar el resultado del target anterior.
 Comprobar también los caminos combinacionales del almacén hacia el motor.
 
-`pixi run test` ejecuta solo las cinco pruebas del RTL original en
+`pixi run test` ejecuta las seis pruebas del RTL, incluidos anchos 3 y 4, en
 `motor_lpdt/TB/`. No hay actualmente una simulación automatizada de la
 integración LiteX, incluido su reset de arranque, supervisor CSR y UARTWishbone.
 

@@ -78,7 +78,7 @@ Son parámetros iniciales, **no certificación de conformidad**.
 | Mark de cada bit | 100 ns | 4 | Motor |
 | Space de cada bit | 100 ns | 4 | Motor |
 | Mark-1 de salida | 100 ns | 4 | Motor |
-| Reposo inicial propuesto | 200 µs | 8000 | Futuro supervisor del panel, no el supervisor CSR actual |
+| Reposo inicial propuesto | 200 µs | 8000 | Secuenciador autónomo, no el supervisor CSR |
 
 Mark + Space = 200 ns por bit: **5 Mbit/s**, 1,6 µs por byte.
 Para el vector inicial: entrada 0,4 µs + cinco bytes 8 µs + salida 0,1 µs =
@@ -87,8 +87,9 @@ Para el vector inicial: entrada 0,4 µs + cinco bytes 8 µs + salida 0,1 µs =
 Los mínimos clásicos de referencia son T_LPX = 50 ns y T_INIT = 100 µs;
 no bastan para validar pulsos, niveles, flancos o restricciones del receptor.
 El reposo propuesto no sustituye la secuencia de alimentación del panel.
-La espera posterior a Software Reset está pendiente y deberá ser configurable;
-no confundirla con la de Exit Sleep.
+La ROM del secuenciador usa 20 ms después de Software Reset y 120 ms después
+de Exit Sleep, siguiendo la referencia de inicialización; no son tiempos de
+alimentación ni evidencia de recepción por el panel.
 
 Se usan contadores sobre 40 MHz, no relojes combinacionales derivados. El RTL
 actual fija cuatro ciclos por fase; verificar permanencias reales evita errores

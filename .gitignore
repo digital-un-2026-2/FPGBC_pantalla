@@ -1,6 +1,7 @@
 # Configuración local del editor y temporales de diagrams.net.
 /.nvim/
 .*.drawio.dtmp
+.*.drawio.bkp
 /book_oct27_2026.pdf
 
 # Archivos de trabajo locales, no destinados a GitHub.
@@ -16,6 +17,7 @@
 /build_test/
 /eda_test.log
 *.vcd
+*.fst
 
 # Cachés de Python; las fuentes y configuraciones sí se versionan.
 __pycache__/

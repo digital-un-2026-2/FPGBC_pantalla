@@ -13,10 +13,10 @@ pantalla completo ni eléctricamente validado.**
 
 | Estado | Contenido |
 |---|---|
-| Implementado | Motor LPDT en Verilog: convierte paquetes preparados en estados lógicos de baja potencia; pruebas unitarias e integrada |
+| Implementado | Motor LPDT Verilog de 1–7/15 bytes y secuenciador autónomo de 11 comandos DCS, con ROM y esperas; verificados en simulación |
 | Integración de depuración | LiteX conecta el motor a registros controlables desde el PC y a LiteScope, un capturador de señales internas |
 | Flujo disponible | Simulación, síntesis para FPGBC, carga temporal en FPGA y pruebas internas por UART |
-| Pendiente | Conectar y validar la capa eléctrica, inicializar el panel, transmitir imagen en alta velocidad e integrar PPU/RISC-V |
+| Pendiente | Implementar y validar la interfaz física LP, comprobar inicialización en el panel, transmitir imagen en HS e integrar PPU |
 
 **El target de depuración no conecta la salida LPDT al panel.** Una captura
 correcta demuestra comportamiento lógico interno, no recepción de la pantalla.
@@ -27,7 +27,8 @@ En Linux x86_64, instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:
 
 ```sh
 pixi install --locked
-pixi run test                    # Las cinco pruebas del motor original
+pixi run test                    # Seis pruebas, incluidos modos de 7 y 15 bytes
+pixi run make -C secuenciador_init test-all  # Control y secuencia completa con motor real
 pixi run sim                     # Prueba integrada y visor GTKWave
 ```
 
@@ -58,11 +59,13 @@ El [índice de documentación](docs/README.md) reúne las referencias detalladas
 | Carpeta | Para qué sirve |
 |---|---|
 | [motor_lpdt/](motor_lpdt/README.md) | Motor Verilog original, contrato de interfaz y pruebas |
+| [secuenciador_init/](secuenciador_init/README.md) | Arranque autónomo Verilog: ROM de comandos, temporizadores, supervisor, pruebas y diagramas |
 | [gateware/](gateware/README.md) | Integración LiteX y plataforma FPGBC |
 | [scripts/](scripts/README.md) | Herramientas de entorno y prueba interna desde el PC |
 | [test/](test/README.md) | Prueba experimental del entorno EDA; no es la regresión LPDT |
 | [docs/](docs/README.md) | Arquitectura, procedimientos y hardware |
 | `build/` | Archivos generados de LiteX y capturas; no editar ni versionar |
+| `pixi.toml`, `pixi.lock` | Comandos y dependencias reproducibles; `.pixi/` y `.toolchain/` son entornos locales ignorados |
 
 Los comandos de los manuales parten de la raíz del repositorio. No ejecutar
 `setup-env` o `test-EDA` como preparación automática: el primero modifica el
@@ -73,7 +76,11 @@ sistema con `sudo` y el segundo intenta programar un diseño de otra placa.
 FPGA **GW2AR-LV18EQ144PC8/I7**, reloj de control de **40 MHz** y pantalla
 LCD-49754, cuya variante completa sigue pendiente. El reloj de control no es
 el reloj de transmisión de alta velocidad. El RESET físico del panel no es
-accesible; se prevé un comando de reset por DSI.
+accesible; la secuencia ROM comienza con un comando de reset por DSI.
+
+El camino autónomo previsto es `secuenciador_init → motor_lpdt → interfaz LP
+→ panel`. Los dos primeros están implementados; la interfaz física aún no.
+LiteX es un arnés externo de depuración, no una dependencia del arranque autónomo.
 
 No escribir flash ni modificar alimentaciones, resistencias o E/S sin revisión
 y autorización. La prueba interna tampoco sustituye la revisión de los pines

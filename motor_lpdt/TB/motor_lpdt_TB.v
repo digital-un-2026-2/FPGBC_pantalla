@@ -1,23 +1,26 @@
 `timescale 1ns / 1ps
 
 // Integración real de FSM, contadores, registros, comparadores y muxes.
-module motor_lpdt_TB;
+module motor_lpdt_TB #(
+    parameter ANCHO_LONGITUD = 3
+);
+  localparam MAX_BYTES = (1 << ANCHO_LONGITUD) - 1;
   reg clk = 0;
   always #12.5 clk = !clk;
   reg rst = 1;
   reg permiso_arranque = 0;
   reg solicitud = 0;
-  reg [2:0] cantidad_bytes = 4;
+  reg [ANCHO_LONGITUD-1:0] cantidad_bytes = 4;
   reg [7:0] byte_almacen = 0;
-  reg [7:0] paquete [0:6];
+  reg [7:0] paquete [0:MAX_BYTES-1];
   wire aceptado, ocupado, terminado;
-  wire [2:0] pos;
+  wire [ANCHO_LONGITUD-1:0] pos;
   wire [1:0] estado_D0;
   reg [1:0] lp_esperado = 2'b11;
   reg [7:0] byte_decodificado = 0;
   integer ciclo, longitud, fase, i;
 
-  motor_lpdt dut (
+  motor_lpdt #(.ANCHO_LONGITUD(ANCHO_LONGITUD)) dut (
       .clk(clk), .rst(rst), .permiso_arranque(permiso_arranque), .solicitud(solicitud),
       .cantidad_bytes(cantidad_bytes), .byte_almacen(byte_almacen),
       .aceptado(aceptado), .ocupado(ocupado), .terminado(terminado),
@@ -107,27 +110,35 @@ module motor_lpdt_TB;
           if (offset % 64 == 63 && byte_decodificado !== esperado(byte_n))
             $fatal(1, "FAIL: byte decodificado %0d", byte_n);
         end
-        // Solicitud adicional ignorada mientras ocupado.
-        solicitud = (ciclo >= 100 && ciclo < 105);
+         // Solicitud adicional ignorada mientras ocupado.
+         solicitud = (ciclo >= 100 && ciclo < 105);
+         // Retirar permiso tras aceptar no debe abortar la transmisión.
+         permiso_arranque = 0;
       end
       if ($time - inicio_lp != total * 25) $fatal(1, "FAIL: duración integrada");
       @(posedge clk); #1;
       if (terminado !== 1 || ocupado !== 0) $fatal(1, "FAIL: aviso final");
       @(posedge clk); #1;
-      if (terminado !== 0 || aceptado !== 0) $fatal(1, "FAIL: duración de los avisos");
+       if (terminado !== 0 || aceptado !== 0) $fatal(1, "FAIL: duración de los avisos");
+       repeat (3) begin
+         @(posedge clk); #1;
+         if (aceptado !== 0 || ocupado !== 0 || terminado !== 0 || estado_D0 !== 2'b11)
+           $fatal(1, "FAIL: envío duplicado o reposo incorrecto");
+       end
       $display("PASS: motor_lpdt %0d bytes DSI, %0d ciclos LP, memoria síncrona",
                cantidad_bytes, total);
     end
   endtask
 
   initial begin
-    $dumpfile("motor_lpdt_TB.vcd");
+    if (ANCHO_LONGITUD == 3) $dumpfile("motor_lpdt_TB.vcd");
+    else $dumpfile("motor_lpdt_15_TB.vcd");
     $dumpvars(0, motor_lpdt_TB);
     paquete[0] = 8'h05;
     paquete[1] = 8'h01;
     paquete[2] = 8'h00;
     paquete[3] = 8'h10;
-    for (i = 4; i < 7; i = i + 1) paquete[i] = 8'h55;
+    for (i = 4; i < MAX_BYTES; i = i + 1) paquete[i] = 8'h55 ^ (i * 13);
     resetear;
     // No aceptar sin permiso ni con longitud nula.
     solicitud = 1;
@@ -151,7 +162,7 @@ module motor_lpdt_TB;
     paquete[1] = 8'hff;
     paquete[2] = 8'h55;
     paquete[3] = 8'haa;
-    for (longitud = 1; longitud <= 7; longitud = longitud + 1) begin
+    for (longitud = 1; longitud <= MAX_BYTES; longitud = longitud + 1) begin
       cantidad_bytes = longitud;
       enviar;
     end
@@ -166,13 +177,33 @@ module motor_lpdt_TB;
       end
       resetear;
     end
+    if (ANCHO_LONGITUD == 4) begin
+      // Paquete largo BE de referencia: 4 header/ECC + 9 payload + 2 CRC.
+      // Se comprueba transporte; este test no recalcula ECC ni CRC.
+      {paquete[0], paquete[1], paquete[2], paquete[3], paquete[4],
+       paquete[5], paquete[6], paquete[7], paquete[8], paquete[9],
+       paquete[10], paquete[11], paquete[12], paquete[13], paquete[14]} =
+          120'h39090030BEFF0F00180404005DE7C4;
+      cantidad_bytes = 15;
+      enviar;
+      @(negedge clk); #1;
+      solicitud = 1;
+      permiso_arranque = 1;
+      @(posedge clk); #1;
+      if (!aceptado) $fatal(1, "FAIL: aceptación antes de aborto extendido");
+      @(negedge clk); #1; solicitud = 0;
+      while (dut.w_indice_byte < 8) begin
+        @(posedge clk); #1;
+      end
+      resetear;
+    end
     enviar;
     $display("PASS: motor_lpdt_TB; integración lógica, no validación eléctrica");
     $finish;
   end
 
   initial begin
-    #300000;
+    #1000000;
     $fatal(1, "FAIL: timeout motor_lpdt_TB");
   end
 endmodule

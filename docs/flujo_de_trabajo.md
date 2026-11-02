@@ -68,7 +68,7 @@ pixi run wave
 
 | Orden | Resultado |
 |---|---|
-| `test` | Compila y ejecuta las cinco pruebas originales |
+| `test` | Compila y ejecuta las seis pruebas, incluidos modos de 7 y 15 bytes |
 | `test TARGET=reg` mediante Make | Prueba solo el registro `reg_0.v` |
 | `sim` | Ejecuta la integrada y abre GTKWave |
 | `wave` | Abre ondas existentes; no vuelve a ejecutar la prueba |
@@ -78,10 +78,27 @@ guardan qué señales mostrar, no sus datos. Los fallos y timeouts de los
 testbenches terminan con `$fatal`.
 
 Sin Pixi, con Make e Icarus instalados: `make -C motor_lpdt test-all`.
-**`make -C motor_lpdt test` ejecuta solo la integrada**, no las cinco.
+**`make -C motor_lpdt test` ejecuta solo la integrada de 7 bytes**, no las seis.
+Para la ampliada: `pixi run make -C motor_lpdt test TARGET=motor_lpdt_15`.
 Cobertura y límites: [testbenches originales](../motor_lpdt/TB/README.md).
 
 ## 3. Alcance de las simulaciones
+
+### Secuenciador autónomo, sin FPGA
+
+```sh
+pixi run make -C secuenciador_init test                 # FSM con modelos e inyección de fallos
+pixi run make -C secuenciador_init test TARGET=secuenciador_init  # ROM y motor reales
+pixi run make -C secuenciador_init test-all             # Ambas pruebas
+pixi run make -C secuenciador_init sim TARGET=secuenciador_init  # Simular y abrir FST
+pixi run make -C secuenciador_init wave TARGET=secuenciador_init # Abrir FST existente
+```
+
+La integrada reconstruye los 11 paquetes desde D0 y comprueba ECC/CRC y
+285 ms de esperas DCS sin reducirlas; solo acorta algunos tiempos de arranque.
+`test` no genera ondas en esta prueba; `sim` sí. Resultados en
+`build/secuenciador_init/`. [Interfaz, diagramas y límites](../secuenciador_init/README.md).
+`pixi run test` sigue ejecutando únicamente la regresión del motor.
 
 Las pruebas de `motor_lpdt/TB/` verifican el motor Verilog y sus auxiliares.
 No simulan la integración LiteX, el reset de arranque, el supervisor CSR ni el

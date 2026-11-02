@@ -15,6 +15,8 @@ Control en flanco ascendente y registros/contadores en descendente: preservar
 los caminos de medio ciclo. Antes de modificar interfaces leer el contrato
 del README superior; el almacén debe entregar los bytes con la anticipación
 exigida, sin un protocolo de espera adicional.
+La FSM registra estado y flags en posedge y decodifica controles combinacionales;
+los flags conservan la información de la fase anterior hasta su captura negedge.
 
 Desde la raíz, sin FPGA:
 
