@@ -21,6 +21,10 @@ pantalla completo ni eléctricamente validado.**
 **El target de depuración no conecta la salida LPDT al panel.** Una captura
 correcta demuestra comportamiento lógico interno, no recepción de la pantalla.
 
+Para sintetizar **secuenciador y motor conectados en un único bitstream** y
+capturar ambos con LiteScope, usar el target `debug_init`:
+[procedimiento de depuración conjunta](docs/debug_secuenciador_init.md).
+
 ## Primera prueba: sin conectar la FPGA
 
 En Linux x86_64, instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:

@@ -26,6 +26,23 @@ Los nombres LiteScope están fijados en `SIGNALS`: un cambio de elaboración
 puede exigir compararlos con el CSV real y adaptar el script. Las comprobaciones
 dependen de la codificación y tiempos del motor actual, no son un receptor general.
 
+## Secuenciador y motor conectados
+
+`test_init_hw.py` usa el target **`debug_init`**, no `debug`. Verifica los
+11 paquetes, ECC/CRC, handshake y marcas de ciclo de toda la secuencia.
+Requiere bitstream cargado, CSV correspondientes y `litex_server` activo.
+No programa ni accede al panel; aplica reset local a los dos módulos por CSR.
+
+```sh
+pixi run python scripts/test_init_hw.py --output-dir build/debug_init/captures/prueba_01
+pixi run python -m unittest scripts.test_init_debug -v
+```
+
+La segunda orden **no usa hardware**: prueba el monitor y genera/simula el
+wrapper real con Icarus, incluidos arranque, pérdida LP, reset y timeout LP.
+No simula UARTWishbone ni LiteScope. Procedimiento y límites en
+[depuración conjunta](../docs/debug_secuenciador_init.md).
+
 ## `setup_env.sh`: preparación con efectos adicionales
 
 La tarea `pixi run setup-env` ejecuta este script. Hace tres cosas:

@@ -23,3 +23,8 @@ Los resultados van a `build/debug/`, no a esta carpeta. El target principal
 permite leer/escribir registros por UART y capturar señales con LiteScope.
 No incorpora CPU ni conecta D0 al panel. Para revisar informes, programar en
 SRAM y probar la FPGA, seguir el [manual de trabajo](../docs/flujo_de_trabajo.md).
+
+Para el **secuenciador y motor conectados en un único bitstream**, usar
+`python -m gateware.targets.debug_init --build`. Produce `build/debug_init/`
+y mantiene el arranque autónomo, sin E/S DSI. Consultar
+[integración y captura conjunta](../docs/debug_secuenciador_init.md).
