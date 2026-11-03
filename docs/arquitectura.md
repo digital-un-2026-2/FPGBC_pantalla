@@ -135,7 +135,10 @@ completo del panel, ni sus esperas o recuperación eléctrica.
 Separado de LiteX, [secuenciador_init](../secuenciador_init/README.md) implementa
 el arranque autónomo: 11 paquetes fijos, temporizadores y fallos enclavados.
 Su prueba integrada usa el motor real con ancho 4 (hasta 15 bytes).
-La interfaz física LP sigue pendiente: no se ha validado el arranque en el panel.
+La [interfaz física LP](../fisical_layer/README.md) ya tiene RTL combinacional
+con IOBUF/TBUF y un `panel_init_top` que conecta los tres módulos. Sus pruebas
+usan buffers ideales y reconstruyen los paquetes desde los pads simulados.
+Siguen pendientes constraints, revisión de E/S y arranque validado en el panel.
 
 ## 5. Reloj y límites de la prueba
 

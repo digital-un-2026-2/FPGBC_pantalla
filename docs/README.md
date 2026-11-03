@@ -27,6 +27,14 @@
 - [Depuración conjunta en FPGA](debug_secuenciador_init.md): target, monitor y LiteScope.
 - [Flujo, datapath y FSM](../secuenciador_init/README.md#diagramas): Draw.io, PDF y SVG.
 
+## Interfaz física LP y top autónomo
+
+- [Contrato LP y conexión de los tres bloques](../fisical_layer/README.md).
+- [Fuentes Verilog y jerarquía](../fisical_layer/src/README.md).
+- [Pruebas de buffers e integración](../fisical_layer/TB/README.md): modelos
+  ideales, reconstrucción desde pads y límites de la verificación.
+- [Flujo y datapath](../fisical_layer/docs/README.md): Draw.io sin constraints.
+
 Los procedimientos generales viven en `flujo_de_trabajo.md`; los README locales
 explican las carpetas y enlazan esos procedimientos. Los diagramas son
 conceptuales: para usar el motor prevalece su contrato RTL.

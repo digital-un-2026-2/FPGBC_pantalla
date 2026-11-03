@@ -1,0 +1,319 @@
+<mxfile host="Electron" pages="2">
+  <diagram id="lp-flujo" name="INTERFAZ_FISICA_LP">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1600" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="titulo" parent="1" style="text;html=1;whiteSpace=wrap;align=center;fontSize=22;" value="INTERFAZ FÍSICA LP — FLUJO DEL RTL" vertex="1">
+          <mxGeometry height="40" width="750" x="270" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="inicio" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;" value="INTERFAZ&lt;br&gt;LP" vertex="1">
+          <mxGeometry height="60" width="140" x="560" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="invariantes" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="SIEMPRE&lt;br&gt;Drivers HS 112–117 explícitamente deshabilitados&lt;br&gt;d0_pad_p = IOBUF_P.O; d0_pad_n = IOBUF_N.O" vertex="1">
+          <mxGeometry height="80" width="460" x="400" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="deshabilitar" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿rst_motor = 1&lt;br&gt;o preparar_lp = 0?" vertex="1">
+          <mxGeometry height="100" width="260" x="500" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="off" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="RESET / DESHABILITAR&lt;br&gt;d0_oen = 1; lp_aux_oen = 1&lt;br&gt;Liberar D0, CLK y D1&lt;br&gt;lp_preparada = 0" vertex="1">
+          <mxGeometry height="110" width="320" x="60" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="aux" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="HABILITAR CLK Y D1 EN LP&lt;br&gt;Datos CLK_P/N = 11; datos D1_P/N = 11&lt;br&gt;lp_aux_oen = 0" vertex="1">
+          <mxGeometry height="80" width="380" x="440" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="liberar" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="¿liberar_d0 = 1?&lt;br&gt;(entrada propuesta)" vertex="1">
+          <mxGeometry height="90" width="240" x="510" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="escuchar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="LIBERAR / ESCUCHAR D0&lt;br&gt;d0_oen = 1 para ambos IOBUF&lt;br&gt;Lectura de ambos pads disponible&lt;br&gt;lp_preparada = 0&lt;br&gt;CLK y D1 permanecen en LP-11" vertex="1">
+          <mxGeometry height="130" width="320" x="60" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="transmitir" parent="1" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" value="D0 SIGUE DIRECTAMENTE AL MOTOR&lt;br&gt;IOBUF_P.I = estado_D0[1]&lt;br&gt;IOBUF_N.I = estado_D0[0]&lt;br&gt;d0_oen = 0; lp_preparada = 1&lt;br&gt;Reposo LP-11 y transmisión los genera el motor" vertex="1">
+          <mxGeometry height="130" width="420" x="420" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="nota_evaluacion" parent="1" style="text;html=1;whiteSpace=wrap;align=center;fontSize=15;fontStyle=1;" value="DECISIONES COMBINACIONALES, NO ESTADOS&lt;br&gt;Reevaluar ante cambios de entradas. Sin FSM, reloj ni contadores propios.&lt;br&gt;Las salidas de cada rama se aplican junto con las condiciones comunes anteriores." vertex="1">
+          <mxGeometry height="90" width="840" x="240" y="1110" as="geometry" />
+        </mxCell>
+        <mxCell id="nota_interfaz" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="SEÑALES REUTILIZADAS&lt;br&gt;Entradas: preparar_lp y rst_motor del secuenciador; estado_D0 del motor.&lt;br&gt;Salida: lp_preparada hacia el secuenciador.&lt;br&gt;rst_motor incluye reset global y aborto por fallo.&lt;br&gt;&lt;br&gt;INTERFAZ NUEVA IMPLEMENTADA&lt;br&gt;liberar_d0: entrada fijada a 0 en panel_init_top, sin controlador BTA.&lt;br&gt;d0_pad_p/n: lecturas de los dos IOBUF.&lt;br&gt;d0_oen y lp_aux_oen: controles internos; 0 conduce, 1 libera.&lt;br&gt;hs_oen = 111111 conectado a seis TBUF.&lt;br&gt;Sin modo_d0, ocupado, mux ni error físico propio." vertex="1">
+          <mxGeometry height="360" width="420" x="1120" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="nota_contrato" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fillColor=#fff2cc;strokeColor=#d6b656;" value="COORDINACIÓN OBLIGATORIA&lt;br&gt;Reset motor: cubrir posedge y negedge posterior. Antes de habilitar LP, estado_D0 debe estar inicializado en LP-11.&lt;br&gt;No hay mux protector: el motor se conecta directamente a los IOBUF.&lt;br&gt;En FALLO, rst_motor = 1 deshabilita las salidas aunque preparar_lp siga a 1.&lt;br&gt;No usar permiso_arranque como OEN: retirarlo no aborta.&lt;br&gt;lp_preparada solo refleja habilitación interna, no recepción ni alimentación estable.&lt;br&gt;Reposo inicial, esperas y timeouts siguen en el secuenciador." vertex="1">
+          <mxGeometry height="340" width="420" x="1120" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="nota_escucha" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fillColor=#fff2cc;strokeColor=#d6b656;" value="ESCUCHA: RESERVA PARA EL FUTURO&lt;br&gt;No ejecuta BTA ni decodifica respuestas.&lt;br&gt;Coordinar detener solicitudes y terminar/abortar envío antes de liberar. Una liberación durante envío lo trunca.&lt;br&gt;No retirar liberar_d0 sin autorización externa para volver a conducir: no hay recuperación automática ni detector de propiedad del enlace.&lt;br&gt;El secuenciador actual trata lp_preparada = 0 como fallo desde REPOSO_INICIAL hasta LISTO. Escucha aún no integrada." vertex="1">
+          <mxGeometry height="280" width="420" x="1120" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="nota_electrica" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fillColor=#f5f5f5;strokeColor=#666666;" value="MAPA Y VALIDACIÓN PENDIENTE — GW2AR-LV18EQ144PC8/I7&lt;br&gt;D0 P/N = 122/123, dos IOBUF y 100 Ω por rama. CLK P/N = 126/128; D1 P/N = 124/125.&lt;br&gt;HS 112–117: configurar explícitamente salidas deshabilitadas; no basta dejarlas sin usar.&lt;br&gt;BANK0 = 1,21 V medidos; LVCMOS12 candidato, no validación D-PHY.&lt;br&gt;Revisar niveles, corrientes, flancos, pulls, keeper, terminaciones, timing y comportamiento durante configuración.&lt;br&gt;No se diseñan BTA, receptor LP, paquetes, vídeo HS ni backlight. No implementar ni probar en placa a partir de este dibujo sin revisión." vertex="1">
+          <mxGeometry height="190" width="1300" x="240" y="1240" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="inicio" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="invariantes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="invariantes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="deshabilitar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="deshabilitar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="off" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="deshabilitar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="aux" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="aux" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="liberar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="liberar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="escuchar" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="liberar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="transmitir" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QXiJJQsXjHay4Z0DCxPz-1" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="1320" y="1070" as="sourcePoint" />
+            <mxPoint x="1370" y="1020" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="lp-datapath" name="DATAPATH_LP">
+    <mxGraphModel dx="873" dy="1309" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dp-title" parent="1" style="text;html=1;align=left;fontSize=28;" value="&lt;b&gt;INTERFAZ LP · DATAPATH RTL&lt;/b&gt;" vertex="1">
+          <mxGeometry height="45" width="1250" x="60" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-key" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=17;" value="Bloques combinacionales y buffers de E/S. Sin mux, registros, contadores ni FSM.&lt;br&gt;Etiquetas iguales = misma señal. [n] = ancho. OEN: 0 conduce; 1 libera. Pines y constraints fuera de este esquema." vertex="1">
+          <mxGeometry height="60" width="1470" x="60" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-rst" parent="1" style="text;html=1;align=left;fontSize=18;" value="rst_motor" vertex="1">
+          <mxGeometry height="30" width="160" x="60" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-prep" parent="1" style="text;html=1;align=left;fontSize=18;" value="preparar_lp" vertex="1">
+          <mxGeometry height="30" width="160" x="60" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-not-rst" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="NOT" vertex="1">
+          <mxGeometry height="50" width="100" x="260" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-and" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="AND" vertex="1">
+          <mxGeometry height="70" width="110" x="440" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-en" parent="1" style="text;html=1;align=center;fontSize=18;" value="habilitar_lp" vertex="1">
+          <mxGeometry height="30" width="160" x="600" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-not-en" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="NOT" vertex="1">
+          <mxGeometry height="50" width="100" x="800" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-aux-oe" parent="1" style="text;html=1;align=center;fontSize=18;" value="lp_aux_oen" vertex="1">
+          <mxGeometry height="30" width="160" x="950" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-release" parent="1" style="text;html=1;align=center;fontSize=18;" value="liberar_d0*" vertex="1">
+          <mxGeometry height="30" width="160" x="950" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-or" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="OR" vertex="1">
+          <mxGeometry height="70" width="100" x="1160" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-oe" parent="1" style="text;html=1;align=center;fontSize=18;" value="d0_oen" vertex="1">
+          <mxGeometry height="30" width="140" x="1330" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-not-oe" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="NOT" vertex="1">
+          <mxGeometry height="50" width="100" x="1160" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-ready" parent="1" style="text;html=1;align=left;fontSize=18;" value="lp_preparada" vertex="1">
+          <mxGeometry height="30" width="200" x="1330" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-pdata" parent="1" style="text;html=1;align=left;fontSize=18;" value="estado_D0[1]" vertex="1">
+          <mxGeometry height="30" width="200" x="60" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-ndata" parent="1" style="text;html=1;align=left;fontSize=18;" value="estado_D0[0]" vertex="1">
+          <mxGeometry height="30" width="200" x="60" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-p" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;IOBUF_P&lt;/b&gt;" vertex="1">
+          <mxGeometry height="130" width="200" x="360" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-p-i" parent="dp-p" style="text;html=1;align=left;fontSize=16;" value="I" vertex="1">
+          <mxGeometry height="25" width="40" x="5" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-p-en" parent="dp-p" style="text;html=1;align=left;fontSize=16;" value="OEN" vertex="1">
+          <mxGeometry height="25" width="50" x="5" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-p-io" parent="dp-p" style="text;html=1;align=right;fontSize=16;" value="IO" vertex="1">
+          <mxGeometry height="25" width="45" x="150" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-p-o" parent="dp-p" style="text;html=1;align=right;fontSize=16;" value="O" vertex="1">
+          <mxGeometry height="25" width="45" x="150" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-n" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;IOBUF_N&lt;/b&gt;" vertex="1">
+          <mxGeometry height="130" width="200" x="360" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-n-i" parent="dp-n" style="text;html=1;align=left;fontSize=16;" value="I" vertex="1">
+          <mxGeometry height="25" width="40" x="5" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-n-en" parent="dp-n" style="text;html=1;align=left;fontSize=16;" value="OEN" vertex="1">
+          <mxGeometry height="25" width="50" x="5" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-n-io" parent="dp-n" style="text;html=1;align=right;fontSize=16;" value="IO" vertex="1">
+          <mxGeometry height="25" width="45" x="150" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-n-o" parent="dp-n" style="text;html=1;align=right;fontSize=16;" value="O" vertex="1">
+          <mxGeometry height="25" width="45" x="150" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-poe" parent="1" style="text;html=1;align=left;fontSize=18;" value="d0_oen" vertex="1">
+          <mxGeometry height="30" width="180" x="60" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-noe" parent="1" style="text;html=1;align=left;fontSize=18;" value="d0_oen" vertex="1">
+          <mxGeometry height="30" width="180" x="60" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-pio" parent="1" style="text;html=1;align=left;fontSize=18;" value="D0_P" vertex="1">
+          <mxGeometry height="30" width="130" x="650" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-nio" parent="1" style="text;html=1;align=left;fontSize=18;" value="D0_N" vertex="1">
+          <mxGeometry height="30" width="130" x="650" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-prx" parent="1" style="text;html=1;align=left;fontSize=18;" value="d0_pad_p*" vertex="1">
+          <mxGeometry height="30" width="160" x="650" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-nrx" parent="1" style="text;html=1;align=left;fontSize=18;" value="d0_pad_n*" vertex="1">
+          <mxGeometry height="30" width="160" x="650" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-ones" parent="1" style="text;html=1;align=left;fontSize=18;" value="1111 [4]" vertex="1">
+          <mxGeometry height="30" width="140" x="900" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-auxen" parent="1" style="text;html=1;align=left;fontSize=18;" value="lp_aux_oen" vertex="1">
+          <mxGeometry height="30" width="150" x="900" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-aux" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;TBUF × 4&lt;/b&gt;" vertex="1">
+          <mxGeometry height="170" width="200" x="1120" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-aux-i" parent="dp-aux" style="text;html=1;align=left;fontSize=16;" value="I [4]" vertex="1">
+          <mxGeometry height="25" width="60" x="5" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-aux-en" parent="dp-aux" style="text;html=1;align=left;fontSize=16;" value="OEN × 4" vertex="1">
+          <mxGeometry height="25" width="90" x="5" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-aux-o" parent="dp-aux" style="text;html=1;align=right;fontSize=16;" value="O [4]" vertex="1">
+          <mxGeometry height="25" width="70" x="125" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-auxout" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=18;" value="CLK_P/N&lt;br&gt;D1_P/N&lt;br&gt;[4]" vertex="1">
+          <mxGeometry height="90" width="150" x="1400" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-hsconst" parent="1" style="text;html=1;align=left;fontSize=18;" value="111111 (hs_oen)" vertex="1">
+          <mxGeometry height="30" width="180" x="950" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-hsoe" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=18;" value="hs_pads* [6]" vertex="1">
+          <mxGeometry height="30" width="180" x="1400" y="815" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-hszero" parent="1" style="text;html=1;align=left;fontSize=18;" value="000000 [6]" vertex="1">
+          <mxGeometry height="30" width="180" x="950" y="785" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-hsbuffers" parent="1" style="whiteSpace=wrap;html=1;fontSize=20;strokeWidth=1;" value="&lt;b&gt;TBUF × 6&lt;/b&gt;" vertex="1">
+          <mxGeometry height="145" width="160" x="1160" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-hsi" parent="dp-hsbuffers" style="text;html=1;align=left;fontSize=16;" value="I [6]" vertex="1">
+          <mxGeometry height="25" width="60" x="5" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-hsen" parent="dp-hsbuffers" style="text;html=1;align=left;fontSize=16;" value="OEN [6]" vertex="1">
+          <mxGeometry height="25" width="80" x="5" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-hso" parent="dp-hsbuffers" style="text;html=1;align=right;fontSize=16;" value="O [6]" vertex="1">
+          <mxGeometry height="25" width="60" x="95" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-foot" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=16;" value="* Señales nuevas. liberar_d0 = 0 en panel_init_top; lecturas sin receptor ni BTA. HS: seis TBUF deshabilitados permanentemente.&lt;br&gt;preparar_lp, rst_motor y lp_preparada: secuenciador; estado_D0: motor. Reset completo y D0 en LP-11 ANTES de habilitar.&lt;br&gt;RTL y pruebas con modelos ideales; sin validación eléctrica. Legalidad de E/S, constraints y estado real durante configuración pendientes." vertex="1">
+          <mxGeometry height="80" width="1490" x="60" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e1" edge="1" parent="1" source="dp-rst" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-not-rst">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e2" edge="1" parent="1" source="dp-not-rst" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0;entryY=0.25;" target="dp-and">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e3" edge="1" parent="1" source="dp-prep" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0;entryY=0.75;" target="dp-and">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e4" edge="1" parent="1" source="dp-and" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-en">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e5" edge="1" parent="1" source="dp-en" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-not-en">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e6" edge="1" parent="1" source="dp-not-en" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-aux-oe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e7" edge="1" parent="1" source="dp-aux-oe" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0;entryY=0.25;" target="dp-or">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e8" edge="1" parent="1" source="dp-release" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0;entryY=0.75;" target="dp-or">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e9" edge="1" parent="1" source="dp-or" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-oe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e10" edge="1" parent="1" source="dp-oe" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" target="dp-not-oe">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1400" y="380" />
+              <mxPoint x="1090" y="380" />
+              <mxPoint x="1090" y="435" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dp-e11" edge="1" parent="1" source="dp-not-oe" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-ready">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e12" edge="1" parent="1" source="dp-pdata" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-p-i">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e13" edge="1" parent="1" source="dp-ndata" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-n-i">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e14" edge="1" parent="1" source="dp-poe" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-p-en">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e15" edge="1" parent="1" source="dp-noe" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-n-en">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e16" edge="1" parent="1" source="dp-p-io" style="edgeStyle=orthogonalEdgeStyle;html=1;startArrow=classic;endArrow=classic;" target="dp-pio">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e17" edge="1" parent="1" source="dp-n-io" style="edgeStyle=orthogonalEdgeStyle;html=1;startArrow=classic;endArrow=classic;" target="dp-nio">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e18" edge="1" parent="1" source="dp-p-o" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-prx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e19" edge="1" parent="1" source="dp-n-o" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-nrx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e20" edge="1" parent="1" source="dp-ones" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-aux-i" value="[4]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e21" edge="1" parent="1" source="dp-auxen" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-aux-en">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e22" edge="1" parent="1" source="dp-aux-o" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-auxout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e23" edge="1" parent="1" source="dp-hsconst" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-hsen" value="[6]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e24" edge="1" parent="1" source="dp-hszero" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-hsi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dp-e25" edge="1" parent="1" source="dp-hso" style="edgeStyle=orthogonalEdgeStyle;html=1;" target="dp-hsoe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%date{ddd mmm dd yyyy HH:MM:ss}%" placeholders="1" id="Sh01nQniaKRXh05P81JP-2">
+          <mxCell parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" vertex="1">
+            <mxGeometry height="20" width="160" x="830" y="760" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="%date{ddd mmm dd yyyy HH:MM:ss}%" placeholders="1" id="EKkHA20dCMUxgitOdBMl-1">
+          <mxCell parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" vertex="1">
+            <mxGeometry height="20" width="160" x="450" y="500" as="geometry" />
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

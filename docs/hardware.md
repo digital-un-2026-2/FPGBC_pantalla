@@ -104,7 +104,9 @@ conductores del panel.
 - UG289-2.2.1E documenta buffers `TBUF`/`TLVDS_TBUF` con salida habilitada
   por `OEN=0`. Alta impedancia requiere revisar también pulls, keeper y
   terminaciones. Durante configuración existen pull-ups débiles fuera del
-  control del RTL; la interfaz física sigue sin implementar.
+  control del RTL. Hay [RTL de interfaz LP](../fisical_layer/README.md) con
+  pruebas funcionales de buffers ideales; falta validar su implementación y
+  configuración de E/S en esta placa.
 - En HS, las ramas GPIO pueden conducirse a cero para participar en la carga
   resistiva de referencia. No asumir alta impedancia sin validar la solución.
 - Las seis resistencias de rama **no son una terminación entre P y N**.
