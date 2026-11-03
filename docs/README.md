@@ -24,6 +24,7 @@
 - [Función, interfaz y comandos](../secuenciador_init/README.md).
 - [Fuentes y ROM](../secuenciador_init/src/README.md): responsabilidad de cada módulo.
 - [Pruebas y límites](../secuenciador_init/TB/README.md).
+- [Depuración conjunta en FPGA](debug_secuenciador_init.md): target, monitor y LiteScope.
 - [Flujo, datapath y FSM](../secuenciador_init/README.md#diagramas): Draw.io, PDF y SVG.
 
 Los procedimientos generales viven en `flujo_de_trabajo.md`; los README locales

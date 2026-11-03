@@ -7,6 +7,7 @@ Un target reúne bloques, plataforma y opciones para generar un diseño.
 | Archivo | Uso |
 |---|---|
 | `debug.py` | Target principal: SoCMini sin CPU, UARTWishbone, registros, supervisor LPDT y LiteScope |
+| `debug_init.py` | Secuenciador autónomo y motor de 4 bits conectados, CSR de diagnóstico y LiteScope |
 | `lpdt_demo.py` | Contiene `CRG`, generador de reloj/reset utilizado por `debug.py`, y la clase auxiliar `LPDTDemo` |
 
 `CRG` conecta el reloj de 40 MHz y mantiene el reset durante el arranque mediante
@@ -27,3 +28,7 @@ una interfaz de build propia. Se conserva porque el target principal importa su 
 El target añade explícitamente las seis fuentes Verilog del motor y registra
 los bancos CSR. La captura LiteScope tiene 2048 muestras a 40 MHz. D0 permanece
 interno: no se exportan drivers del panel ni transporte HS.
+
+`python -m gateware.targets.debug_init --build` genera el bitstream conjunto
+en `build/debug_init/`, con timing estricto (no permite `--timing-allow-fail`).
+No programa la FPGA. Ver [capturas y registro de eventos](../../docs/debug_secuenciador_init.md).

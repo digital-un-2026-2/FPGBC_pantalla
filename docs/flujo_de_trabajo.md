@@ -108,6 +108,11 @@ del motor, pero no sustituyen esa cobertura pendiente.
 
 ## 4. Generar el diseño y sintetizar
 
+Para probar **secuenciador y motor conectados**, usar el target independiente
+`gateware.targets.debug_init` y el procedimiento de
+[depuración conjunta](debug_secuenciador_init.md). Los comandos `debug` de esta
+página siguen correspondiendo a la prueba del motor aislado.
+
 Para generar Verilog y mapas de registros **sin síntesis**:
 
 ```sh
