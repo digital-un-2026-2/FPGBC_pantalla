@@ -25,3 +25,10 @@ pixi run python -m gateware.targets.debug
 Las restricciones generadas se consultan en `build/debug/gateware/debug.cst`.
 No editar ese archivo para cambiar los pines: corregir la fuente y regenerar.
 Revisar también el tratamiento de pines no utilizados antes de programar.
+
+## Pines del panel
+
+`Platform(with_display_pins=True)` incorpora los doce pines LP/HS confirmados,
+en orden D0, D1, CLK. Se solicitan como `dsi`; LP usa LVCMOS12/4 mA y HS
+LVDS25, con pulls desactivados. El target `display_board` los conecta al RTL.
+[Pinout, construcción y resultados](../../docs/implementacion_fpga.md).

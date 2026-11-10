@@ -1,0 +1,1127 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" pages="8">
+  <diagram id="flujo_firmware" name="1 · FIRMWARE RISC-V Y CSR LITEX">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="2700">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge-0" parent="1" source="start" target="safe" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" parent="1" source="safe" target="profile" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-2" parent="1" source="init" target="initialized" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-3" parent="1" source="config" target="accepted" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-4" parent="1" source="run" target="monitor" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-5" parent="1" source="monitor" target="faultq" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-6" parent="1" source="profile" target="init" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-7" parent="1" source="initialized" target="config" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-8" parent="1" source="accepted" target="run" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-9" parent="1" source="profile" target="blocked" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-10" parent="1" source="initialized" target="fault" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="1070" />
+              <mxPoint x="1140" y="990" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-11" parent="1" source="accepted" target="fault" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="1530" />
+              <mxPoint x="1140" y="990" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-12" parent="1" source="faultq" target="fault" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1760" y="2150" />
+              <mxPoint x="1760" y="990" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-13" parent="1" source="faultq" target="stopq" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-14" parent="1" source="stopq" target="monitor" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="2375" />
+              <mxPoint x="280" y="1950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-15" parent="1" source="stopq" target="stop" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-16" parent="1" source="stop" target="config" value="Enlace libre" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1740" y="2500" />
+              <mxPoint x="150" y="2500" />
+              <mxPoint x="150" y="1300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="title" parent="1" value="PLANIFICADOR DSI · FIRMWARE RISC-V" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="PROPUESTA · Inicialización y supervisión por software; vídeo coordinado por RTL.&#10;Una caja representa una operación, no un ciclo ni un estado definitivo." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="start" parent="1" value="ARRANQUE DEL FIRMWARE" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#e8edf4;strokeColor=#5c708a;spacing=10;rounded=1;arcSize=50;">
+          <mxGeometry x="430" y="230" width="660" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="safe" parent="1" value="MANTENER VÍDEO DETENIDO&#10;Inicializar CPU, memoria y acceso a CSR&#10;Invalidar panel_initialized" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="355" width="660" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="profile" parent="1" value="¿Perfil de panel y PHY&#10;validado para el destino?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="535" width="660" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="init" parent="1" value="INICIALIZAR PANEL POR LPDT&#10;Enviar comandos DCS desde software&#10;Esperar fin de cada envío y retardos del panel" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="770" width="660" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="initialized" parent="1" value="¿Secuencia completada&#10;sin fallo local?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="990" width="660" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="config" parent="1" value="CONFIGURAR POR CSR CON VÍDEO DETENIDO&#10;Seleccionar perfil compatible y VC&#10;APPLY valida dimensiones y calendario del perfil" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="1230" width="660" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="accepted" parent="1" value="¿Configuración aceptada&#10;y ruta disponible?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="1450" width="660" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="run" parent="1" value="AUTORIZAR E INICIAR VÍDEO&#10;panel_initialized ← 1; emitir START&#10;El RTL captura la configuración activa" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="1690" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="monitor" parent="1" value="SUPERVISAR POR CSR&#10;Leer estado, cuadros y causa de fallo&#10;Atender solicitudes de parada o cambios" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="1890" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="faultq" parent="1" value="¿Hay fallo?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="2080" width="660" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="stopq" parent="1" value="¿Parar o reconfigurar?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="2300" width="660" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="stop" parent="1" value="SOLICITAR STOP&#10;Esperar stopped y enlace libre&#10;Antes de reconfigurar o enviar DCS" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1200" y="2310" width="500" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="fault" parent="1" value="BLOQUEAR NUEVOS INICIOS&#10;Registrar causa; invalidar autorización&#10;Recuperación con reset coordinado&#10;y nueva inicialización" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fde9e7;strokeColor=#ba5d54;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1200" y="900" width="500" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="blocked" parent="1" value="SIN PERFIL VÁLIDO&#10;Mantener salida física inhibida&#10;Usar perfil sintético solo en simulación" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fde9e7;strokeColor=#ba5d54;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1200" y="525" width="500" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="csr" parent="1" value="PUENTE LITEX / CSR PROPUESTO&#10;&#10;CPU → RTL&#10;CONFIG + APPLY; START; STOP&#10;panel_initialized; reset coordinado&#10;&#10;RTL → CPU&#10;config_ok; running; stopped&#10;frame_count; error; error_cause&#10;&#10;Eventos persistentes o contadores:&#10;el software no debe perder pulsos.&#10;CSR concretos y mapa: por implementar." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="1200" y="1200" width="500" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="limits" parent="1" value="RESPONSABILIDADES&#10;&#10;RISC-V configura y supervisa.&#10;Los píxeles no pasan por la CPU.&#10;Inicialización LPDT solo con vídeo parado.&#10;Fin LPDT no confirma recepción del LCD.&#10;Cambios activos se rechazan: parar primero." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="1200" y="1730" width="500" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" value="PROPUESTA · Sin CPU, firmware ni CSR nuevos implementados. Reset o fallo global invalidan la autorización.&#10;La página 2 detalla el flujo RTL. El perfil real del LCD continúa pendiente." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2570" width="1680" height="100" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="flujo_rtl" name="2 · PLANIFICADOR RTL DE VIDEO">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="3450">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge-0" parent="1" source="reset" target="wait" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" parent="1" source="wait" target="begin" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-2" parent="1" source="begin" target="event" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-3" parent="1" source="event" target="isend" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-4" parent="1" source="descriptor" target="payload" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-5" parent="1" source="payload" target="packet" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-6" parent="1" source="physical" target="deadline" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-7" parent="1" source="isend" target="iswait" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-8" parent="1" source="isend" target="frame" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-9" parent="1" source="frame" target="stopq" value="" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-10" parent="1" source="stopq" target="stopped" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-11" parent="1" source="stopq" target="begin" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1750" y="1315" />
+              <mxPoint x="1750" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-12" parent="1" source="iswait" target="delay" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="1350" />
+              <mxPoint x="385" y="1370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-13" parent="1" source="delay" target="event" value="Venció" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="30" y="1370" />
+              <mxPoint x="30" y="910" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-14" parent="1" source="iswait" target="descriptor" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-15" parent="1" source="packet" target="physical" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-16" parent="1" source="packet" target="payload" value="No: continuar" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="2040" />
+              <mxPoint x="360" y="1805" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-17" parent="1" source="deadline" target="advance" value="Sí" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-18" parent="1" source="deadline" target="fault" value="No" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-19" parent="1" source="advance" target="event" value="Siguiente" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="2900" />
+              <mxPoint x="390" y="2900" />
+              <mxPoint x="390" y="910" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="title" parent="1" value="PLANIFICADOR DSI · FLUJO RTL" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="PROPUESTA · Calendario de eventos según el modo del panel, sin fijar porches, fps ni bitrate.&#10;Fuente inicial: dsi_test_pattern; reloj de vídeo y relación con CSR por definir al integrar." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="reset" parent="1" value="RESET COORDINADO&#10;Invalidar cuadro, eventos y configuración activa&#10;Bloquear nuevas transferencias" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="240" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="wait" parent="1" value="ESPERAR START AUTORIZADO&#10;Configuración válida + panel inicializado&#10;PHY disponible + cadena libre de fallos" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="440" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="begin" parent="1" value="INICIAR CUADRO&#10;Conservar perfil activo; reiniciar línea y calendario&#10;Iniciar fuente con start_valid ∧ start_ready" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="640" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="event" parent="1" value="SELECCIONAR SIGUIENTE EVENTO&#10;Según línea, cuadro y modo del perfil&#10;Evento: espera, paquete o fin de cuadro" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="850" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="isend" parent="1" value="¿Evento = fin de cuadro?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="1050" width="660" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="iswait" parent="1" value="¿Evento = espera?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="1280" width="660" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="descriptor" parent="1" value="OFRECER DESCRIPTOR DEL PAQUETE&#10;Mantener campos y valid hasta ready&#10;RGB888: DT=0x3E; WC=3×WIDTH; VC del perfil" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="1520" width="660" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="payload" parent="1" value="PREPARAR Y CARGAR PAQUETE COMPLETO&#10;Para RGB: conectar payload de la fuente&#10;Solo valid ∧ ready consume bytes; comprobar marcas" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="1740" width="660" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="packet" parent="1" value="¿Paquete aceptado completo&#10;por la cadena de salida?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="1960" width="660" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="physical" parent="1" value="ESPERAR FIN DEL TRANSPORTE&#10;Retener eventos de fin aunque lleguen antes&#10;Esperar hs_complete y transporte disponible" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="2220" width="660" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="deadline" parent="1" value="¿Se cumple el calendario&#10;sin error de la cadena?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="430" y="2440" width="660" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="advance" parent="1" value="AVANZAR EVENTO / LÍNEA&#10;Solo después del paquete completo&#10;No iniciar otro cuadro con fin local del payload" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="430" y="2700" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="frame" parent="1" value="CUADRO TRANSMITIDO LOCALMENTE&#10;Incrementar frame_count&#10;Incluye finalización del último evento" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1200" y="1000" width="510" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="stopq" parent="1" value="¿STOP pendiente?" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fff4d6;strokeColor=#b69a50;spacing=10;rhombus;">
+          <mxGeometry x="1200" y="1240" width="510" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="stopped" parent="1" value="DETENIDO&#10;Publicar stopped con enlace libre&#10;Aceptar configuración o inicialización" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#e8edf4;strokeColor=#5c708a;spacing=10;rounded=1;arcSize=50;">
+          <mxGeometry x="1200" y="1480" width="510" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="delay" parent="1" value="ESPERAR PLAZO&#10;Contador RTL&#10;Al vencer: avanzar" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#5b7fa6;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="50" y="1280" width="290" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="fault" parent="1" value="FALLO PERSISTENTE&#10;Bloquear nuevos descriptores&#10;Publicar primera causa por CSR&#10;Si falla PHY: aplicar aborto existente&#10;Recuperar con reset de toda la cadena" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fde9e7;strokeColor=#ba5d54;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1200" y="2410" width="510" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="meaning" parent="1" value="DOS FINALES DIFERENTES&#10;&#10;packet_done: CRC final aceptado por el consumidor del preparador.&#10;hs_done: última palabra entregada al PHY.&#10;hs_complete: secuencia HS finalizada.&#10;&#10;El planificador debe conservar estos eventos, no exigir pulsos simultáneos.&#10;Ninguno confirma recepción del LCD." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="1200" y="1750" width="510" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="global" parent="1" value="PRIORIDADES GLOBALES&#10;&#10;1. Reset coordinado → RESET.&#10;2. Fallo / aborto → FALLO.&#10;3. STOP → retener solicitud y terminar cuadro.&#10;&#10;Fallo o plazo perdido no se reintentan como cuadro correcto." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="1200" y="2800" width="510" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="notes" parent="1" value="CONTRATO DE LA PROPUESTA&#10;&#10;• Esperas y ready: conservar datos y descriptor; reset/fallo tienen prioridad global.&#10;• Un paquete en vuelo; el transporte actual no carga el siguiente durante HS.&#10;• Configuración activa inmutable; STOP se atiende al terminar el cuadro.&#10;• Si un plazo vence en cualquier operación, registrar fallo; no acumular retraso silencioso.&#10;• El calendario debe incluir carga del paquete, arranque/parada HS y tiempo de enlace." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2980" width="1060" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" value="LÍMITES · El calendario exacto depende de Video/Command Mode y del panel. Eventos no RGB requieren&#10;preparación adicional. Este flujo no demuestra que el transporte actual alcance la frecuencia de imagen requerida." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="3340" width="1680" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="datapath_config" name="3 · DATAPATH · CONFIGURACIÓN">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="2400">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge-0" parent="1" source="cpu" target="shadow" value="[10]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" parent="1" source="shadow" target="validate" value="[10]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-2" parent="1" source="shadow" target="active" value="[10]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-3" parent="1" source="active" target="meta" value="ID [8]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-4" parent="1" source="meta" target="wcalc" value="WIDTH [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1420" y="950" />
+              <mxPoint x="760" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" parent="1" source="wcalc" target="descriptor" value="WC [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-6" parent="1" source="status" target="mux" value="[32 × N]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-7" parent="1" source="mux" target="read" value="[32]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-8" parent="1" source="uc" target="active" value="START_ACCEPT [1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=0;entryY=0.5;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="890" y="1910" />
+              <mxPoint x="500" y="1910" />
+              <mxPoint x="500" y="740" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="title" parent="1" value="DATAPATH 1/4 · CONFIGURACIÓN Y CSR" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="CSR propuestos; sin direcciones asignadas. Perfil seleccionado de una tabla constante.&#10;Las dimensiones deben coincidir con WIDTH/HEIGHT del generador elaborado; no se cambia su tamaño por software." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" value="PROPUESTA · Registros en ↑clk; rst síncrono prioritario. LD=0 conserva Q.&#10;Buses [n]; controles discontinuos. Redes con el mismo nombre se conectan entre páginas. Ecuaciones: datapath.md." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2290" width="1680" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cpu" parent="1" value="RISC-V / LiteX&#10;Escritura CSR&#10;profile_id[8], VC[2]" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="270" width="370" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="shadow" parent="1" value="R_SHADOW [10] · CSR&#10;{profile_id, VC}&#10;LD = cfg_write &amp; stopped&#10;Reset → 0" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="560" y="250" width="400" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="validate" parent="1" value="C_CFG · VALIDACIÓN&#10;ID &lt; N_PROFILES; fuente compatible&#10;WC ≤ 65535; WC+6 ≤ 2×BUFFER_WORDS&#10;Paquete par; calendario certificado&#10;Destino simulación / PHY compatible" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="1120" y="230" width="600" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="commands" parent="1" value="ÓRDENES CSR → UC&#10;APPLY; START; STOP&#10;panel_initialized; reset coordinado&#10;Escribir configuración invalida config_ok&#10;Escritura activa: rechazar sin alterar Q" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="620" width="370" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="active" parent="1" value="R_ACTIVE [10]&#10;D = R_SHADOW&#10;LD = START_ACCEPT&#10;Reset → 0" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="560" y="650" width="400" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="meta" parent="1" value="ROM_META · CONSTANTES&#10;Dirección: active_profile_id[8]&#10;WIDTH[16], HEIGHT[16], N_EVENTS[16]&#10;T_FRAME[32], certificado / destino&#10;Lectura combinacional" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1120" y="620" width="600" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="wcalc" parent="1" value="A_WC · SUMA [18]&#10;W_EXT + (W_EXT &lt;&lt; 1)&#10;Extender WIDTH antes de sumar&#10;Solo truncar tras validar" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="560" y="1080" width="400" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="descriptor" parent="1" value="DESCRIPTOR RGB888&#10;cmd_vc = R_ACTIVE.VC [2]&#10;cmd_dt = 0x3E [6]&#10;cmd_wc = WC_EXT[15:0] [16]&#10;→ Preparador largo, pág. 5" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1120" y="1060" width="600" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="net" parent="1" value="REDES DE CONFIGURACIÓN ACTIVA&#10;HEIGHT[16] → contador de líneas&#10;N_EVENTS[16] → límite de índice&#10;T_FRAME[32] → límite de cuadro&#10;active_profile_id[8] → ROM_EVENT&#10;VC[2] → descriptor RGB" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="1040" width="370" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="read" parent="1" value="LECTURA CSR POR CPU&#10;Estado y diagnóstico&#10;Perfil / dimensiones activas&#10;frame_count y primera causa" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="1580" width="370" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="mux" parent="1" value="M_STATUS · N:1 [32]&#10;Entradas numeradas:&#10;0: estado; 1: frame_count&#10;2: causa; 3: perfil activo&#10;4: WIDTH; 5: HEIGHT&#10;Resto: 0" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="560" y="1510" width="400" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="status" parent="1" value="BUS DE ESTADO&#10;UC: config_ok, running, stopped&#10;R_FRAMES[32], R_ERROR[5]&#10;R_ACTIVE y ROM_META&#10;Cada entrada extendida a 32 bits" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1120" y="1550" width="600" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="uc" parent="1" value="FRONTERA UC ↔ DATAPATH&#10;UC recibe: cfg_match, órdenes CSR, panel_initialized, disponibilidad PHY y condiciones de las otras vistas.&#10;UC genera: START_ACCEPT, config_ok, running, stopped, comandos de fuente/paquete y enables.&#10;APPLY solo valida R_SHADOW. START_ACCEPT captura R_ACTIVE una vez por ejecución; repetir cuadros no lo recarga.&#10;CPU no alimenta bytes RGB. Para esta propuesta, CSR y vídeo comparten clk; otros dominios requieren un puente CDC." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="1950" width="1660" height="270" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="datapath_calendario" name="4 · DATAPATH · CALENDARIO">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="2800">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge-0" parent="1" source="zero-TICK" target="mux-TICK" value="0 [32]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.25;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="325" />
+              <mxPoint x="310" y="240" />
+              <mxPoint x="740" y="240" />
+              <mxPoint x="740" y="315" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-1" parent="1" source="add-TICK" target="mux-TICK" value="1 [32]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.75;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="540" />
+              <mxPoint x="710" y="405" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-2" parent="1" source="mux-TICK" target="reg-TICK" value="D [32]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-3" parent="1" source="reg-TICK" target="add-TICK" value="Q [32]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1480" y="640" />
+              <mxPoint x="505" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-4" parent="1" source="ctrl-TICK" target="mux-TICK" value="SEL [1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=0.5;entryY=1;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="670" />
+              <mxPoint x="1180" y="670" />
+              <mxPoint x="1180" y="490" />
+              <mxPoint x="935" y="490" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" parent="1" source="zero-IP" target="mux-IP" value="0 [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.25;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="985" />
+              <mxPoint x="310" y="900" />
+              <mxPoint x="740" y="900" />
+              <mxPoint x="740" y="975" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-6" parent="1" source="add-IP" target="mux-IP" value="1 [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.75;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="1200" />
+              <mxPoint x="710" y="1065" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-7" parent="1" source="mux-IP" target="reg-IP" value="D [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-8" parent="1" source="reg-IP" target="add-IP" value="Q [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1480" y="1300" />
+              <mxPoint x="505" y="1300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-9" parent="1" source="ctrl-IP" target="mux-IP" value="SEL [1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=0.5;entryY=1;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="1330" />
+              <mxPoint x="1180" y="1330" />
+              <mxPoint x="1180" y="1150" />
+              <mxPoint x="935" y="1150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-10" parent="1" source="reg-IP" target="rom" value="IP [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1750" y="1020" />
+              <mxPoint x="1750" y="1530" />
+              <mxPoint x="385" y="1530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-11" parent="1" source="rom" target="evt" value="[66]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-12" parent="1" source="evt" target="bounds" value="KIND [2]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-13" parent="1" source="evt" target="time" value="RELEASE / DEADLINE [32 c/u]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="1910" />
+              <mxPoint x="385" y="1910" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-14" parent="1" source="time" target="conditions" value="[1 c/u]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="title" parent="1" value="DATAPATH 2/4 · TIEMPO E ÍNDICE DE EVENTOS" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="ROM_EVENT: calendario expandido de un cuadro. WAIT=0, RGB=1, END=2; 3 es inválido.&#10;Registro de evento estable durante su ejecución; no se programa esta ROM por CSR." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" value="PROPUESTA · Registros en ↑clk; rst síncrono prioritario. LD=0 conserva Q.&#10;Buses [n]; controles discontinuos. Redes con el mismo nombre se conectan entre páginas. Ecuaciones: datapath.md." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2690" width="1680" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="zero-TICK" parent="1" value="0 [32]" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="280" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="add-TICK" parent="1" value="A0 · +1 [32]&#10;Entrada: TICK" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="360" y="480" width="290" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="mux-TICK" parent="1" value="M0 · 2:1 [32]&#10;0: constante 0&#10;1: A0&#10;SEL = !FRAME_BEGIN" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="770" y="270" width="330" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="reg-TICK" parent="1" value="R_TICK [32]&#10;D = M0; rst → 0&#10;LD = FRAME_BEGIN | TICK_EN" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1250" y="280" width="460" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl-TICK" parent="1" value="FRAME_BEGIN; TICK_EN; SEL_M0&#10;Ciclos desde FRAME_BEGIN" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="700" width="1640" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="zero-IP" parent="1" value="0 [16]" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="940" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="add-IP" parent="1" value="A1 · +1 [16]&#10;Entrada: IP" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="360" y="1140" width="290" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="mux-IP" parent="1" value="M1 · 2:1 [16]&#10;0: constante 0&#10;1: A1&#10;SEL = !FRAME_BEGIN" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="770" y="930" width="330" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="reg-IP" parent="1" value="R_IP [16]&#10;D = M1; rst → 0&#10;LD = FRAME_BEGIN | EVENT_ADVANCE" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1250" y="940" width="460" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl-IP" parent="1" value="FRAME_BEGIN; EVENT_ADVANCE; SEL_M1&#10;Índice 0 … N_EVENTS−1" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="1360" width="1640" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="rom" parent="1" value="ROM_EVENT [N_PROFILES × E_MAX × 66]&#10;Dirección: {active_profile_id[8], IP[16]}&#10;Salida: KIND[2], RELEASE[32], DEADLINE[32]&#10;Fuera de rango: código inválido&#10;Lectura combinacional" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="1600" width="650" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="evt" parent="1" value="R_EVT [66]&#10;D = ROM_EVENT&#10;LD = EVENT_LOAD&#10;Reset → 0&#10;UC conserva event_valid" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="850" y="1620" width="400" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="bounds" parent="1" value="C_IP / C_KIND&#10;IP &lt; N_EVENTS&#10;Avance: IP+1 [17]&#10;&lt; N_EVENTS&#10;KIND ≠ 3&#10;→ UC: event_legal" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="1400" y="1590" width="330" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="time" parent="1" value="C_TIME · COMPARACIONES [32]&#10;released = TICK ≥ R_EVT.RELEASE&#10;late = TICK &gt; R_EVT.DEADLINE&#10;frame_late = TICK &gt; T_FRAME&#10;overflow = TICK == 0xFFFFFFFF" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="60" y="2020" width="650" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="conditions" parent="1" value="CONDICIONES → UC&#10;event_legal; kind[2]; released; late&#10;frame_late; overflow&#10;WAIT termina al alcanzar RELEASE&#10;RGB solo inicia desde RELEASE&#10;END requiere cuadro y enlace completos" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="850" y="2020" width="880" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="policy" parent="1" value="LÍMITES DE AVANCE&#10;TICK_EN = frame_active &amp; !overflow; se satura antes de envolver. El tiempo avanza también bajo backpressure.&#10;EVENT_ADVANCE solo al terminar WAIT o RGB. Antes de IP+1, comprobar IP+1 &lt; N_EVENTS; END no incrementa IP.&#10;La tabla debe incluir carga de R_EVT y ciclos de control. END cumple RELEASE ≤ TICK ≤ DEADLINE ≤ T_FRAME.&#10;Fuentes combinacionales se estabilizan antes de EVENT_LOAD; no se presupone la latencia de una BRAM síncrona." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2380" width="1660" height="260" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="datapath_payload" name="5 · DATAPATH · PAYLOAD">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="2850">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge-0" parent="1" source="source" target="gate" value="[8] + valid" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" parent="1" source="gate" target="long" value="[8] + valid" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-2" parent="1" source="long" target="packer" value="[8]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1750" y="350" />
+              <mxPoint x="1750" y="530" />
+              <mxPoint x="890" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-3" parent="1" source="packer" target="transport" value="[16] + keep[2]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-4" parent="1" source="transport" target="phy" value="HS" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1490" y="820" />
+              <mxPoint x="895" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" parent="1" source="zero-BCNT" target="mux-BCNT" value="0 [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.25;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="305" y="1165" />
+              <mxPoint x="305" y="1090" />
+              <mxPoint x="730" y="1090" />
+              <mxPoint x="730" y="1165" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-6" parent="1" source="add-BCNT" target="mux-BCNT" value="1 [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.75;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="1360" />
+              <mxPoint x="700" y="1255" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-7" parent="1" source="mux-BCNT" target="reg-BCNT" value="D [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-8" parent="1" source="reg-BCNT" target="add-BCNT" value="Q [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1490" y="1470" />
+              <mxPoint x="490" y="1470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-9" parent="1" source="zero-LINE" target="mux-LINE" value="0 [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.25;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="305" y="1825" />
+              <mxPoint x="305" y="1750" />
+              <mxPoint x="730" y="1750" />
+              <mxPoint x="730" y="1825" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-10" parent="1" source="add-LINE" target="mux-LINE" value="1 [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.75;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="2020" />
+              <mxPoint x="700" y="1915" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-11" parent="1" source="mux-LINE" target="reg-LINE" value="D [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-12" parent="1" source="reg-LINE" target="add-LINE" value="Q [16]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1490" y="2130" />
+              <mxPoint x="490" y="2130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="title" parent="1" value="DATAPATH 3/4 · BYTES, LÍNEAS Y CADENA DSI" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="Los bloques DSI existentes son externos al planificador. No duplicar su RAM, ECC, CRC ni serializadores.&#10;El planificador cuenta bytes aceptados por el preparador; el fin físico se supervisa en la siguiente página." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" value="PROPUESTA · Registros en ↑clk; rst síncrono prioritario. LD=0 conserva Q.&#10;Buses [n]; controles discontinuos. Redes con el mismo nombre se conectan entre páginas. Ecuaciones: datapath.md." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2740" width="1680" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="source" parent="1" value="dsi_test_pattern · EXISTENTE&#10;byte[8], valid, line_last, frame_last&#10;start_valid / start_ready&#10;frame_done → pág. 6" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="260" width="480" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="gate" parent="1" value="G_PAYLOAD · COMBINACIONAL&#10;payload_data = source.byte [8]&#10;payload_valid = source.valid &amp; G&#10;source.ready = payload_ready &amp; G&#10;G: RGB admitido, sin reset / fallo" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="650" y="240" width="480" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="long" parent="1" value="dsi_long_packet_tx · EXISTENTE&#10;cmd_vc[2], cmd_dt[6], cmd_wc[16]&#10;cmd_valid / cmd_ready&#10;payload_data / valid / ready&#10;packet_done → pág. 6" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1250" y="240" width="480" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="fire" parent="1" value="BF = payload_valid &amp; payload_ready&#10;DF = cmd_valid &amp; cmd_ready&#10;Handshakes combinacionales [1 c/u]&#10;ready vuelve hacia la fuente" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="60" y="590" width="480" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="packer" parent="1" value="dsi_lane_packer · EXISTENTE&#10;Bytes [8] → palabras [16]&#10;keep[2], valid, last, ready" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="650" y="590" width="480" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="transport" parent="1" value="dsi_hs_transport · EXISTENTE&#10;Buffer de paquete completo&#10;HS req / grant / done / complete&#10;error / busy → pág. 6" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1250" y="590" width="480" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="phy" parent="1" value="Árbitro → dphy_hs_tx → dphy_gowin_tx → pads&#10;Bloques externos: petición HS y tiempos eléctricos propios. PROFILE_OK sigue bloqueado para hardware no caracterizado." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="870" width="1670" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="zero-BCNT" parent="1" value="0 [16]" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="1120" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="add-BCNT" parent="1" value="A2 · +1 [16]&#10;Entrada: BCNT" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="340" y="1300" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="mux-BCNT" parent="1" value="M2 · 2:1 [16]&#10;0: 0; 1: A2&#10;SEL = !DF" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="760" y="1120" width="340" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="reg-BCNT" parent="1" value="R_BCNT [16]&#10;LD = DF | BF&#10;rst → 0; D = M2" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1250" y="1120" width="480" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="cmp-BCNT" parent="1" value="C_BCNT · == WC / &lt; WC&#10;BCNT nunca avanza por encima de WC&#10;Condiciones → UC y comprobador de marcas" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="60" y="1540" width="1670" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="zero-LINE" parent="1" value="0 [16]" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="1780" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="add-LINE" parent="1" value="A3 · +1 [16]&#10;Entrada: LINE" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="340" y="1960" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="mux-LINE" parent="1" value="M3 · 2:1 [16]&#10;0: 0; 1: A3&#10;SEL = !FRAME_BEGIN" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="760" y="1780" width="340" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="reg-LINE" parent="1" value="R_LINE [16]&#10;LD = FRAME_BEGIN | RGB_COMPLETE&#10;rst → 0; D = M3" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1250" y="1780" width="480" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="cmp-LINE" parent="1" value="C_LINE · == HEIGHT / &lt; HEIGHT&#10;LINE nunca avanza por encima de HEIGHT&#10;Condiciones → UC y comprobador de marcas" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="60" y="2200" width="1670" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="marks" parent="1" value="C_MARK · COMPROBAR SOLO CON BF&#10;expect_line_last = (BCNT == WC−1)&#10;expect_frame_last = expect_line_last &amp; (LINE == HEIGHT−1)&#10;mark_error = BF &amp; ((source.line_last ≠ expect_line_last) | (source.frame_last ≠ expect_frame_last))&#10;count_error: BF con BCNT ≥ WC, o packet_done sin BCNT == WC. LINE avanza tras RGB_COMPLETE, no tras BF." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="60" y="2460" width="1670" height="240" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="datapath_estado" name="6 · DATAPATH · EVENTOS Y ESTADO">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="2700">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge-0" parent="1" source="in-PKT" target="or-PKT" value="[3]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390" y="335" />
+              <mxPoint x="390" y="210" />
+              <mxPoint x="1025" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-1" parent="1" source="clear-PKT" target="or-PKT" value="[3]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-2" parent="1" source="or-PKT" target="reg-PKT" value="D [3]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-3" parent="1" source="reg-PKT" target="clear-PKT" value="Q [3]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.25;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1540" y="500" />
+              <mxPoint x="420" y="500" />
+              <mxPoint x="420" y="292.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-4" parent="1" source="in-FRAME" target="or-FRAME" value="[1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390" y="815" />
+              <mxPoint x="390" y="690" />
+              <mxPoint x="1025" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" parent="1" source="clear-FRAME" target="or-FRAME" value="[1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-6" parent="1" source="or-FRAME" target="reg-FRAME" value="D [1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-7" parent="1" source="reg-FRAME" target="clear-FRAME" value="Q [1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.25;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1540" y="980" />
+              <mxPoint x="420" y="980" />
+              <mxPoint x="420" y="772.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-8" parent="1" source="in-STOP" target="or-STOP" value="[1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390" y="1295" />
+              <mxPoint x="390" y="1170" />
+              <mxPoint x="1025" y="1170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-9" parent="1" source="clear-STOP" target="or-STOP" value="[1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-10" parent="1" source="or-STOP" target="reg-STOP" value="D [1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-11" parent="1" source="reg-STOP" target="clear-STOP" value="Q [1]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.25;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1540" y="1460" />
+              <mxPoint x="420" y="1460" />
+              <mxPoint x="420" y="1252.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-12" parent="1" source="frame-add" target="frames" value="D [32]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-13" parent="1" source="frames" target="frame-add" value="Q [32]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1760" y="1950" />
+              <mxPoint x="1760" y="1685" />
+              <mxPoint x="1490" y="1685" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-14" parent="1" source="cause" target="err" value="[5]" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="title" parent="1" value="DATAPATH 4/4 · EVENTOS RETENIDOS Y SUPERVISIÓN" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="No exigir coincidencia de pulsos. pkt_done, hs_done y hs_complete se retienen por paquete.&#10;frame_done se retiene por cuadro; STOP por ejecución; primera causa de fallo hasta reset." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" value="PROPUESTA · Registros en ↑clk; rst síncrono prioritario. LD=0 conserva Q.&#10;Buses [n]; controles discontinuos. Redes con el mismo nombre se conectan entre páginas. Ecuaciones: datapath.md." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2590" width="1680" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="in-PKT" parent="1" value="ENTRADA [3]&#10;{hs_complete, hs_done, packet_done}" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="260" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="clear-PKT" parent="1" value="M4 · 2:1 [3]&#10;0: Q; 1: 0&#10;SEL = CLR" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="450" y="250" width="300" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="or-PKT" parent="1" value="G0 · OR [3]&#10;M4 | entrada" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="850" y="250" width="350" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="reg-PKT" parent="1" value="R_PKT_SEEN [3]&#10;LD = ventana | CLR&#10;rst → 0" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1350" y="260" width="380" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="policy-PKT" parent="1" value="CLR = DF; LD = ventana | CLR&#10;D = (CLR ? 0 : Q) | entrada; set domina clear; rst → 0&#10;seen_next == 3’b111 &amp; !transport.busy" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="560" width="1670" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="in-FRAME" parent="1" value="ENTRADA [1]&#10;source.frame_done" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="740" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="clear-FRAME" parent="1" value="M5 · 2:1 [1]&#10;0: Q; 1: 0&#10;SEL = CLR" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="450" y="730" width="300" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="or-FRAME" parent="1" value="G1 · OR [1]&#10;M5 | entrada" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="850" y="730" width="350" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="reg-FRAME" parent="1" value="R_FRAME_SEEN [1]&#10;LD = ventana | CLR&#10;rst → 0" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1350" y="740" width="380" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="policy-FRAME" parent="1" value="CLR = FRAME_BEGIN; LD = ventana | CLR&#10;D = (CLR ? 0 : Q) | entrada; set domina clear; rst → 0&#10;LINE == HEIGHT &amp; frame_seen_next" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="1040" width="1670" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="in-STOP" parent="1" value="ENTRADA [1]&#10;CSR_STOP" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="60" y="1220" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="clear-STOP" parent="1" value="M6 · 2:1 [1]&#10;0: Q; 1: 0&#10;SEL = CLR" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;shape=trapezoid;direction=east;">
+          <mxGeometry x="450" y="1210" width="300" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="or-STOP" parent="1" value="G2 · OR [1]&#10;M6 | entrada" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="850" y="1210" width="350" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="reg-STOP" parent="1" value="R_STOP [1]&#10;LD = ventana | CLR&#10;rst → 0" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1350" y="1220" width="380" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="policy-STOP" parent="1" value="CLR = START_ACCEPT; LD = ventana | CLR&#10;D = (CLR ? 0 : Q) | entrada; set domina clear; rst → 0&#10;STOP_PENDING → UC al fin del cuadro" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="1520" width="1670" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="cause" parent="1" value="P_ERR · PRIORIDAD COMBINACIONAL&#10;1: PHY / aborto; 2: transporte&#10;3: overflow; 4: plazo; 5: evento ilegal&#10;6: contador; 7: marcas; 8: fuente&#10;FAULT_REQ; CAUSE[4]" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="60" y="1770" width="490" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="err" parent="1" value="R_ERROR [5]&#10;{valid[1], cause[4]}&#10;LD = FAULT_REQ &amp; !valid&#10;D = {1, CAUSE}&#10;rst → 0; primera causa retenida" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="660" y="1790" width="480" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="frame-add" parent="1" value="A4 · +1 [32]&#10;Entrada: R_FRAMES" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="1250" y="1720" width="480" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="frames" parent="1" value="R_FRAMES [32]&#10;D=A4; LD=FRAME_COMPLETE&#10;rst → 0; módulo 2³²&#10;→ CSR frame_count" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="1250" y="1870" width="480" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="uc" parent="1" value="FRONTERA CON UC · FSM EN PÁGINAS 7–8&#10;Entradas: released, late, event_legal, BCNT/WC, LINE/HEIGHT, seen_next, FAULT_REQ y autorización.&#10;Salidas: START_ACCEPT, FRAME_BEGIN, EVENT_LOAD/ADVANCE, G, cmd_valid, RGB_COMPLETE, FRAME_COMPLETE.&#10;RGB_COMPLETE: UC emite una vez al comprobar paquete+HS completos y BCNT==WC sin fallo.&#10;FRAME_COMPLETE: END liberado, todas las líneas+fuente completas, enlace libre y sin fallo. Emitir una vez.&#10;STOP conserva el nivel hasta terminar cuadro. Ante fallo, bloquear nuevos paquetes y exigir reset coordinado.&#10;Un fallo del planificador no conmuta directamente pads ni borra el diagnóstico del wrapper Gowin." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="2180" width="1670" height="350" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fsm" name="7 · FSM · TRANSICIONES">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="3000">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge-0" parent="1" source="IDLE" target="ARM" value="START_ACCEPT" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" parent="1" source="ARM" target="LOAD" value="SF / FRAME_BEGIN" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-2" parent="1" source="LOAD" target="RELEASE" value="IP_OK / EVENT_LOAD" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-3" parent="1" source="RELEASE" target="CMD" value="released &amp; KIND=RGB" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-4" parent="1" source="CMD" target="PAYLOAD" value="DF" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-5" parent="1" source="PAYLOAD" target="TX_WAIT" value="LAST_BF" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-6" parent="1" source="TX_WAIT" target="ADVANCE" value="PKT_OK / RGB_COMPLETE" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-7" parent="1" source="RELEASE" target="ADVANCE" value="released &amp; KIND=WAIT" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="1150" />
+              <mxPoint x="300" y="2330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-8" parent="1" source="RELEASE" target="FINISH" value="END_OK" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-9" parent="1" source="ADVANCE" target="LOAD" value="NEXT_IP_OK / EVENT_ADVANCE" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="745" y="2500" />
+              <mxPoint x="170" y="2500" />
+              <mxPoint x="170" y="860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-10" parent="1" source="FINISH" target="IDLE" value="STOP" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1740" y="1150" />
+              <mxPoint x="1780" y="1150" />
+              <mxPoint x="1780" y="220" />
+              <mxPoint x="745" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-11" parent="1" source="FINISH" target="ARM" value="!STOP_NEXT" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1480" y="1010" />
+              <mxPoint x="1160" y="1010" />
+              <mxPoint x="1160" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-12" parent="1" source="global" target="FAULT" value="FAULT_REQ" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#5c708a;strokeWidth=2;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1435" y="2160" />
+              <mxPoint x="1480" y="2160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="title" parent="1" value="FSM · PLANIFICADOR DSI · TRANSICIONES" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="PROPUESTA · STATE[3:0], diez códigos usados. Registros en ↑clk; rst síncrono activo alto.&#10;Toda transición normal exige !FAULT_REQ. Los controles de handshake son combinacionales antes del flanco." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="IDLE" parent="1" value="IDLE · 0000&#10;Configurar / esperar START" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="260" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ARM" parent="1" value="ARM · 0001&#10;Solicitar inicio de fuente" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="520" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LOAD" parent="1" value="LOAD · 0010&#10;Cargar evento desde ROM" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="780" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="RELEASE" parent="1" value="RELEASE · 0011&#10;Esperar instante y decodificar&#10;END aceptado: FRAME_COMPLETE" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="1070" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="CMD" parent="1" value="CMD · 0100&#10;Ofrecer descriptor RGB" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="1410" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="PAYLOAD" parent="1" value="PAYLOAD · 0101&#10;Consumir bytes con handshake" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="1690" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="TX_WAIT" parent="1" value="TX_WAIT · 0110&#10;Esperar finales retenidos" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="1970" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ADVANCE" parent="1" value="ADVANCE · 0111&#10;Incrementar IP una vez" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="430" y="2250" width="630" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="FINISH" parent="1" value="FINISH · 1000&#10;Resolver STOP / repetición" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#eaf2fc;strokeColor=#344563;spacing=10;ellipse;">
+          <mxGeometry x="1230" y="1070" width="500" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="FAULT" parent="1" value="FAULT · 1001&#10;Bloqueado hasta reset" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fde9e7;strokeColor=#ba5d54;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1230" y="2250" width="500" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="reset" parent="1" value="rst desde cualquier estado → IDLE&#10;Limpiar registros y autorización&#10;Prioridad absoluta" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#e8edf4;strokeColor=#5c708a;spacing=10;rounded=1;arcSize=50;">
+          <mxGeometry x="60" y="2600" width="700" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="global" parent="1" value="FALLO GLOBAL → FAULT&#10;PHY, transporte, plazo, contadores o marcas&#10;LOAD / ADVANCE sin índice válido → causa 5&#10;KIND inválido o STATE=10…15 → causa 5&#10;Solo reset coordinado permite salir" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#fde9e7;strokeColor=#ba5d54;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1130" y="1830" width="610" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="holds" parent="1" value="RETENCIÓN Y PRIORIDAD&#10;Sin guard habilitado, conservar STATE. LOAD, ADVANCE y FINISH resuelven en un ciclo sin fallo.&#10;1. rst; 2. FAULT_REQ; 3. transición normal. FAULT es absorbente; STOP no aborta el cuadro.&#10;SF = source.start_valid &amp; source.start_ready. DF = cmd_valid &amp; cmd_ready. LAST_BF = BF &amp; (BCNT=WC−1)." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2790" width="1680" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="guards" parent="1" value="GUARDS DEL DATAPATH&#10;&#10;PKT_OK: tres finales retenidos,&#10;transporte libre y BCNT=WC.&#10;&#10;END_OK: KIND=END, released,&#10;LINE=HEIGHT, FRAME_SEEN_NEXT,&#10;fuente y enlace libres, sin paquete&#10;pendiente y END en último índice.&#10;&#10;Plazo de evento solo en RELEASE,&#10;CMD, PAYLOAD y TX_WAIT.&#10;&#10;TICK avanza también bajo pausas.&#10;En FINISH, STOP = STOP_NEXT." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="1200" y="1300" width="530" height="480" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fsm_controles" name="8 · FSM · CONTROLES">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="2650">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" value="FSM · CONTROLES Y CONDICIONES DE SALIDA" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="20" width="1680" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" value="Todos los pulsos son enables presentes antes del flanco que ejecuta la operación; no registros ACTION.&#10;Señales no indicadas = 0. La captura de eventos y los contadores siguen las ecuaciones del datapath." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="100" width="1680" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="headers" parent="1" value="ESTADO [4]                         CONTROLES ACTIVOS / ENTRADAS AL DATAPATH" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="205" width="1680" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s-IDLE" parent="1" value="IDLE&#10;0000" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="300" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-IDLE" parent="1" value="stopped = chain_free &amp; !rst &amp; !R_ERROR.valid; habilita CSR" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="300" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-IDLE" parent="1" value="START_ACCEPT → ARM; si no, conservar estado" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="300" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-ARM" parent="1" value="ARM&#10;0001" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="475" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-ARM" parent="1" value="source.start_valid = !HARD_BLOCK" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="475" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-ARM" parent="1" value="SF → LOAD; sin ready, conservar estado" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="475" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-LOAD" parent="1" value="LOAD&#10;0010" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="650" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-LOAD" parent="1" value="EVENT_LOAD = IP_OK &amp; !FAULT_REQ" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="650" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-LOAD" parent="1" value="IP_OK → RELEASE; si no, FAULT / causa 5" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="650" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-RELEASE" parent="1" value="RELEASE&#10;0011" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="825" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-RELEASE" parent="1" value="Según KIND y released; END puede emitir FRAME_COMPLETE" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="825" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-RELEASE" parent="1" value="WAIT → ADVANCE; RGB → CMD; END_OK → FINISH" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="825" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-CMD" parent="1" value="CMD&#10;0100" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="1000" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-CMD" parent="1" value="cmd_valid = !HARD_BLOCK; campos desde R_ACTIVE" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="1000" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-CMD" parent="1" value="DF → PAYLOAD; sin ready, conservar descriptor" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="1000" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-PAYLOAD" parent="1" value="PAYLOAD&#10;0101" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="1175" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-PAYLOAD" parent="1" value="G = !HARD_BLOCK &amp; (BCNT &lt; WC)" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="1175" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-PAYLOAD" parent="1" value="LAST_BF → TX_WAIT; sin BF, conservar byte y contadores" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="1175" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-TX_WAIT" parent="1" value="TX_WAIT&#10;0110" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="1350" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-TX_WAIT" parent="1" value="Capturar finales; RGB_COMPLETE = PKT_OK &amp; !FAULT_REQ" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="1350" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-TX_WAIT" parent="1" value="PKT_OK → ADVANCE; si no, conservar estado" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="1350" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-ADVANCE" parent="1" value="ADVANCE&#10;0111" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="1525" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-ADVANCE" parent="1" value="EVENT_ADVANCE = NEXT_IP_OK &amp; !FAULT_REQ" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="1525" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-ADVANCE" parent="1" value="NEXT_IP_OK → LOAD; si no, FAULT / causa 5" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="1525" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-FINISH" parent="1" value="FINISH&#10;1000" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="1700" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-FINISH" parent="1" value="Cuadro ya contado; frame_active = 0" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="1700" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-FINISH" parent="1" value="STOP_NEXT → IDLE; si no, ARM para repetir" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="1700" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="s-FAULT" parent="1" value="FAULT&#10;1001" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="60" y="1875" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-FAULT" parent="1" value="running=0; stopped=0; bloquear nuevos inicios" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#344563;spacing=10;rounded=0;">
+          <mxGeometry x="420" y="1875" width="760" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="g-FAULT" parent="1" value="Conservar estado hasta rst; no hay CLEAR_ERROR parcial" vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#f3f5f7;strokeColor=#7a869a;spacing=10;rounded=1;arcSize=12;">
+          <mxGeometry x="1240" y="1875" width="500" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="masks" parent="1" value="MÁSCARAS Y VENTANAS&#10;HARD_BLOCK = rst | estado ilegal | STATE=FAULT | R_ERROR.valid | fallo urgente sin depender de DF/BF.&#10;cmd_valid y G usan HARD_BLOCK; mark_error / count_error derivados de BF no vuelven a enmascarar ese mismo BF.&#10;frame_active: LOAD / RELEASE / CMD / PAYLOAD / TX_WAIT / ADVANCE.&#10;pkt_window: DF o PAYLOAD / TX_WAIT; frame_window: FRAME_BEGIN o frame_active.&#10;STOP se captura mientras running o START_ACCEPT. running: todos excepto IDLE / FAULT. stopped: IDLE &amp; chain_free." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#7a869a;spacing=10;rounded=0;dashed=1;">
+          <mxGeometry x="60" y="2110" width="1680" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="memory" parent="1" value="MEMORIA UC: STATE[4] + config_ok[1] + panel_initialized[1] = 6 bits. Ventanas y flags de actividad se decodifican de STATE.&#10;Total propuesto: datapath 198 + CSR R_SHADOW 10 + UC 6 = 214 bits, sin ROM ni módulos externos.&#10;Comandos detenidos: cfg_write &gt; APPLY &gt; escritura de autorización &gt; START. STOP puede coincidir con START.&#10;Diseño documentado, no RTL implementado. Verificación simbólica: verificar_fsm.py; límites y ecuaciones: fsm.md." vertex="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172b4d;strokeWidth=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;spacing=10;text;align=left;spacing=0;">
+          <mxGeometry x="60" y="2420" width="1680" height="180" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

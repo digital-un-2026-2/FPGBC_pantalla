@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2700" viewBox="0 0 1800 2700">
+  <title>1 · FIRMWARE RISC-V Y CSR LITEX — Planificador DSI propuesto</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c708a" />
+    </marker>
+  </defs>
+  <rect width="1800" height="2700" fill="white" />
+  <polyline points="760.0,295 760.0,355" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,465 760.0,535" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,910 760.0,990" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,1370 760.0,1450" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,1810 760.0,1890" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,2010 760.0,2080" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,695 760.0,770" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,1150 760.0,1230" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,1610 760.0,1690" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1090,615.0 1200,615.0 1200,610.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1090,1070.0 1140,1070 1140,990 1200,990.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1090,1530.0 1140,1530 1140,990 1200,990.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1090,2150.0 1760,2150 1760,990 1700,990.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="760.0,2220 760.0,2300" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="430,2375.0 280,2375 280,1950 430,1950.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1090,2375.0 1200,2375.0 1200,2380.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1450.0,2450 1450.0,2500 1740,2500 150,2500 150,1300 430,1300.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="60" y="65.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="28" text-anchor="start">PLANIFICADOR DSI · FIRMWARE RISC-V</text>
+  <text x="60" y="133.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">PROPUESTA · Inicialización y supervisión por software; vídeo coordinado por RTL.</text>
+  <text x="60" y="159.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Una caja representa una operación, no un ciclo ni un estado definitivo.</text>
+  <rect x="430" y="230" width="660" height="65" rx="28" fill="#e8edf4" stroke="#5c708a" stroke-width="2" stroke-dasharray="none" />
+  <text x="760.0" y="268.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ARRANQUE DEL FIRMWARE</text>
+  <rect x="430" y="355" width="660" height="110" rx="12" fill="#eaf2fc" stroke="#5b7fa6" stroke-width="2" stroke-dasharray="none" />
+  <text x="760.0" y="390.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">MANTENER VÍDEO DETENIDO</text>
+  <text x="760.0" y="416.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Inicializar CPU, memoria y acceso a CSR</text>
+  <text x="760.0" y="442.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Invalidar panel_initialized</text>
+  <polygon points="760.0,535 1090,615.0 760.0,695 430,615.0" fill="#fff4d6" stroke="#b69a50" stroke-width="2" />
+  <text x="760.0" y="608.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">¿Perfil de panel y PHY</text>
+  <text x="760.0" y="634.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">validado para el destino?</text>
+  <rect x="430" y="770" width="660" height="140" rx="12" fill="#eaf2fc" stroke="#5b7fa6" stroke-width="2" stroke-dasharray="none" />
+  <text x="760.0" y="820.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">INICIALIZAR PANEL POR LPDT</text>
+  <text x="760.0" y="846.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Enviar comandos DCS desde software</text>
+  <text x="760.0" y="872.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Esperar fin de cada envío y retardos del panel</text>
+  <polygon points="760.0,990 1090,1070.0 760.0,1150 430,1070.0" fill="#fff4d6" stroke="#b69a50" stroke-width="2" />
+  <text x="760.0" y="1063.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">¿Secuencia completada</text>
+  <text x="760.0" y="1089.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">sin fallo local?</text>
+  <rect x="430" y="1230" width="660" height="140" rx="12" fill="#eaf2fc" stroke="#5b7fa6" stroke-width="2" stroke-dasharray="none" />
+  <text x="760.0" y="1280.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CONFIGURAR POR CSR CON VÍDEO DETENIDO</text>
+  <text x="760.0" y="1306.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Seleccionar perfil compatible y VC</text>
+  <text x="760.0" y="1332.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">APPLY valida dimensiones y calendario del perfil</text>
+  <polygon points="760.0,1450 1090,1530.0 760.0,1610 430,1530.0" fill="#fff4d6" stroke="#b69a50" stroke-width="2" />
+  <text x="760.0" y="1523.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">¿Configuración aceptada</text>
+  <text x="760.0" y="1549.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">y ruta disponible?</text>
+  <rect x="430" y="1690" width="660" height="120" rx="12" fill="#eaf2fc" stroke="#5b7fa6" stroke-width="2" stroke-dasharray="none" />
+  <text x="760.0" y="1730.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">AUTORIZAR E INICIAR VÍDEO</text>
+  <text x="760.0" y="1756.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">panel_initialized ← 1; emitir START</text>
+  <text x="760.0" y="1782.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">El RTL captura la configuración activa</text>
+  <rect x="430" y="1890" width="660" height="120" rx="12" fill="#eaf2fc" stroke="#5b7fa6" stroke-width="2" stroke-dasharray="none" />
+  <text x="760.0" y="1930.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SUPERVISAR POR CSR</text>
+  <text x="760.0" y="1956.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Leer estado, cuadros y causa de fallo</text>
+  <text x="760.0" y="1982.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Atender solicitudes de parada o cambios</text>
+  <polygon points="760.0,2080 1090,2150.0 760.0,2220 430,2150.0" fill="#fff4d6" stroke="#b69a50" stroke-width="2" />
+  <text x="760.0" y="2156.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">¿Hay fallo?</text>
+  <polygon points="760.0,2300 1090,2375.0 760.0,2450 430,2375.0" fill="#fff4d6" stroke="#b69a50" stroke-width="2" />
+  <text x="760.0" y="2381.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">¿Parar o reconfigurar?</text>
+  <rect x="1200" y="2310" width="500" height="140" rx="12" fill="#eaf2fc" stroke="#5b7fa6" stroke-width="2" stroke-dasharray="none" />
+  <text x="1450.0" y="2360.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SOLICITAR STOP</text>
+  <text x="1450.0" y="2386.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Esperar stopped y enlace libre</text>
+  <text x="1450.0" y="2412.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Antes de reconfigurar o enviar DCS</text>
+  <rect x="1200" y="900" width="500" height="180" rx="12" fill="#fde9e7" stroke="#ba5d54" stroke-width="2" stroke-dasharray="none" />
+  <text x="1450.0" y="957.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">BLOQUEAR NUEVOS INICIOS</text>
+  <text x="1450.0" y="983.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Registrar causa; invalidar autorización</text>
+  <text x="1450.0" y="1009.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Recuperación con reset coordinado</text>
+  <text x="1450.0" y="1035.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">y nueva inicialización</text>
+  <rect x="1200" y="525" width="500" height="170" rx="12" fill="#fde9e7" stroke="#ba5d54" stroke-width="2" stroke-dasharray="none" />
+  <text x="1450.0" y="590.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SIN PERFIL VÁLIDO</text>
+  <text x="1450.0" y="616.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Mantener salida física inhibida</text>
+  <text x="1450.0" y="642.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Usar perfil sintético solo en simulación</text>
+  <text x="1200" y="1290.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">PUENTE LITEX / CSR PROPUESTO</text>
+  <text x="1200" y="1316.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1342.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">CPU → RTL</text>
+  <text x="1200" y="1368.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">CONFIG + APPLY; START; STOP</text>
+  <text x="1200" y="1394.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">panel_initialized; reset coordinado</text>
+  <text x="1200" y="1420.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1446.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">RTL → CPU</text>
+  <text x="1200" y="1472.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">config_ok; running; stopped</text>
+  <text x="1200" y="1498.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">frame_count; error; error_cause</text>
+  <text x="1200" y="1524.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1550.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Eventos persistentes o contadores:</text>
+  <text x="1200" y="1576.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">el software no debe perder pulsos.</text>
+  <text x="1200" y="1602.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">CSR concretos y mapa: por implementar.</text>
+  <text x="1200" y="1813.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">RESPONSABILIDADES</text>
+  <text x="1200" y="1839.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1865.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">RISC-V configura y supervisa.</text>
+  <text x="1200" y="1891.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Los píxeles no pasan por la CPU.</text>
+  <text x="1200" y="1917.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Inicialización LPDT solo con vídeo parado.</text>
+  <text x="1200" y="1943.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Fin LPDT no confirma recepción del LCD.</text>
+  <text x="1200" y="1969.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Cambios activos se rechazan: parar primero.</text>
+  <text x="60" y="2613.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">PROPUESTA · Sin CPU, firmware ni CSR nuevos implementados. Reset o fallo global invalidan la autorización.</text>
+  <text x="60" y="2639.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">La página 2 detalla el flujo RTL. El perfil real del LCD continúa pendiente.</text>
+  <text x="780.0" y="732.5" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Sí</text>
+  <text x="780.0" y="1190.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Sí</text>
+  <text x="780.0" y="1650.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Sí</text>
+  <text x="1145.0" y="603.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">No</text>
+  <text x="1115.0" y="1058.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">No</text>
+  <text x="1115.0" y="1518.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">No</text>
+  <text x="1425.0" y="2138.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Sí</text>
+  <text x="780.0" y="2260.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">No</text>
+  <text x="355.0" y="2363.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">No</text>
+  <text x="1145.0" y="2363.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Sí</text>
+  <text x="1470.0" y="2475.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Enlace libre</text>
+</svg>

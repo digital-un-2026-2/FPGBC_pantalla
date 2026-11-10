@@ -1,7 +1,7 @@
 [workspace]
 name = "fpgbc-pantalla"
 version = "0.1.0"
-description = "Entorno de FPGA, LiteX y simulación del motor LPDT"
+description = "Entorno de FPGA y LiteX para FPGBC"
 channels = ["conda-forge", "litex-hub"]
 platforms = ["linux-64"]
 preview = ["pixi-build"]
@@ -35,7 +35,41 @@ pythondata-cpu-vexriscv = { git = "https://github.com/litex-hub/pythondata-cpu-v
 
 [tasks]
 setup-env = "bash scripts/setup_env.sh"
-test-EDA = "bash test/env/eda_test.sh"
-test = "make -C motor_lpdt test-all"
-sim = "make -C motor_lpdt sim"
-wave = "make -C motor_lpdt wave"
+check-dphy-rtl = "iverilog -g2012 -Wall -s dphy_lpdt_tx -t null dphy_lpdt_tx/src/*.v"
+check-dsi-rtl = "make -C dsi_lp_packet_tx check"
+check-dsi-long-rtl = "make -C dsi_long_packet_tx check"
+check-dsi-lpdt-bridge-rtl = "make -C dsi_lpdt_bridge check"
+check-dphy-mode-rtl = "make -C dphy_mode_ctrl check"
+check-dsi-lane-packer-rtl = "make -C dsi_lane_packer check"
+check-rtl = { depends-on = ["check-dphy-rtl", "check-dsi-rtl", "check-dsi-long-rtl", "check-dsi-lpdt-bridge-rtl", "check-dphy-mode-rtl", "check-dsi-lane-packer-rtl", "check-dsi-hs-transport-rtl", "check-dphy-hs-rtl", "check-dphy-gowin-rtl", "check-dsi-test-pattern-rtl", "check-dsi-display-rtl"] }
+test-dsi-packet = "make -C dsi_lp_packet_tx test"
+test-dsi-long-packet = "make -C dsi_long_packet_tx test"
+test-dsi-lpdt-bridge = "make -C dsi_lpdt_bridge test"
+test-dphy-mode = "make -C dphy_mode_ctrl test"
+test-dsi-lane-packer = "make -C dsi_lane_packer test"
+
+check-dsi-hs-transport-rtl = "make -C dsi_hs_transport check"
+test-dsi-hs-transport = "make -C dsi_hs_transport test"
+check-dphy-hs-rtl = "make -C dphy_hs_tx check"
+test-dphy-hs = "make -C dphy_hs_tx test"
+
+check-dphy-gowin-rtl = "make -C dphy_gowin_tx check"
+test-dphy-gowin = "make -C dphy_gowin_tx test"
+
+check-dsi-test-pattern-rtl = "make -C dsi_test_pattern check"
+test-dsi-test-pattern = "make -C dsi_test_pattern test"
+
+check-dsi-display-rtl = "make -C dsi_display check"
+test-dsi-display = "make -C dsi_display test"
+generate-display = "python -m gateware.targets.display"
+generate-display-board = "python -m gateware.targets.display_board --mode parked"
+build-display-board = "python -m gateware.targets.display_board --mode parked --build"
+generate-display-lpdt = "python -m gateware.targets.display_board --mode lpdt"
+build-display-lpdt = "python -m gateware.targets.display_board --mode lpdt --build"
+check-display-lpdt = "python scripts/check_display_board.py build/display_board_lpdt --implemented"
+generate-display-image = "python -m gateware.targets.display_image"
+build-display-image = "python -m gateware.targets.display_image --build"
+test-display-image = "make -C dsi_display test-image"
+check-display-image = "python scripts/check_display_image.py build/display_image"
+build-display-backlight = "python -m gateware.targets.display_image --backlight-dcs --build"
+check-display-backlight = "python scripts/check_display_image.py build/display_image_backlight"

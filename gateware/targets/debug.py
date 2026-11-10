@@ -6,7 +6,7 @@ from litex.soc.integration.soc_core import SoCMini
 from litex.soc.integration.builder import Builder
 from gateware.platforms.fpgbc import Platform
 
-from gateware.targets.lpdt_demo import CRG
+from gateware.targets.crg import CRG
 
 from gateware.cores.debug_regs import DebugRegs
 from gateware.cores.lpdt_debug import LPDTDebug
@@ -31,10 +31,8 @@ class DebugSoC(SoCMini):
 
         # Fuentes explícitas: Instance no incorpora automáticamente el RTL.
         raiz = Path(__file__).resolve().parents[2]
-        for fuente in ("motor_lpdt.v", "motor_control.v", "count.v",
-                       "comp.v", "reg_0.v", "mux.v"):
-            platform.add_source(str(raiz / "motor_lpdt" / "src" / fuente))
-
+        for fuente in sorted((raiz / "dphy_lpdt_tx" / "src").glob("*.v")):
+            platform.add_source(str(fuente))
         self.submodules.lpdt = LPDTDebug()
         self.csr.add("lpdt")
 

@@ -61,9 +61,13 @@ independiente por cada caja.
    que recibe la pantalla. La solución eléctrica de la FPGBC combina ramas
    de baja potencia y de alta velocidad: [mapa y precauciones](hardware.md).
 
-PPU, buffers, planificador, generación de paquetes de imagen y transporte HS
-**siguen pendientes**. No se han fijado formato de color, resolución operativa,
-intervalos entre líneas/cuadros ni velocidad por canal.
+El generador de franjas RGB888, planificador, preparadores, transporte y wrapper
+Gowin están unidos en la [integración de pantalla](../dsi_display/README.md),
+con control CSR y pruebas hasta pads simulados. PPU, adaptación, buffers de imagen,
+calendario definitivo del panel y caracterización física HS siguen pendientes.
+El [target autónomo de imagen](imagen_en_pantalla.md) ensaya un perfil de
+720×720 a 60 Hz y 480 Mbit/s por canal. Estos valores están implementados
+para la prueba; todavía no se ha conseguido imagen en la pantalla física.
 
 ## 3. Recorrido de un comando por LPDT
 
@@ -77,19 +81,39 @@ de baja potencia. En este proyecto es la primera vía de transporte desarrollada
 
 Ejemplo: un Software Reset se prepara como `05 01 00 10`:
 
-1. La ROM del secuenciador conserva el paquete completo, incluido ECC/CRC;
-   en el arnés de depuración lo prepara el software del PC.
+1. El software del PC prepara el paquete completo, incluido ECC/CRC
+   cuando corresponda.
 2. Un supervisor conserva una copia estable y pide al motor que lo envíe.
 3. El motor espera permiso, acepta la petición y añade el selector LPDT `87`.
 4. Codifica cada bit en los estados lógicos del par D0, en orden LSB primero
    (primero el bit de menor peso del byte).
 5. Regresa al reposo LP-11 y emite `terminado`.
-6. El secuenciador respeta las esperas de su ROM antes del siguiente comando.
+6. El software respeta las esperas antes del siguiente comando.
    `terminado` **no confirma que el panel lo recibió**.
 
 Los estados LP-00, LP-01, LP-10 y LP-11 nombran los valores lógicos de los
 conductores P y N. No son valores de tensión ni autorizan usar 3,3 V.
-El [manual LPDT](../motor_lpdt/docs/lpdt.md) detalla la codificación y los tiempos.
+El núcleo está en [dphy_lpdt_tx.v](../dphy_lpdt_tx/src/dphy_lpdt_tx.v).
+
+También existe una ruta de prueba RTL independiente del PC:
+`dsi_lp_packet_tx → dsi_lpdt_bridge → dphy_lpdt_tx → estado_D0`.
+El [puente de prueba](../dsi_lpdt_bridge/README.md) almacena los cuatro bytes
+del paquete corto y espera el fin del motor. Esta ruta se verifica en
+simulación y se integra en el target LiteX `display`; el target `debug`
+conserva su supervisor LPDT de depuración.
+
+El [controlador de modos](../dphy_mode_ctrl/README.md) añade arbitraje entre
+esa ruta LPDT y la cadena HS. Prepara reloj antes de datos y
+detiene datos antes de reloj mediante confirmaciones de un modelo de PHY.
+Los bits y controles de pads los proporcionan el secuenciador HS y el wrapper,
+ahora conectados en `dsi_display`; la validación eléctrica sigue pendiente.
+
+El [secuenciador HS](../dphy_hs_tx/README.md) ejecuta esas órdenes con el perfil
+sintético S320. Su RTL entrega tramas de 16 bits y controles de fases; el
+testbench genera la serialización ideal y reconstruye los bytes de D0/D1.
+La integración con preparadores, packer, transporte, árbitro y motor LPDT
+reales se comprueba en simulación. No incluye OSER8, PLL ni pads Gowin;
+solo completa paquetes pares y rechaza lane parcial con fallo persistente.
 
 LP y HS son modos de señalización, no modos de imagen. Video Mode envía un
 flujo de vídeo con tiempos de línea/cuadro; Command Mode actualiza mediante
@@ -132,15 +156,14 @@ El supervisor de esta prueba admite paquetes de 1–7 bytes, rechaza órdenes
 mientras está ocupado y no tiene cola. No implementa todavía el supervisor
 completo del panel, ni sus esperas o recuperación eléctrica.
 
-Separado de LiteX, [secuenciador_init](../secuenciador_init/README.md) implementa
-el arranque autónomo: 11 paquetes fijos, temporizadores y fallos enclavados.
-Su prueba integrada usa el motor real con ancho 4 (hasta 15 bytes).
-La interfaz física LP sigue pendiente: no se ha validado el arranque en el panel.
+La inicialización será por software: comandos, orden y esperas. El arnés
+LiteX permite preparar paquetes desde el PC y observar el envío interno.
+La interfaz física LP sigue pendiente.
 
 ## 5. Reloj y límites de la prueba
 
-El reloj de control es de **40 MHz**: un ciclo dura **25 ns**. La lógica de
-control del motor cambia en el flanco ascendente (posedge); sus registros y
+El reloj de control es de **40 MHz**: un ciclo dura **25 ns**. El handshake del
+motor cambia en el flanco ascendente (posedge); la secuencia de fases, datos y
 salida LP cambian en el descendente (negedge). Entre ambos hay **12,5 ns**.
 
 El análisis de timing comprueba que los datos llegan antes de que el registro
@@ -156,8 +179,8 @@ drivers HS/LP, CLK/D1, recepción del panel ni conformidad D-PHY.
 1. Completar pruebas del motor y del supervisor CSR, incluidos reset, rechazos
    y envíos consecutivos; revisar timing del diseño integrado.
 2. Validar la PHY LP y las E/S antes de conectar la salida lógica al panel.
-3. Integrar el secuenciador autónomo con la interfaz LP y validar su secuencia
-   en el panel. Completar fallos integrados y confirmar la variante de pantalla.
+3. Integrar la inicialización por software con la interfaz LP y confirmar
+   la variante de pantalla antes de validar la secuencia en el panel.
 4. Desarrollar HS: reloj, serialización, cambios LP/HS y reparto entre canales.
 5. Añadir paquetes de imagen, buffers, adaptación e integración con PPU.
 6. Definir la integración RISC-V y evaluar recepción de respuestas del panel.

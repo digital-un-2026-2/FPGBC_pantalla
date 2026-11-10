@@ -3,7 +3,7 @@
 [Inicio](../README.md) · [Arquitectura](../docs/arquitectura.md) · [Flujo completo](../docs/flujo_de_trabajo.md)
 
 Gateware es el circuito que se configura en la FPGA. Aquí se describe en Python
-con Migen/LiteX y se conecta al motor Verilog de `motor_lpdt/`. Este Python
+con Migen/LiteX y se conecta al núcleo Verilog de `dphy_lpdt_tx/src/`. Este Python
 genera hardware; no necesita una CPU ejecutándolo dentro de la FPGA.
 
 | Carpeta | Responsabilidad |
@@ -24,7 +24,9 @@ permite leer/escribir registros por UART y capturar señales con LiteScope.
 No incorpora CPU ni conecta D0 al panel. Para revisar informes, programar en
 SRAM y probar la FPGA, seguir el [manual de trabajo](../docs/flujo_de_trabajo.md).
 
-Para el **secuenciador y motor conectados en un único bitstream**, usar
-`python -m gateware.targets.debug_init --build`. Produce `build/debug_init/`
-y mantiene el arranque autónomo, sin E/S DSI. Consultar
-[integración y captura conjunta](../docs/debug_secuenciador_init.md).
+## Cadena de pantalla integrada
+
+El target `gateware.targets.display` añade el planificador, generador de franjas,
+rutas LP/HS, wrapper Gowin y control CSR por UARTWishbone. Sus pads permanecen
+internos; el perfil de panel y la caracterización física siguen pendientes.
+[Uso y comprobaciones](../dsi_display/README.md).

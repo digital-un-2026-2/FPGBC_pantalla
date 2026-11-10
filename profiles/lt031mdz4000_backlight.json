@@ -1,0 +1,10 @@
+{
+  "purpose": "Diagnostic extension after the original 11-command JDI initialization; panel/board reception unverified",
+  "brightness_source": "https://github.com/will-tm/RPI-LCD-LT031MDZ4000/blob/main/panel-jdi-lt031mdz4000.c",
+  "control_source": "https://github.com/torvalds/linux/blob/master/include/video/mipi_display.h",
+  "notes": "51 FF 00 matches the public driver's 8-bit brightness carried in a u16. 53 24 requests BCTRL and BL on without dimming. This test sends both over LPDT; the public driver uses HS for brightness. It does not drive an unidentified external backlight GPIO.",
+  "steps": [
+    {"opcode": 81, "params": [255, 0], "delay_ms": 0},
+    {"opcode": 83, "params": [36], "delay_ms": 20}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "identification_source": "user-transcribed physical marking",
+  "label_lines": ["LCD-49754-001/111 3", "MP3 L4N3352v0057724"],
+  "part_number": "LCD-49754-001/111",
+  "documented_model": "JDI LT031MDZ4000",
+  "datasheet": "https://www.panoxdisplay.com/uploadfile/datasheet/LT031MDZ4000.pdf",
+  "match_basis": "Exact part-number suffix in section E, page 5; model correspondence from EarthLCD",
+  "controller_ic_readback": null,
+  "secondary_marking_decoded": false,
+  "lcd_reception_verified": false,
+  "backlight_board_control_net_identified": false
+}

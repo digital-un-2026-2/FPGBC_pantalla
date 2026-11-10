@@ -12,15 +12,19 @@ responsable no equivale a una validación eléctrica completa de D-PHY.
 |---|---|
 | Placa | FunnyPlaying FPGBC; revisión pendiente |
 | FPGA | Gowin GW2AR-LV18EQ144PC8/I7, referencia confirmada por el responsable |
-| Pantalla | LCD-49754 según el usuario; sufijo completo pendiente |
+| Pantalla | Marcado del usuario: LCD-49754-001/111 3; MP3 L4N3352v0057724 |
 | Enlace | Un par CLK y dos pares de datos: D0 y D1 |
 | Reloj de control | 40 MHz, periodo 25 ns; no es el reloj HS |
 | RESET físico del panel | No accesible, confirmado por el usuario |
 | Alimentación del panel | Secuencia resuelta y estable, según el usuario |
+| Retroiluminación, prueba del usuario | Apagada con `display_image.fs`; vuelve a funcionar al apagar/encender con firmware original |
+| Variante DCS de backlight, prueba del usuario | Luz también apagada; UART: 13 LPDT completados, vídeo local ~60 Hz, sin fallos PLL/PHY/árbitro |
+| Habilitación de retroiluminación de placa | Sin pin GPIO identificado; no confundir con los doce pines LP/HS |
 
 EarthLCD asocia LCD-49754-001 con JDI LT031MDZ4000 (720 × 720).
-Es una referencia comercial, no identificación de todas las variantes ni
-justificación para adoptar sus temporizaciones de vídeo.
+El sufijo aportado coincide con la especificación original; la identificación
+queda documentada en [panel_lcd49754.md](panel_lcd49754.md). Falta verificar
+recepción del panel y configuración efectiva del controlador.
 
 Se prevé DCS Software Reset: requiere un receptor DSI operativo y no garantiza
 recuperar cualquier fallo físico. Los seis conductores DSI no incluyen
@@ -47,7 +51,9 @@ programador y cableado; no confundirla con los pines UART 28/27. La UART de
 depuración se ha usado en `/dev/ttyACM2`, pero Linux puede asignar otro puerto.
 Consultar los [comandos y comprobaciones](flujo_de_trabajo.md#5-cargar-temporalmente-en-la-fpga).
 
-El target actual **no exporta `estado_D0` al panel**. Esto no resuelve por sí
+Los targets `debug` y `display` mantienen las señales del panel internas.
+El nuevo target [display_board](implementacion_fpga.md) asigna los doce pines
+y dispone de modos parked, LPDT y HS con perfil explícito. Esto no resuelve por sí
 solo el estado de los pines no utilizados: revisar su configuración y los bancos
 conectados a la pantalla antes de cargar incluso una prueba interna.
 
@@ -104,7 +110,8 @@ conductores del panel.
 - UG289-2.2.1E documenta buffers `TBUF`/`TLVDS_TBUF` con salida habilitada
   por `OEN=0`. Alta impedancia requiere revisar también pulls, keeper y
   terminaciones. Durante configuración existen pull-ups débiles fuera del
-  control del RTL; la interfaz física sigue sin implementar.
+  control del RTL. La salida LPDT de placa está implementada; HS usa un wrapper
+  candidato con caracterización del perfil pendiente.
 - En HS, las ramas GPIO pueden conducirse a cero para participar en la carga
   resistiva de referencia. No asumir alta impedancia sin validar la solución.
 - Las seis resistencias de rama **no son una terminación entre P y N**.

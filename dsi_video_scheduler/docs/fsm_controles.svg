@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2650" viewBox="0 0 1800 2650">
+  <title>8 · FSM · CONTROLES — Planificador DSI propuesto</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c708a" />
+    </marker>
+  </defs>
+  <rect width="1800" height="2650" fill="white" />
+  <text x="60" y="65.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="28" text-anchor="start">FSM · CONTROLES Y CONDICIONES DE SALIDA</text>
+  <text x="60" y="143.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Todos los pulsos son enables presentes antes del flanco que ejecuta la operación; no registros ACTION.</text>
+  <text x="60" y="169.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Señales no indicadas = 0. La captura de eventos y los contadores siguen las ecuaciones del datapath.</text>
+  <text x="60" y="241.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">ESTADO [4]                         CONTROLES ACTIVOS / ENTRADAS AL DATAPATH</text>
+  <rect x="60" y="300" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="365.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">IDLE</text>
+  <text x="210.0" y="391.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0000</text>
+  <rect x="420" y="300" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="378.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">stopped = chain_free &amp; !rst &amp; !R_ERROR.valid; habilita CSR</text>
+  <rect x="1240" y="300" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="378.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">START_ACCEPT → ARM; si no, conservar estado</text>
+  <rect x="60" y="475" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="540.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ARM</text>
+  <text x="210.0" y="566.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0001</text>
+  <rect x="420" y="475" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="553.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">source.start_valid = !HARD_BLOCK</text>
+  <rect x="1240" y="475" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="553.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SF → LOAD; sin ready, conservar estado</text>
+  <rect x="60" y="650" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="715.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LOAD</text>
+  <text x="210.0" y="741.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0010</text>
+  <rect x="420" y="650" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="728.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">EVENT_LOAD = IP_OK &amp; !FAULT_REQ</text>
+  <rect x="1240" y="650" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="728.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">IP_OK → RELEASE; si no, FAULT / causa 5</text>
+  <rect x="60" y="825" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="890.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">RELEASE</text>
+  <text x="210.0" y="916.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0011</text>
+  <rect x="420" y="825" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="903.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Según KIND y released; END puede emitir FRAME_COMPLETE</text>
+  <rect x="1240" y="825" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="903.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">WAIT → ADVANCE; RGB → CMD; END_OK → FINISH</text>
+  <rect x="60" y="1000" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="1065.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CMD</text>
+  <text x="210.0" y="1091.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0100</text>
+  <rect x="420" y="1000" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="1078.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">cmd_valid = !HARD_BLOCK; campos desde R_ACTIVE</text>
+  <rect x="1240" y="1000" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="1078.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">DF → PAYLOAD; sin ready, conservar descriptor</text>
+  <rect x="60" y="1175" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="1240.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">PAYLOAD</text>
+  <text x="210.0" y="1266.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0101</text>
+  <rect x="420" y="1175" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="1253.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">G = !HARD_BLOCK &amp; (BCNT &lt; WC)</text>
+  <rect x="1240" y="1175" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="1240.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LAST_BF → TX_WAIT; sin BF, conservar byte y</text>
+  <text x="1490.0" y="1266.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">contadores</text>
+  <rect x="60" y="1350" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="1415.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">TX_WAIT</text>
+  <text x="210.0" y="1441.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0110</text>
+  <rect x="420" y="1350" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="1428.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Capturar finales; RGB_COMPLETE = PKT_OK &amp; !FAULT_REQ</text>
+  <rect x="1240" y="1350" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="1428.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">PKT_OK → ADVANCE; si no, conservar estado</text>
+  <rect x="60" y="1525" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="1590.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ADVANCE</text>
+  <text x="210.0" y="1616.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0111</text>
+  <rect x="420" y="1525" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="1603.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">EVENT_ADVANCE = NEXT_IP_OK &amp; !FAULT_REQ</text>
+  <rect x="1240" y="1525" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="1603.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">NEXT_IP_OK → LOAD; si no, FAULT / causa 5</text>
+  <rect x="60" y="1700" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="1765.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FINISH</text>
+  <text x="210.0" y="1791.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">1000</text>
+  <rect x="420" y="1700" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="1778.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Cuadro ya contado; frame_active = 0</text>
+  <rect x="1240" y="1700" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="1778.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">STOP_NEXT → IDLE; si no, ARM para repetir</text>
+  <rect x="60" y="1875" width="300" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="1940.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FAULT</text>
+  <text x="210.0" y="1966.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">1001</text>
+  <rect x="420" y="1875" width="760" height="145" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="800.0" y="1953.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">running=0; stopped=0; bloquear nuevos inicios</text>
+  <rect x="1240" y="1875" width="500" height="145" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="1940.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Conservar estado hasta rst; no hay CLEAR_ERROR</text>
+  <text x="1490.0" y="1966.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">parcial</text>
+  <rect x="60" y="2110" width="1680" height="260" rx="0" fill="#ffffff" stroke="#7a869a" stroke-width="2" stroke-dasharray="8 6" />
+  <text x="900.0" y="2181.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">MÁSCARAS Y VENTANAS</text>
+  <text x="900.0" y="2207.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">HARD_BLOCK = rst | estado ilegal | STATE=FAULT | R_ERROR.valid | fallo urgente sin depender de DF/BF.</text>
+  <text x="900.0" y="2233.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">cmd_valid y G usan HARD_BLOCK; mark_error / count_error derivados de BF no vuelven a enmascarar ese mismo BF.</text>
+  <text x="900.0" y="2259.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">frame_active: LOAD / RELEASE / CMD / PAYLOAD / TX_WAIT / ADVANCE.</text>
+  <text x="900.0" y="2285.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">pkt_window: DF o PAYLOAD / TX_WAIT; frame_window: FRAME_BEGIN o frame_active.</text>
+  <text x="900.0" y="2311.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">STOP se captura mientras running o START_ACCEPT. running: todos excepto IDLE / FAULT. stopped: IDLE &amp; chain_free.</text>
+  <text x="60" y="2477.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">MEMORIA UC: STATE[4] + config_ok[1] + panel_initialized[1] = 6 bits. Ventanas y flags de actividad se decodifican de STATE.</text>
+  <text x="60" y="2503.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Total propuesto: datapath 198 + CSR R_SHADOW 10 + UC 6 = 214 bits, sin ROM ni módulos externos.</text>
+  <text x="60" y="2529.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Comandos detenidos: cfg_write &gt; APPLY &gt; escritura de autorización &gt; START. STOP puede coincidir con START.</text>
+  <text x="60" y="2555.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Diseño documentado, no RTL implementado. Verificación simbólica: verificar_fsm.py; límites y ecuaciones: fsm.md.</text>
+</svg>

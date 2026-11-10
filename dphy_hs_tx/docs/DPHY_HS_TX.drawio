@@ -1,0 +1,898 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="24.7.17">
+  <diagram id="hs-flow" name="Flujo HS propuesto">
+    <mxGraphModel dx="1200" dy="1800" grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="1654">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="PHY HS · Flujo PROPUESTO · 2026-11-08&#10;Documento previo a datapath/FSM/RTL" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="220" y="20" width="700" height="70" />
+        </mxCell>
+        <mxCell id="idle" value="Validar perfil y confirmar reposo conjunto&#10;Esperar clk_start_req" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="140" width="560" height="85" />
+        </mxCell>
+        <mxCell id="clk" value="Preparar CLK: entrada, Zero, oscilación y CLK-PRE&#10;Confirmar clk_prepared; mantener reloj" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="270" width="560" height="85" />
+        </mxCell>
+        <mxCell id="eclk" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="idle" target="clk">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="data" value="Esperar data_start_req&#10;Ejecutar preparación de D0/D1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="400" width="560" height="85" />
+        </mxCell>
+        <mxCell id="edata" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="clk" target="data">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="start" value="Cumplir Zero mínimo → data_prepared; mantener HS-0&#10;Capturar W0 → Sync un ciclo → emitir W0&#10;PENDING + ACTIVE: máximo dos palabras" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="530" width="560" height="85" />
+        </mxCell>
+        <mxCell id="estart" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="data" target="start">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="send" value="Consumir palabras y serializar sin burbujas&#10;Comprobar valid, keep y propiedad hasta last" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="660" width="560" height="85" />
+        </mxCell>
+        <mxCell id="esend" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="start" target="send">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="drain" value="Capturar last y terminar todos sus bits&#10;Conservar data_stop_req si llega durante drenaje" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="790" width="560" height="85" />
+        </mxCell>
+        <mxCell id="edrain" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="send" target="drain">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="trail" value="Con parada solicitada y datos drenados:&#10;Trail + retorno D0/D1 → data_stopped" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="920" width="560" height="85" />
+        </mxCell>
+        <mxCell id="etrail" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="drain" target="trail">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="stop" value="Esperar clk_stop_req; cumplir CLK-POST&#10;Trail + retorno CLK → clk_stopped; cumplir Exit" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="1050" width="560" height="85" />
+        </mxCell>
+        <mxCell id="estop" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="trail" target="stop">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="return" value="Reposo conjunto → stop_ready&#10;El árbitro genera hs_complete → nueva reserva" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="1180" width="560" height="85" />
+        </mxCell>
+        <mxCell id="ereturn" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=13;" edge="1" parent="1" source="stop" target="return">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="fault" value="Desde cualquier fase:&#10;reset / phy_abort / fallo local&#10;↓&#10;Descartar operación; sin éxito&#10;Recuperación coordinada&#10;&#10;Respuesta eléctrica ante aborto:&#10;PENDIENTE del wrapper" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="740" y="500" width="330" height="260" />
+        </mxCell>
+        <mxCell id="limits" value="Modelo propuesto S320:&#10;40 MHz · 320 Mb/s/lane&#10;PENDING + ACTIVE&#10;&#10;Pendiente antes de perfil físico:&#10;• cotejo normativo Zero/Sync/Trail&#10;• política de lane parcial&#10;• primitivas, relojes y reset&#10;&#10;keep distinto de 11 → fallo&#10;sin emitir la palabra inválida." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="740" y="870" width="330" height="310" />
+        </mxCell>
+        <mxCell id="footer" value="Flujo de responsabilidades; no es una FSM ni una tabla eléctrica.&#10;Fuentes, límites y pruebas: especificacion.md y verificacion.md." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#4a5568;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="1360" width="970" height="70" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="timing" name="Contrato temporal S320">
+    <mxGraphModel dx="1500" dy="1000" grid="1" page="1" pageWidth="1600" pageHeight="1100">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" value="S320 · Cronograma PROPUESTO de tres palabras&#10;T=25 ns · 8 bits/lane/T · Solo modelo ideal; sin primitivas/pads" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#e1d5e7;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="20" width="1510" height="90" />
+        </mxCell>
+        <mxCell id="h0" value="Señal / intervalo" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="150" width="250" height="60" />
+        </mxCell>
+        <mxCell id="h1" value="A" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="270" y="150" width="180" height="60" />
+        </mxCell>
+        <mxCell id="h2" value="A+1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="150" width="180" height="60" />
+        </mxCell>
+        <mxCell id="h3" value="C0=A+2" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="630" y="150" width="180" height="60" />
+        </mxCell>
+        <mxCell id="h4" value="C1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="810" y="150" width="180" height="60" />
+        </mxCell>
+        <mxCell id="h5" value="C2" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="990" y="150" width="180" height="60" />
+        </mxCell>
+        <mxCell id="h6" value="C3" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1170" y="150" width="180" height="60" />
+        </mxCell>
+        <mxCell id="h7" value="C4" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#d5e8d4;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="150" width="180" height="60" />
+        </mxCell>
+        <mxCell id="r0c0" value="Árbitro tras flanco" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="210" width="250" height="80" />
+        </mxCell>
+        <mxCell id="r0c1" value="grant ↑" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="270" y="210" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r0c2" value="grant=1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="210" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r0c3" value="grant=1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="630" y="210" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r0c4" value="grant=1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="810" y="210" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r0c5" value="grant=1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="990" y="210" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r0c6" value="stop ↑&#10;grant ↓" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1170" y="210" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r0c7" value="Espera retorno" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="210" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r1c0" value="Entrada aceptada" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="290" width="250" height="80" />
+        </mxCell>
+        <mxCell id="r1c1" value="—" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="270" y="290" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r1c2" value="—" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="290" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r1c3" value="W0" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="630" y="290" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r1c4" value="W1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="810" y="290" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r1c5" value="W2, last" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="990" y="290" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r1c6" value="—" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1170" y="290" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r1c7" value="—" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="290" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r2c0" value="PENDING tras flanco" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="370" width="250" height="80" />
+        </mxCell>
+        <mxCell id="r2c1" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="270" y="370" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r2c2" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="370" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r2c3" value="W0" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="630" y="370" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r2c4" value="W1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="810" y="370" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r2c5" value="W2" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="990" y="370" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r2c6" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1170" y="370" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r2c7" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="370" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r3c0" value="ACTIVE tras flanco" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="450" width="250" height="80" />
+        </mxCell>
+        <mxCell id="r3c1" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="270" y="450" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r3c2" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="450" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r3c3" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="630" y="450" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r3c4" value="W0" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="810" y="450" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r3c5" value="W1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="990" y="450" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r3c6" value="W2" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1170" y="450" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r3c7" value="vacío" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="450" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r4c0" value="Salida en [C,C+1)" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="530" width="250" height="80" />
+        </mxCell>
+        <mxCell id="r4c1" value="HS-0" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="270" y="530" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r4c2" value="HS-0" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="530" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r4c3" value="Sync B8" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="630" y="530" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r4c4" value="W0" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="810" y="530" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r4c5" value="W1" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="990" y="530" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r4c6" value="W2 final" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1170" y="530" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r4c7" value="Trail" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="530" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r5c0" value="Transporte tras flanco" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="610" width="250" height="80" />
+        </mxCell>
+        <mxCell id="r5c1" value="WAIT_GRANT" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="270" y="610" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r5c2" value="SEND" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="610" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r5c3" value="SEND" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="630" y="610" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r5c4" value="SEND" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="810" y="610" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r5c5" value="done ↑" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="990" y="610" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r5c6" value="WAIT_COMPLETE" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1170" y="610" width="180" height="80" />
+        </mxCell>
+        <mxCell id="r5c7" value="WAIT_COMPLETE" style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#dae8fc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="610" width="180" height="80" />
+        </mxCell>
+        <mxCell id="notes" value="Pérdida normal de grant después de aceptar last: drenar ACTIVE, sin fallo.&#10;PENDING se lee con su valor anterior y recibe a la vez la siguiente palabra.&#10;Ocupación máxima: dos palabras. Sync espera a W0; el primer payload sigue sin hueco.&#10;Al acabar bits: Trail → LP-11/Exit → data_stopped; CLK respeta POST antes de parar." style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#fff2cc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="740" width="1510" height="140" />
+        </mxCell>
+        <mxCell id="n1" value="Caso N=1: C0 captura W0 y emite Sync; C1 solicita parada y serializa W0; C2 inicia Trail.&#10;Fuentes y supuestos: contrato_temporal.md. Perfil LCD y política de lane parcial pendientes." style="rounded=0;whiteSpace=wrap;html=0;fontSize=16;fillColor=#f8cecc;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="20" y="920" width="1510" height="90" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="dp-data" name="Datapath · Datos y salida">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="1400">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="dphy_hs_tx · DATAPATH RTL · Datos y salida&#10;S320: registros en posedge de 40 MHz; modelo de paquetes pares" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1710" height="80" />
+        </mxCell>
+        <mxCell id="input" value="hs_word_data[15:0]&#10;hs_word_last" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="230" width="230" height="90" />
+        </mxCell>
+        <mxCell id="pending" value="PENDING&#10;P_DATA[15:0]&#10;P_LAST · P_VALID&#10;18 bits · enable CAPTURE" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="400" y="210" width="290" height="150" />
+        </mxCell>
+        <mxCell id="active" value="ACTIVE&#10;A_DATA[15:0]&#10;A_LAST · A_VALID&#10;18 bits · enable MOVE" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="840" y="210" width="290" height="150" />
+        </mxCell>
+        <mxCell id="data" value="datos[16] + last[1]" source="input" target="pending" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="move" value="P_DATA[16], P_LAST[1]&#10;valores anteriores al flanco" source="pending" target="active" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="zero" value="00: ZERO = 16'h0000" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="840" y="450" width="290" height="60" />
+        </mxCell>
+        <mxCell id="sync" value="01: SYNC = 16'hB8B8" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="840" y="560" width="290" height="60" />
+        </mxCell>
+        <mxCell id="tail" value="L1 · Extraer e invertir&#10;D0: ~A_DATA[7]&#10;D1: ~A_DATA[15]" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="840" y="710" width="290" height="90" />
+        </mxCell>
+        <mxCell id="rep" value="L2 · Replicar&#10;8 veces por lane&#10;16 bits" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="840" y="870" width="290" height="80" />
+        </mxCell>
+        <mxCell id="ta" value="A_DATA[15:0]" source="active" target="tail" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;exitX=1;exitY=0.75;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1180" y="400" />
+              <mxPoint x="1180" y="670" />
+              <mxPoint x="980" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tr" value="2 bits" source="tail" target="rep" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="mux" value="M1 · 4 → 1&#10;16 bits&#10;SEL_WORD[1:0]" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;shape=rectangle;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="500" width="240" height="220" />
+        </mxCell>
+        <mxCell id="m0" value="00" source="zero" target="mux" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;entryX=0;entryY=0.2;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1230" y="480" />
+              <mxPoint x="1230" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" value="01" source="sync" target="mux" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;entryX=0;entryY=0.4;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1260" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="10: payload[16]" source="active" target="mux" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;exitX=1;exitY=0.4;entryX=0;entryY=0.6;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1290" y="280" />
+              <mxPoint x="1290" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="11: TRAIL[16]" source="rep" target="mux" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;entryX=0;entryY=0.8;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1260" y="910" />
+              <mxPoint x="1260" y="680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="serializer" value="GENERADOR CONDUCTUAL&#10;Capturar FRAME[15:0] tras posedge&#10;8 eventos UI: i=0…7&#10;D0=FRAME[i] · D1=FRAME[8+i]&#10;CLK: HS-0 o bien oscilar con CLK_TOGGLE" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;dashed=1;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1250" y="850" width="460" height="150" />
+        </mxCell>
+        <mxCell id="frame" value="FRAME[15:0]" source="mux" target="serializer" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="out" value="Salidas observables&#10;HS bits CLK/D0/D1 + enables lógicos&#10;Estados LP desde UC · Sin pads" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1250" y="1120" width="460" height="100" />
+        </mxCell>
+        <mxCell id="outs" value="3 bits HS; control lógico" source="serializer" target="out" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="mask" value="K0: hs_word_keep[1:0] == 11&#10;MASK_OK" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;shape=rectangle;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="470" width="310" height="80" />
+        </mxCell>
+        <mxCell id="capture" value="L0: CAPTURE = RX_OPEN &amp; valid&#10;&amp; grant &amp; MASK_OK &amp; !rst &amp; !abort" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="650" width="430" height="80" />
+        </mxCell>
+        <mxCell id="maskcapture" value="MASK_OK[1]" source="mask" target="capture" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="enp" value="CAPTURE" source="capture" target="pending" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;dashed=1;strokeColor=#2255aa;entryX=0.5;entryY=1;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="510" y="690" />
+              <mxPoint x="510" y="420" />
+              <mxPoint x="545" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flags" value="Validez, prioridad tras reset:&#10;P_VALID: CLEAR &gt; CAPTURE &gt; MOVE&#10;A_VALID: CLEAR &gt; MOVE &gt; RETIRE&#10;CAPTURE + MOVE: sin bypass&#10;A_DATA se conserva durante Trail" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="820" width="640" height="170" />
+        </mxCell>
+        <mxCell id="uc" value="FRONTERA CON UC&#10;Recibe: MASK_OK, P_VALID/P_LAST, A_VALID/A_LAST&#10;Emite: RX_OPEN, MOVE, RETIRE, CLEAR_PIPE, SEL_WORD&#10;HS_DATA_ON, HS_CLK_ON, CLK_TOGGLE y estados LP → modelo serial" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;dashed=1;strokeColor=#2255aa;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1080" width="1050" height="140" />
+        </mxCell>
+        <mxCell id="uca" value="MOVE / RETIRE / CLEAR" source="uc" target="active" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;dashed=1;strokeColor=#2255aa;entryX=0.5;entryY=1;exitX=0.65;exitY=0;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="740" y="1040" />
+              <mxPoint x="740" y="400" />
+              <mxPoint x="985" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="foot" value="Datos: 36 bits. No RAM/FIFO, keep almacenado ni TAIL adicional.&#10;El índice UI pertenece al simulador, no a un contador RTL de 40 MHz. Fuentes y ecuaciones: datapath.md." style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1280" width="1680" height="80" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="dp-control" name="Datapath · Temporizadores y UC">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="1400">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="dphy_hs_tx · DATAPATH RTL · Temporizadores y UC&#10;S320: 16 bits de temporizadores + 36 bits de palabras = 52 bits lógicos (sin UC/modelo serial)" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1710" height="80" />
+        </mxCell>
+        <mxCell id="constants" value="Constantes S320 N−1 [12]&#10;0 INIT:3999 · 1 LPX:1&#10;2 CLK_PREP:1 · 3 CLK_ZERO:9&#10;4 CLK_PRE:0 · 5 HS_PREP:2&#10;6 HS_ZERO:4 · 7 HS_TRAIL:2&#10;8 EXIT:3 · 9 CLK_TRAIL:2" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="170" width="400" height="220" />
+        </mxCell>
+        <mxCell id="m0" value="M0 · 10 → 1&#10;12 bits&#10;TIME_SEL[3:0]" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;shape=rectangle;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="530" y="210" width="230" height="140" />
+        </mxCell>
+        <mxCell id="timer" value="TIME_LEFT[11:0]&#10;12 bits · reset 0&#10;load &gt; step &gt; hold" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="900" y="210" width="300" height="140" />
+        </mxCell>
+        <mxCell id="dec0" value="Σ0&#10;TIME_LEFT − 1&#10;12 bits" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="900" y="470" width="300" height="90" />
+        </mxCell>
+        <mxCell id="cmp0" value="C0: TIME_LEFT == 0&#10;TIME_LAST_INTERVAL" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;shape=rectangle;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="230" width="350" height="100" />
+        </mxCell>
+        <mxCell id="constmux" value="10 × 12 bits" source="constants" target="m0" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="timercmp" value="12 bits" source="timer" target="cmp0" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="timerdec" value="Q[11:0]" source="timer" target="dec0" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="postconst" value="Constante POST&#10;N_POST−1 = 8 [4]" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="670" width="400" height="100" />
+        </mxCell>
+        <mxCell id="post" value="POST_LEFT[3:0]&#10;4 bits · reset 0&#10;load &gt; step &gt; hold" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="900" y="650" width="300" height="140" />
+        </mxCell>
+        <mxCell id="dec1" value="Σ1&#10;POST_LEFT − 1&#10;4 bits" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="900" y="880" width="300" height="90" />
+        </mxCell>
+        <mxCell id="cmp1" value="C1: POST_LEFT == 0&#10;POST_LAST_INTERVAL" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;shape=rectangle;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1350" y="670" width="350" height="100" />
+        </mxCell>
+        <mxCell id="postcmp" value="4 bits" source="post" target="cmp1" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="postdec" value="Q[3:0]" source="post" target="dec1" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="selok" value="K1: TIME_SEL ≤ 9&#10;TIME_SEL_OK&#10;Códigos 10…15: fallo al cargar" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="450" width="400" height="100" />
+        </mxCell>
+        <mxCell id="convention" value="INTERVALOS COMPLETOS&#10;Cargar N−1 en frontera E.&#10;Cero = intervalo actual es el último.&#10;UC cambia de fase en E+N.&#10;N=1: cargar 0; terminar en E+1.&#10;Nunca usar cero para parar a mitad de ciclo." style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="850" width="650" height="170" />
+        </mxCell>
+        <mxCell id="uc" value="FRONTERA UC&#10;TIME_SEL[3:0], TIME_LOAD, TIME_STEP · POST_LOAD, POST_STEP&#10;Recibe C0, C1 y TIME_SEL_OK. Evalúa condiciones en posedge.&#10;Al final de Trail de datos: cargar POST y cargar TIME para Exit simultáneamente." style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;dashed=1;strokeColor=#2255aa;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1110" width="1680" height="130" />
+        </mxCell>
+        <mxCell id="ctrl0" value="TIME_LOAD / STEP" source="uc" target="timer" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;dashed=1;strokeColor=#2255aa;exitX=0.4;exitY=0;entryX=0.4;entryY=1;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="1060" />
+              <mxPoint x="800" y="400" />
+              <mxPoint x="1020" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ctrl1" value="POST_LOAD / STEP" source="uc" target="post" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;dashed=1;strokeColor=#2255aa;exitX=0.3;exitY=0;entryX=0.4;entryY=1;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="750" y="1050" />
+              <mxPoint x="750" y="820" />
+              <mxPoint x="1020" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="foot" value="POST avanza en paralelo a Exit y espera de parada del reloj; se satura en 0, sin wrap.&#10;TIME se comparte entre fases secuenciales. STATE, causas, ACK y propiedad permanecen en UC/árbitro." style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1280" width="1680" height="80" />
+        </mxCell>
+        <mxCell id="m2" value="M2&#10;2→1&#10;12 bits" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="790" y="230" width="80" height="100" />
+        </mxCell>
+        <mxCell id="loadtimer" value="M0[12]" source="m0" target="m2" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;entryX=0;entryY=0.3;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="mt" value="D[12]" source="m2" target="timer" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="dectimer" value="Σ0[12]" source="dec0" target="m2" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0.5;entryY=1;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="830" y="515" />
+              <mxPoint x="830" y="385" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="M3&#10;2→1&#10;4 bits" style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="680" y="670" width="100" height="100" />
+        </mxCell>
+        <mxCell id="postld" value="N_POST−1[4]" source="postconst" target="m3" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="pm" value="D[4]" source="m3" target="post" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="decpost" value="Σ1[4]" source="dec1" target="m3" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0.5;entryY=1;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="820" y="925" />
+              <mxPoint x="820" y="820" />
+              <mxPoint x="730" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="selects" value="M2: TIME_LOAD=1 → carga M0; 0 → Σ0. M3: POST_LOAD=1 → constante; 0 → Σ1.&#10;Enables: LOAD | (STEP &amp; Q≠0). Reset prioritario; retención sin realimentación externa." style="rounded=0;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="570" width="1250" height="65" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fsm-prepare" name="FSM · Preparación">
+    <mxGraphModel dx="1600" dy="1450" grid="1" page="1" pageWidth="1600" pageHeight="1450">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="dphy_hs_tx · FSM RTL · Preparación&#10;Posedge · S320 · Las duraciones corresponden al modelo ideal" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1510" height="90" />
+        </mxCell>
+        <mxCell id="boot" value="0 · BOOT&#10;Cargar INIT=3999" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="100" y="180" width="450" height="95" />
+        </mxCell>
+        <mxCell id="init" value="1 · INIT&#10;LP-11 · contar 4000 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="100" y="350" width="450" height="95" />
+        </mxCell>
+        <mxCell id="idle" value="2 · IDLE&#10;Reposo local; esperar CS" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="100" y="520" width="450" height="95" />
+        </mxCell>
+        <mxCell id="lpx" value="3 · CLK_LPX&#10;CLK LP-01 · 2 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="100" y="690" width="450" height="95" />
+        </mxCell>
+        <mxCell id="prep" value="4 · CLK_PREP&#10;CLK LP-00 · 2 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="100" y="860" width="450" height="95" />
+        </mxCell>
+        <mxCell id="zero" value="5 · CLK_ZERO&#10;CLK HS-0 · 10 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="100" y="1030" width="450" height="95" />
+        </mxCell>
+        <mxCell id="pre" value="6 · CLK_PRE&#10;Oscilar CLK · 1 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1000" y="180" width="450" height="95" />
+        </mxCell>
+        <mxCell id="waitdata" value="7 · WAIT_DATA&#10;clk_prepared=1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1000" y="350" width="450" height="95" />
+        </mxCell>
+        <mxCell id="dlpx" value="8 · DATA_LPX&#10;D0/D1 LP-01 · 2 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1000" y="520" width="450" height="95" />
+        </mxCell>
+        <mxCell id="dprep" value="9 · DATA_PREP&#10;D0/D1 LP-00 · 3 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1000" y="690" width="450" height="95" />
+        </mxCell>
+        <mxCell id="dzero" value="10 · DATA_ZERO&#10;D0/D1 HS-0 · 5 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1000" y="860" width="450" height="95" />
+        </mxCell>
+        <mxCell id="waitword" value="11 · WAIT_WORD&#10;data_prepared=1 · mantener HS-0" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1000" y="1030" width="450" height="95" />
+        </mxCell>
+        <mxCell id="eboot" value="Siempre / T(0), CLR" source="boot" target="init" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="einit" value="Z" source="init" target="idle" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="eidle" value="CS / T(1), CLR" source="idle" target="lpx" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="elpx" value="Z / T(2)" source="lpx" target="prep" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="eprep" value="Z / T(3)" source="prep" target="zero" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="epre" value="Z" source="pre" target="waitdata" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ewaitdata" value="DS / T(1)" source="waitdata" target="dlpx" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edlpx" value="Z / T(5)" source="dlpx" target="dprep" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edprep" value="Z / T(6)" source="dprep" target="dzero" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edzero" value="Z" source="dzero" target="waitword" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="clkpre" value="Z / T(4)" source="zero" target="pre" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="760" y="1080" />
+              <mxPoint x="760" y="227" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="next" value="A página de transferencia:&#10;V &amp; G &amp; K / CAP&#10;L=0 → SYNC_OPEN · L=1 → SYNC_CLOSED" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="950" y="1220" width="550" height="110" />
+        </mxCell>
+        <mxCell id="n" value="Primera palabra" source="waitword" target="next" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="legend" value="Z: último intervalo del temporizador. T(k): cargar N−1 del selector k.&#10;Sin condición de avance: conservar estado; no hay timeout de espera.&#10;Reset → BOOT. Fallo/aborto desde cualquier fase → ABORT_EXIT (pág. 7)." style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1350" width="1510" height="90" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fsm-transfer" name="FSM · Transferencia y retorno">
+    <mxGraphModel dx="1800" dy="1800" grid="1" page="1" pageWidth="1800" pageHeight="1800">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="dphy_hs_tx · FSM RTL · Transferencia y retorno&#10;CAP/MOV/RET se deciden antes del flanco; M1 representa el intervalo posterior" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1710" height="90" />
+        </mxCell>
+        <mxCell id="input" value="11 · WAIT_WORD (desde página 5)&#10;V &amp; G &amp; K → CAP" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="650" y="150" width="500" height="90" />
+        </mxCell>
+        <mxCell id="so" value="12 · SYNC_OPEN&#10;Sync B8 · RX abierta&#10;P válido y no final; A vacío" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="130" y="340" width="550" height="110" />
+        </mxCell>
+        <mxCell id="sc" value="13 · SYNC_CLOSED&#10;Sync B8 · RX cerrada&#10;P válido y final; A vacío" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1100" y="340" width="550" height="110" />
+        </mxCell>
+        <mxCell id="toopen" value="L=0" source="input" target="so" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="toclose" value="L=1" source="input" target="sc" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="stream" value="14 · STREAM_OPEN&#10;Payload de ACTIVE · RX abierta&#10;RET + MOV + CAP cada T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="130" y="620" width="550" height="110" />
+        </mxCell>
+        <mxCell id="drain" value="15 · DRAIN_PENDING&#10;Payload anterior · RX cerrada&#10;P final; A válido no final" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1100" y="620" width="550" height="110" />
+        </mxCell>
+        <mxCell id="sos" value="V &amp; G &amp; K &amp; !L / MOV + CAP" source="so" target="stream" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="sod" value="V &amp; G &amp; K &amp; L / MOV + CAP" source="so" target="drain" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="780" y="395" />
+              <mxPoint x="780" y="560" />
+              <mxPoint x="1375" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="loop" value="V &amp; G &amp; K &amp; !L&#10;RET + MOV + CAP" source="stream" target="stream" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0.5;entryY=1;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="65" y="675" />
+              <mxPoint x="65" y="805" />
+              <mxPoint x="405" y="805" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sd" value="V &amp; G &amp; K &amp; L&#10;RET + MOV + CAP" source="stream" target="drain" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="final" value="16 · FINAL&#10;Emitir última palabra completa&#10;Sin RX; grant ya no es requisito" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="650" y="910" width="500" height="110" />
+        </mxCell>
+        <mxCell id="df" value="!V / RET + MOV" source="drain" target="final" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1375" y="855" />
+              <mxPoint x="900" y="855" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sf" value="!V / MOV (N=1)" source="sc" target="final" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1710" y="395" />
+              <mxPoint x="1710" y="965" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="trail" value="17 · DATA_TRAIL&#10;M1=11 · 3 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="120" y="1130" width="450" height="95" />
+        </mxCell>
+        <mxCell id="exit" value="18 · DATA_EXIT&#10;Datos LP-11 · 4 T&#10;POST avanza en paralelo" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="120" y="1350" width="450" height="110" />
+        </mxCell>
+        <mxCell id="ft" value="!V &amp; DT / RET, T(7)" source="final" target="trail" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="900" y="1070" />
+              <mxPoint x="345" y="1070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="te" value="Z / T(8), POST_LOAD" source="trail" target="exit" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="wait" value="19 · WAIT_CLK_STOP&#10;data_stopped=1&#10;Esperar CT y POST" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="680" y="1350" width="450" height="110" />
+        </mxCell>
+        <mxCell id="ew" value="Z / POST_STEP" source="exit" target="wait" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ctrail" value="20 · CLK_TRAIL&#10;CLK HS-0 · 3 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="1350" width="450" height="110" />
+        </mxCell>
+        <mxCell id="wc" value="CT &amp; J / T(9)" source="wait" target="ctrail" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="cexit" value="21 · CLK_EXIT&#10;CLK LP-11 · 4 T" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="1550" width="450" height="95" />
+        </mxCell>
+        <mxCell id="cc" value="Z / T(8)" source="ctrail" target="cexit" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ret" value="22 · RETURN&#10;clk_stopped + reposo local" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="680" y="1550" width="450" height="95" />
+        </mxCell>
+        <mxCell id="idle" value="2 · IDLE&#10;Nueva reserva habilitada" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="120" y="1550" width="450" height="95" />
+        </mxCell>
+        <mxCell id="cr" value="Z" source="cexit" target="ret" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ri" value="CS=DS=DT=CT=G=0" source="ret" target="idle" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="foot" value="Todos los avances de datos requieren las invariantes P/A de fsm.md.&#10;RX abierta: hueco → underflow. RX cerrada: V → protocolo. Fallo/aborto → ABORT_EXIT.&#10;No retirar ACTIVE por caída normal de grant tras last. J: último intervalo POST." style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1690" width="1710" height="90" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fsm-controls" name="FSM · Controles y recuperación">
+    <mxGraphModel dx="1800" dy="1600" grid="1" page="1" pageWidth="1800" pageHeight="1600">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="dphy_hs_tx · FSM RTL · Controles y recuperación&#10;STATE[4:0] + CAUSE[2:0] = 8 bits UC; total con datapath = 60 bits lógicos" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1710" height="90" />
+        </mxCell>
+        <mxCell id="normal" value="Desde cualquier estado normal&#10;rst tiene prioridad absoluta" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="50" y="160" width="500" height="100" />
+        </mxCell>
+        <mxCell id="abort" value="23 · ABORT_EXIT&#10;CLR + T(8) al entrar&#10;HS deshabilitado · LP-11 lógico&#10;Contar 4 T aunque phy_abort siga alto" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="650" y="160" width="500" height="140" />
+        </mxCell>
+        <mxCell id="halt" value="24 · HALTED&#10;Reposo local, sin éxito&#10;CAUSE retenida · solo sale por reset" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1250" y="160" width="480" height="140" />
+        </mxCell>
+        <mxCell id="na" value="phy_abort o fallo local" source="normal" target="abort" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ah" value="Z" source="abort" target="halt" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=16;labelBackgroundColor=#ffffff;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="reset" value="rst → BOOT · CAUSE=0 · flags/contadores reset&#10;Prioridad: reset &gt; recuperación activa &gt; aborto externo &gt; fallo local &gt; avance normal.&#10;Aborto externo no crea CAUSE; fallo local conserva primera causa. Sin lazo abort→error." style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="360" width="1710" height="120" />
+        </mxCell>
+        <mxCell id="h0" value="Fases" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="530" width="550" height="60" />
+        </mxCell>
+        <mxCell id="h1" value="Datos HS / M1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="530" width="330" height="60" />
+        </mxCell>
+        <mxCell id="h2" value="CLK HS / oscila" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="530" width="330" height="60" />
+        </mxCell>
+        <mxCell id="h3" value="ACK" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="530" width="500" height="60" />
+        </mxCell>
+        <mxCell id="r0c0" value="CLK_LPX / CLK_PREP" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="590" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r0c1" value="0 / Zero" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="590" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r0c2" value="0 / 0" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="590" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r0c3" value="—" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="590" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r1c0" value="CLK_ZERO → CLK_PRE" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="655" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r1c1" value="0 / Zero" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="655" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r1c2" value="1 / 0 → 1 / 1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="655" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r1c3" value="—" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="655" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r2c0" value="WAIT_DATA / DATA_LPX / DATA_PREP" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="720" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r2c1" value="0 / Zero" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="720" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r2c2" value="1 / 1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="720" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r2c3" value="clk_prepared" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="720" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r3c0" value="DATA_ZERO / WAIT_WORD" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="785" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r3c1" value="1 / Zero" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="785" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r3c2" value="1 / 1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="785" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r3c3" value="clk_prepared; data_prepared desde WAIT_WORD" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="785" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r4c0" value="SYNC_OPEN / SYNC_CLOSED" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="850" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r4c1" value="1 / Sync" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="850" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r4c2" value="1 / 1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="850" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r4c3" value="clk_prepared + data_prepared" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="850" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r5c0" value="STREAM_OPEN / DRAIN_PENDING / FINAL" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="915" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r5c1" value="1 / Payload" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="915" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r5c2" value="1 / 1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="915" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r5c3" value="clk_prepared + data_prepared" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="915" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r6c0" value="DATA_TRAIL" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="980" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r6c1" value="1 / Trail" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="980" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r6c2" value="1 / 1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="980" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r6c3" value="clk_prepared" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="980" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r7c0" value="DATA_EXIT / WAIT_CLK_STOP" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1045" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r7c1" value="0 / Zero" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="1045" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r7c2" value="1 / 1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="1045" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r7c3" value="clk_prepared; data_stopped desde WAIT_CLK_STOP" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="1045" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r8c0" value="CLK_TRAIL / CLK_EXIT" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1110" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r8c1" value="0 / Zero" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="1110" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r8c2" value="1 / 0 → 0 / 0" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="1110" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r8c3" value="data_stopped" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="1110" width="500" height="65" />
+        </mxCell>
+        <mxCell id="r9c0" value="RETURN" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1175" width="550" height="65" />
+        </mxCell>
+        <mxCell id="r9c1" value="0 / Zero" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="580" y="1175" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r9c2" value="0 / 0" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="910" y="1175" width="330" height="65" />
+        </mxCell>
+        <mxCell id="r9c3" value="data_stopped + clk_stopped" style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="1240" y="1175" width="500" height="65" />
+        </mxCell>
+        <mxCell id="causes" value="CAUSE, primera causa retenida:&#10;5 estado inválido &gt; 6 selector &gt; 4 pipeline &gt; 1 máscara &gt; 3 protocolo &gt; 2 underflow&#10;0: sin fallo local; 7 reservado. phy_error = (CAUSE≠0). clear_error no recupera la PHY." style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1290" width="1710" height="100" />
+        </mxCell>
+        <mxCell id="notes" value="rst/phy_abort enmascaran ACK y HS. HALTED permite reposo local tras Exit incluso con aborto sostenido.&#10;Composición: reposo local &amp; !lp_grant &amp; lp_D0=11. El árbitro produce hs_complete.&#10;CLK_TOGGLE separa oscilación de HS-0. No son controles de pads ni prueba de conformidad D-PHY." style="rounded=1;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#222222;fontSize=17;rounded=0;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="1440" width="1710" height="110" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

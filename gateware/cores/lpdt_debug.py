@@ -3,7 +3,7 @@
 from migen import Array, Cat, Constant, If, Module, ResetSignal, Signal
 from litex.soc.interconnect.csr import AutoCSR, CSRStatus, CSRStorage
 
-from gateware.cores.motor_lpdt import MotorLPDT
+from gateware.cores.dphy_lpdt_tx import DPHYLPDTTX
 
 
 class LPDTDebug(Module, AutoCSR):
@@ -27,7 +27,7 @@ class LPDTDebug(Module, AutoCSR):
         self.estado = CSRStatus(6, name="estado")
         self.finalizado = CSRStatus(1, name="finalizado")
 
-        self.submodules.motor = motor = MotorLPDT()
+        self.submodules.motor = motor = DPHYLPDTTX()
 
         # Copia privada: sólo cambia al admitir una orden válida estando libre.
         self.bytes_activos = [Signal(8, name=f"lpdt_activo_{i}") for i in range(7)]

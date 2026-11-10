@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="3000" viewBox="0 0 1800 3000">
+  <title>7 · FSM · TRANSICIONES — Planificador DSI propuesto</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c708a" />
+    </marker>
+  </defs>
+  <rect width="1800" height="3000" fill="white" />
+  <polyline points="745.0,420 745.0,520" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="745.0,680 745.0,780" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="745.0,940 745.0,1070" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="745.0,1230 745.0,1410" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="745.0,1570 745.0,1690" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="745.0,1850 745.0,1970" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="745.0,2130 745.0,2250" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="430,1150.0 300,1150 300,2330 430,2330.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1060,1150.0 1230,1150.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="745.0,2410 745,2500 170,2500 170,860 430,860.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1730,1150.0 1740,1150 1780,1150 1780,220 745,220 745.0,260" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1480.0,1070 1480,1010 1160,1010 1160,600 1060,600.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1435.0,2080 1435,2160 1480,2160 1480.0,2250" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="8 6" />
+  <text x="60" y="65.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="28" text-anchor="start">FSM · PLANIFICADOR DSI · TRANSICIONES</text>
+  <text x="60" y="143.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">PROPUESTA · STATE[3:0], diez códigos usados. Registros en ↑clk; rst síncrono activo alto.</text>
+  <text x="60" y="169.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Toda transición normal exige !FAULT_REQ. Los controles de handshake son combinacionales antes del flanco.</text>
+  <ellipse cx="745.0" cy="340.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="333.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">IDLE · 0000</text>
+  <text x="745.0" y="359.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Configurar / esperar START</text>
+  <ellipse cx="745.0" cy="600.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="593.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ARM · 0001</text>
+  <text x="745.0" y="619.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Solicitar inicio de fuente</text>
+  <ellipse cx="745.0" cy="860.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="853.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LOAD · 0010</text>
+  <text x="745.0" y="879.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Cargar evento desde ROM</text>
+  <ellipse cx="745.0" cy="1150.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="1130.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">RELEASE · 0011</text>
+  <text x="745.0" y="1156.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Esperar instante y decodificar</text>
+  <text x="745.0" y="1182.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">END aceptado: FRAME_COMPLETE</text>
+  <ellipse cx="745.0" cy="1490.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="1483.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CMD · 0100</text>
+  <text x="745.0" y="1509.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Ofrecer descriptor RGB</text>
+  <ellipse cx="745.0" cy="1770.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="1763.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">PAYLOAD · 0101</text>
+  <text x="745.0" y="1789.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Consumir bytes con handshake</text>
+  <ellipse cx="745.0" cy="2050.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="2043.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">TX_WAIT · 0110</text>
+  <text x="745.0" y="2069.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Esperar finales retenidos</text>
+  <ellipse cx="745.0" cy="2330.0" rx="315.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="745.0" y="2323.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ADVANCE · 0111</text>
+  <text x="745.0" y="2349.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Incrementar IP una vez</text>
+  <ellipse cx="1480.0" cy="1150.0" rx="250.0" ry="80.0" fill="#eaf2fc" stroke="#344563" stroke-width="2" />
+  <text x="1480.0" y="1143.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FINISH · 1000</text>
+  <text x="1480.0" y="1169.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Resolver STOP / repetición</text>
+  <rect x="1230" y="2250" width="500" height="160" rx="12" fill="#fde9e7" stroke="#ba5d54" stroke-width="2" stroke-dasharray="none" />
+  <text x="1480.0" y="2323.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FAULT · 1001</text>
+  <text x="1480.0" y="2349.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Bloqueado hasta reset</text>
+  <rect x="60" y="2600" width="700" height="150" rx="28" fill="#e8edf4" stroke="#5c708a" stroke-width="2" stroke-dasharray="none" />
+  <text x="410.0" y="2655.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">rst desde cualquier estado → IDLE</text>
+  <text x="410.0" y="2681.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Limpiar registros y autorización</text>
+  <text x="410.0" y="2707.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Prioridad absoluta</text>
+  <rect x="1130" y="1830" width="610" height="250" rx="12" fill="#fde9e7" stroke="#ba5d54" stroke-width="2" stroke-dasharray="none" />
+  <text x="1435.0" y="1909.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FALLO GLOBAL → FAULT</text>
+  <text x="1435.0" y="1935.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">PHY, transporte, plazo, contadores o marcas</text>
+  <text x="1435.0" y="1961.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LOAD / ADVANCE sin índice válido → causa 5</text>
+  <text x="1435.0" y="1987.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">KIND inválido o STATE=10…15 → causa 5</text>
+  <text x="1435.0" y="2013.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Solo reset coordinado permite salir</text>
+  <text x="60" y="2832.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">RETENCIÓN Y PRIORIDAD</text>
+  <text x="60" y="2858.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Sin guard habilitado, conservar STATE. LOAD, ADVANCE y FINISH resuelven en un ciclo sin fallo.</text>
+  <text x="60" y="2884.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">1. rst; 2. FAULT_REQ; 3. transición normal. FAULT es absorbente; STOP no aborta el cuadro.</text>
+  <text x="60" y="2910.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">SF = source.start_valid &amp; source.start_ready. DF = cmd_valid &amp; cmd_ready. LAST_BF = BF &amp; (BCNT=WC−1).</text>
+  <text x="1200" y="1364.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">GUARDS DEL DATAPATH</text>
+  <text x="1200" y="1390.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1416.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">PKT_OK: tres finales retenidos,</text>
+  <text x="1200" y="1442.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">transporte libre y BCNT=WC.</text>
+  <text x="1200" y="1468.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1494.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">END_OK: KIND=END, released,</text>
+  <text x="1200" y="1520.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">LINE=HEIGHT, FRAME_SEEN_NEXT,</text>
+  <text x="1200" y="1546.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">fuente y enlace libres, sin paquete</text>
+  <text x="1200" y="1572.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">pendiente y END en último índice.</text>
+  <text x="1200" y="1598.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1624.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Plazo de evento solo en RELEASE,</text>
+  <text x="1200" y="1650.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">CMD, PAYLOAD y TX_WAIT.</text>
+  <text x="1200" y="1676.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start" />
+  <text x="1200" y="1702.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">TICK avanza también bajo pausas.</text>
+  <text x="1200" y="1728.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">En FINISH, STOP = STOP_NEXT.</text>
+  <text x="765.0" y="470.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">START_ACCEPT</text>
+  <text x="765.0" y="730.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">SF / FRAME_BEGIN</text>
+  <text x="765.0" y="1005.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">IP_OK / EVENT_LOAD</text>
+  <text x="765.0" y="1320.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">released &amp; KIND=RGB</text>
+  <text x="765.0" y="1630.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">DF</text>
+  <text x="765.0" y="1910.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">LAST_BF</text>
+  <text x="765.0" y="2190.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">PKT_OK / RGB_COMPLETE</text>
+  <text x="365.0" y="1138.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">released &amp; KIND=WAIT</text>
+  <text x="1145.0" y="1138.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">END_OK</text>
+  <text x="765.0" y="2455.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">NEXT_IP_OK / EVENT_ADVANCE</text>
+  <text x="1735.0" y="1138.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">STOP</text>
+  <text x="1500.0" y="1040.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">!STOP_NEXT</text>
+  <text x="1455.0" y="2120.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">FAULT_REQ</text>
+</svg>

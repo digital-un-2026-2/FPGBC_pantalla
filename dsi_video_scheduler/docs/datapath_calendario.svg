@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2800" viewBox="0 0 1800 2800">
+  <title>4 · DATAPATH · CALENDARIO — Planificador DSI propuesto</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c708a" />
+    </marker>
+  </defs>
+  <rect width="1800" height="2800" fill="white" />
+  <polyline points="280,325.0 310,325 310,240 740,240 740,315 770,315.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="650,540.0 710,540 710,405 770,405.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1100,360.0 1250,360.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1480.0,440 1480,640 505,640 505.0,600" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="880.0,700 880,670 1180,670 1180,490 935,490 935.0,450" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="8 6" />
+  <polyline points="280,985.0 310,985 310,900 740,900 740,975 770,975.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="650,1200.0 710,1200 710,1065 770,1065.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1100,1020.0 1250,1020.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1480.0,1100 1480,1300 505,1300 505.0,1260" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="880.0,1360 880,1330 1180,1330 1180,1150 935,1150 935.0,1110" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="8 6" />
+  <polyline points="1710,1020.0 1750,1020 1750,1530 385,1530 385.0,1600" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="710,1720.0 850,1720.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1250,1720.0 1400,1720.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1050.0,1820 1050,1910 385,1910 385.0,2020" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="710,2140.0 850,2140.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="60" y="65.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="28" text-anchor="start">DATAPATH 2/4 · TIEMPO E ÍNDICE DE EVENTOS</text>
+  <text x="60" y="143.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">ROM_EVENT: calendario expandido de un cuadro. WAIT=0, RGB=1, END=2; 3 es inválido.</text>
+  <text x="60" y="169.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Registro de evento estable durante su ejecución; no se programa esta ROM por CSR.</text>
+  <text x="60" y="2728.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">PROPUESTA · Registros en ↑clk; rst síncrono prioritario. LD=0 conserva Q.</text>
+  <text x="60" y="2754.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Buses [n]; controles discontinuos. Redes con el mismo nombre se conectan entre páginas. Ecuaciones: datapath.md.</text>
+  <rect x="60" y="280" width="220" height="90" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="170.0" y="331.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0 [32]</text>
+  <ellipse cx="505.0" cy="540.0" rx="145.0" ry="60.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="505.0" y="533.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">A0 · +1 [32]</text>
+  <text x="505.0" y="559.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Entrada: TICK</text>
+  <polygon points="770,270 1100,290 1100,430 770,450" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="935.0" y="327.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M0 · 2:1 [32]</text>
+  <text x="935.0" y="353.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0: constante 0</text>
+  <text x="935.0" y="379.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">1: A0</text>
+  <text x="935.0" y="405.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SEL = !FRAME_BEGIN</text>
+  <rect x="1250" y="280" width="460" height="160" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="1480.0" y="340.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_TICK [32]</text>
+  <text x="1480.0" y="366.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D = M0; rst → 0</text>
+  <text x="1480.0" y="392.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LD = FRAME_BEGIN | TICK_EN</text>
+  <rect x="60" y="700" width="1640" height="110" rx="0" fill="#ffffff" stroke="#7a869a" stroke-width="2" stroke-dasharray="8 6" />
+  <text x="880.0" y="748.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FRAME_BEGIN; TICK_EN; SEL_M0</text>
+  <text x="880.0" y="774.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Ciclos desde FRAME_BEGIN</text>
+  <rect x="60" y="940" width="220" height="90" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="170.0" y="991.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0 [16]</text>
+  <ellipse cx="505.0" cy="1200.0" rx="145.0" ry="60.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="505.0" y="1193.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">A1 · +1 [16]</text>
+  <text x="505.0" y="1219.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Entrada: IP</text>
+  <polygon points="770,930 1100,950 1100,1090 770,1110" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="935.0" y="987.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M1 · 2:1 [16]</text>
+  <text x="935.0" y="1013.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0: constante 0</text>
+  <text x="935.0" y="1039.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">1: A1</text>
+  <text x="935.0" y="1065.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SEL = !FRAME_BEGIN</text>
+  <rect x="1250" y="940" width="460" height="160" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="1480.0" y="1000.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_IP [16]</text>
+  <text x="1480.0" y="1026.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D = M1; rst → 0</text>
+  <text x="1480.0" y="1052.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LD = FRAME_BEGIN | EVENT_ADVANCE</text>
+  <rect x="60" y="1360" width="1640" height="110" rx="0" fill="#ffffff" stroke="#7a869a" stroke-width="2" stroke-dasharray="8 6" />
+  <text x="880.0" y="1408.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FRAME_BEGIN; EVENT_ADVANCE; SEL_M1</text>
+  <text x="880.0" y="1434.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Índice 0 … N_EVENTS−1</text>
+  <rect x="60" y="1600" width="650" height="240" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="385.0" y="1674.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ROM_EVENT [N_PROFILES × E_MAX × 66]</text>
+  <text x="385.0" y="1700.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Dirección: {active_profile_id[8], IP[16]}</text>
+  <text x="385.0" y="1726.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Salida: KIND[2], RELEASE[32], DEADLINE[32]</text>
+  <text x="385.0" y="1752.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Fuera de rango: código inválido</text>
+  <text x="385.0" y="1778.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Lectura combinacional</text>
+  <rect x="850" y="1620" width="400" height="200" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="1050.0" y="1674.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_EVT [66]</text>
+  <text x="1050.0" y="1700.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D = ROM_EVENT</text>
+  <text x="1050.0" y="1726.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LD = EVENT_LOAD</text>
+  <text x="1050.0" y="1752.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Reset → 0</text>
+  <text x="1050.0" y="1778.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">UC conserva event_valid</text>
+  <ellipse cx="1565.0" cy="1720.0" rx="165.0" ry="130.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="1565.0" y="1661.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">C_IP / C_KIND</text>
+  <text x="1565.0" y="1687.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">IP &lt; N_EVENTS</text>
+  <text x="1565.0" y="1713.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Avance: IP+1 [17]</text>
+  <text x="1565.0" y="1739.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">&lt; N_EVENTS</text>
+  <text x="1565.0" y="1765.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">KIND ≠ 3</text>
+  <text x="1565.0" y="1791.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">→ UC: event_legal</text>
+  <ellipse cx="385.0" cy="2140.0" rx="325.0" ry="120.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="385.0" y="2094.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">C_TIME · COMPARACIONES [32]</text>
+  <text x="385.0" y="2120.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">released = TICK ≥ R_EVT.RELEASE</text>
+  <text x="385.0" y="2146.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">late = TICK &gt; R_EVT.DEADLINE</text>
+  <text x="385.0" y="2172.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">frame_late = TICK &gt; T_FRAME</text>
+  <text x="385.0" y="2198.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">overflow = TICK == 0xFFFFFFFF</text>
+  <rect x="850" y="2020" width="880" height="240" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="1290.0" y="2081.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CONDICIONES → UC</text>
+  <text x="1290.0" y="2107.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">event_legal; kind[2]; released; late</text>
+  <text x="1290.0" y="2133.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">frame_late; overflow</text>
+  <text x="1290.0" y="2159.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">WAIT termina al alcanzar RELEASE</text>
+  <text x="1290.0" y="2185.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">RGB solo inicia desde RELEASE</text>
+  <text x="1290.0" y="2211.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">END requiere cuadro y enlace completos</text>
+  <text x="60" y="2464.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">LÍMITES DE AVANCE</text>
+  <text x="60" y="2490.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">TICK_EN = frame_active &amp; !overflow; se satura antes de envolver. El tiempo avanza también bajo backpressure.</text>
+  <text x="60" y="2516.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">EVENT_ADVANCE solo al terminar WAIT o RGB. Antes de IP+1, comprobar IP+1 &lt; N_EVENTS; END no incrementa IP.</text>
+  <text x="60" y="2542.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">La tabla debe incluir carga de R_EVT y ciclos de control. END cumple RELEASE ≤ TICK ≤ DEADLINE ≤ T_FRAME.</text>
+  <text x="60" y="2568.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Fuentes combinacionales se estabilizan antes de EVENT_LOAD; no se presupone la latencia de una BRAM síncrona.</text>
+  <text x="295.0" y="313.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">0 [32]</text>
+  <text x="680.0" y="528.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">1 [32]</text>
+  <text x="1175.0" y="348.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">D [32]</text>
+  <text x="1500.0" y="540.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Q [32]</text>
+  <text x="900.0" y="685.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">SEL [1]</text>
+  <text x="295.0" y="973.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">0 [16]</text>
+  <text x="680.0" y="1188.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">1 [16]</text>
+  <text x="1175.0" y="1008.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">D [16]</text>
+  <text x="1500.0" y="1200.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Q [16]</text>
+  <text x="900.0" y="1345.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">SEL [1]</text>
+  <text x="1730.0" y="1008.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">IP [16]</text>
+  <text x="780.0" y="1708.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[66]</text>
+  <text x="1325.0" y="1708.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">KIND [2]</text>
+  <text x="1070.0" y="1865.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">RELEASE / DEADLINE [32 c/u]</text>
+  <text x="780.0" y="2128.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[1 c/u]</text>
+</svg>

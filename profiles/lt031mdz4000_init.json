@@ -1,0 +1,92 @@
+{
+  "source": "https://github.com/jamwu/RPI-LCD-LT031MDZ4000/blob/main/panel-jdi-lt031mdz4000.c",
+  "source_license": "GPL-2.0-only; register values and delays from jdi_panel_init/on",
+  "steps": [
+    {
+      "opcode": 1,
+      "params": [],
+      "delay_ms": 20
+    },
+    {
+      "opcode": 176,
+      "params": [
+        0
+      ],
+      "delay_ms": 5
+    },
+    {
+      "opcode": 228,
+      "params": [
+        0,
+        0,
+        0,
+        0,
+        8
+      ],
+      "delay_ms": 0
+    },
+    {
+      "opcode": 208,
+      "params": [
+        69,
+        69,
+        113
+      ],
+      "delay_ms": 0
+    },
+    {
+      "opcode": 111,
+      "params": [
+        1
+      ],
+      "delay_ms": 0
+    },
+    {
+      "opcode": 17,
+      "params": [],
+      "delay_ms": 120
+    },
+    {
+      "opcode": 208,
+      "params": [
+        82,
+        74,
+        113
+      ],
+      "delay_ms": 0
+    },
+    {
+      "opcode": 190,
+      "params": [
+        255,
+        15,
+        0,
+        24,
+        4,
+        4,
+        0,
+        93
+      ],
+      "delay_ms": 0
+    },
+    {
+      "opcode": 187,
+      "params": [
+        47
+      ],
+      "delay_ms": 0
+    },
+    {
+      "opcode": 176,
+      "params": [
+        47
+      ],
+      "delay_ms": 20
+    },
+    {
+      "opcode": 41,
+      "params": [],
+      "delay_ms": 120
+    }
+  ]
+}

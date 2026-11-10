@@ -72,7 +72,7 @@ def dcs_short_packet(command):
 
 
 def check_ecc_vectors():
-    # Reset está documentado en motor_lpdt/docs/lpdt.md. Estos vectores fijos
+    # Estos vectores fijos
     # detectan regresiones de las ecuaciones, pero no prueban todos los headers.
     for command, ecc in ((0x01, 0x10), (0x11, 0x36), (0x29, 0x1C)):
         require(dsi_header_ecc([0x05, command, 0x00]) == ecc,

@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2700" viewBox="0 0 1800 2700">
+  <title>6 · DATAPATH · EVENTOS Y ESTADO — Planificador DSI propuesto</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c708a" />
+    </marker>
+  </defs>
+  <rect width="1800" height="2700" fill="white" />
+  <polyline points="360,335.0 390,335 390,210 1025,210 1025.0,250" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="750,335.0 850,335.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1200,335.0 1350,335.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1540.0,410 1540,500 420,500 420,292.5 450,292.5" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="360,815.0 390,815 390,690 1025,690 1025.0,730" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="750,815.0 850,815.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1200,815.0 1350,815.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1540.0,890 1540,980 420,980 420,772.5 450,772.5" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="360,1295.0 390,1295 390,1170 1025,1170 1025.0,1210" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="750,1295.0 850,1295.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1200,1295.0 1350,1295.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1540.0,1370 1540,1460 420,1460 420,1252.5 450,1252.5" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1490.0,1820 1490.0,1870" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="1730,1950.0 1760,1950 1760,1685 1490,1685 1490.0,1720" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <polyline points="550,1890.0 660,1890.0 660,1895.0" fill="none" stroke="#5c708a" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="60" y="65.5" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="28" text-anchor="start">DATAPATH 4/4 · EVENTOS RETENIDOS Y SUPERVISIÓN</text>
+  <text x="60" y="143.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">No exigir coincidencia de pulsos. pkt_done, hs_done y hs_complete se retienen por paquete.</text>
+  <text x="60" y="169.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">frame_done se retiene por cuadro; STOP por ejecución; primera causa de fallo hasta reset.</text>
+  <text x="60" y="2628.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">PROPUESTA · Registros en ↑clk; rst síncrono prioritario. LD=0 conserva Q.</text>
+  <text x="60" y="2654.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="start">Buses [n]; controles discontinuos. Redes con el mismo nombre se conectan entre páginas. Ecuaciones: datapath.md.</text>
+  <rect x="60" y="260" width="300" height="150" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="315.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ENTRADA [3]</text>
+  <text x="210.0" y="341.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">{hs_complete, hs_done,</text>
+  <text x="210.0" y="367.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">packet_done}</text>
+  <polygon points="450,250 750,270 750,400 450,420" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="600.0" y="315.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M4 · 2:1 [3]</text>
+  <text x="600.0" y="341.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0: Q; 1: 0</text>
+  <text x="600.0" y="367.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SEL = CLR</text>
+  <ellipse cx="1025.0" cy="335.0" rx="175.0" ry="85.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="1025.0" y="328.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">G0 · OR [3]</text>
+  <text x="1025.0" y="354.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M4 | entrada</text>
+  <rect x="1350" y="260" width="380" height="150" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="1540.0" y="315.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_PKT_SEEN [3]</text>
+  <text x="1540.0" y="341.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LD = ventana | CLR</text>
+  <text x="1540.0" y="367.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">rst → 0</text>
+  <rect x="60" y="560" width="1670" height="110" rx="0" fill="#ffffff" stroke="#7a869a" stroke-width="2" stroke-dasharray="8 6" />
+  <text x="895.0" y="595.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CLR = DF; LD = ventana | CLR</text>
+  <text x="895.0" y="621.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D = (CLR ? 0 : Q) | entrada; set domina clear; rst → 0</text>
+  <text x="895.0" y="647.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">seen_next == 3’b111 &amp; !transport.busy</text>
+  <rect x="60" y="740" width="300" height="150" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="808.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ENTRADA [1]</text>
+  <text x="210.0" y="834.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">source.frame_done</text>
+  <polygon points="450,730 750,750 750,880 450,900" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="600.0" y="795.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M5 · 2:1 [1]</text>
+  <text x="600.0" y="821.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0: Q; 1: 0</text>
+  <text x="600.0" y="847.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SEL = CLR</text>
+  <ellipse cx="1025.0" cy="815.0" rx="175.0" ry="85.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="1025.0" y="808.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">G1 · OR [1]</text>
+  <text x="1025.0" y="834.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M5 | entrada</text>
+  <rect x="1350" y="740" width="380" height="150" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="1540.0" y="795.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_FRAME_SEEN [1]</text>
+  <text x="1540.0" y="821.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LD = ventana | CLR</text>
+  <text x="1540.0" y="847.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">rst → 0</text>
+  <rect x="60" y="1040" width="1670" height="110" rx="0" fill="#ffffff" stroke="#7a869a" stroke-width="2" stroke-dasharray="8 6" />
+  <text x="895.0" y="1075.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CLR = FRAME_BEGIN; LD = ventana | CLR</text>
+  <text x="895.0" y="1101.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D = (CLR ? 0 : Q) | entrada; set domina clear; rst → 0</text>
+  <text x="895.0" y="1127.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LINE == HEIGHT &amp; frame_seen_next</text>
+  <rect x="60" y="1220" width="300" height="150" rx="12" fill="#f3f5f7" stroke="#7a869a" stroke-width="2" stroke-dasharray="none" />
+  <text x="210.0" y="1288.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">ENTRADA [1]</text>
+  <text x="210.0" y="1314.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CSR_STOP</text>
+  <polygon points="450,1210 750,1230 750,1360 450,1380" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="600.0" y="1275.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M6 · 2:1 [1]</text>
+  <text x="600.0" y="1301.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">0: Q; 1: 0</text>
+  <text x="600.0" y="1327.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">SEL = CLR</text>
+  <ellipse cx="1025.0" cy="1295.0" rx="175.0" ry="85.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="1025.0" y="1288.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">G2 · OR [1]</text>
+  <text x="1025.0" y="1314.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">M6 | entrada</text>
+  <rect x="1350" y="1220" width="380" height="150" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="1540.0" y="1275.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_STOP [1]</text>
+  <text x="1540.0" y="1301.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LD = ventana | CLR</text>
+  <text x="1540.0" y="1327.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">rst → 0</text>
+  <rect x="60" y="1520" width="1670" height="110" rx="0" fill="#ffffff" stroke="#7a869a" stroke-width="2" stroke-dasharray="8 6" />
+  <text x="895.0" y="1555.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">CLR = START_ACCEPT; LD = ventana | CLR</text>
+  <text x="895.0" y="1581.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D = (CLR ? 0 : Q) | entrada; set domina clear; rst → 0</text>
+  <text x="895.0" y="1607.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">STOP_PENDING → UC al fin del cuadro</text>
+  <ellipse cx="305.0" cy="1890.0" rx="245.0" ry="120.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="305.0" y="1844.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">P_ERR · PRIORIDAD COMBINACIONAL</text>
+  <text x="305.0" y="1870.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">1: PHY / aborto; 2: transporte</text>
+  <text x="305.0" y="1896.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">3: overflow; 4: plazo; 5: evento ilegal</text>
+  <text x="305.0" y="1922.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">6: contador; 7: marcas; 8: fuente</text>
+  <text x="305.0" y="1948.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FAULT_REQ; CAUSE[4]</text>
+  <rect x="660" y="1790" width="480" height="210" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="900.0" y="1849.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_ERROR [5]</text>
+  <text x="900.0" y="1875.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">{valid[1], cause[4]}</text>
+  <text x="900.0" y="1901.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">LD = FAULT_REQ &amp; !valid</text>
+  <text x="900.0" y="1927.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D = {1, CAUSE}</text>
+  <text x="900.0" y="1953.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">rst → 0; primera causa retenida</text>
+  <ellipse cx="1490.0" cy="1770.0" rx="240.0" ry="50.0" fill="#ffffff" stroke="#344563" stroke-width="2" />
+  <text x="1490.0" y="1763.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">A4 · +1 [32]</text>
+  <text x="1490.0" y="1789.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Entrada: R_FRAMES</text>
+  <rect x="1250" y="1870" width="480" height="160" rx="0" fill="#ffffff" stroke="#344563" stroke-width="2" stroke-dasharray="none" />
+  <text x="1490.0" y="1917.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">R_FRAMES [32]</text>
+  <text x="1490.0" y="1943.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">D=A4; LD=FRAME_COMPLETE</text>
+  <text x="1490.0" y="1969.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">rst → 0; módulo 2³²</text>
+  <text x="1490.0" y="1995.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">→ CSR frame_count</text>
+  <rect x="60" y="2180" width="1670" height="350" rx="0" fill="#ffffff" stroke="#7a869a" stroke-width="2" stroke-dasharray="8 6" />
+  <text x="895.0" y="2283.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FRONTERA CON UC · FSM EN PÁGINAS 7–8</text>
+  <text x="895.0" y="2309.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Entradas: released, late, event_legal, BCNT/WC, LINE/HEIGHT, seen_next, FAULT_REQ y autorización.</text>
+  <text x="895.0" y="2335.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Salidas: START_ACCEPT, FRAME_BEGIN, EVENT_LOAD/ADVANCE, G, cmd_valid, RGB_COMPLETE, FRAME_COMPLETE.</text>
+  <text x="895.0" y="2361.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">RGB_COMPLETE: UC emite una vez al comprobar paquete+HS completos y BCNT==WC sin fallo.</text>
+  <text x="895.0" y="2387.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">FRAME_COMPLETE: END liberado, todas las líneas+fuente completas, enlace libre y sin fallo. Emitir una vez.</text>
+  <text x="895.0" y="2413.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">STOP conserva el nivel hasta terminar cuadro. Ante fallo, bloquear nuevos paquetes y exigir reset coordinado.</text>
+  <text x="895.0" y="2439.0" fill="#172b4d" font-family="Helvetica, Arial, sans-serif" font-size="19" text-anchor="middle">Un fallo del planificador no conmuta directamente pads ni borra el diagnóstico del wrapper Gowin.</text>
+  <text x="375.0" y="323.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[3]</text>
+  <text x="800.0" y="323.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[3]</text>
+  <text x="1275.0" y="323.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">D [3]</text>
+  <text x="1560.0" y="455.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Q [3]</text>
+  <text x="375.0" y="803.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[1]</text>
+  <text x="800.0" y="803.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[1]</text>
+  <text x="1275.0" y="803.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">D [1]</text>
+  <text x="1560.0" y="935.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Q [1]</text>
+  <text x="375.0" y="1283.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[1]</text>
+  <text x="800.0" y="1283.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[1]</text>
+  <text x="1275.0" y="1283.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">D [1]</text>
+  <text x="1560.0" y="1415.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Q [1]</text>
+  <text x="1510.0" y="1845.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">D [32]</text>
+  <text x="1745.0" y="1938.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">Q [32]</text>
+  <text x="605.0" y="1878.0" fill="#344563" font-family="Helvetica, Arial, sans-serif" font-size="17" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">[5]</text>
+</svg>

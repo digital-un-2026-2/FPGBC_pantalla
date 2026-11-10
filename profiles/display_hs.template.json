@@ -1,0 +1,23 @@
+{
+  "description": "Plantilla HS deshabilitada. Sustituir fases/latencias y calendario por datos caracterizados del panel. No habilita v\u00eddeo.",
+  "rtl_parameters": {
+    "WIDTH": 720,
+    "HEIGHT": 720,
+    "BUFFER_WORDS": 2048,
+    "J": 0,
+    "PROFILE_OK": false,
+    "PLL_IDIV": 0,
+    "PLL_FBDIV": 3,
+    "PLL_ODIV": 4,
+    "PLL_SDIV": 4,
+    "PLL_PHASE": "0000",
+    "SER_HWL": "false",
+    "MAP_BITS": 16434824,
+    "E_MAX": 1,
+    "N_EVENTS_TABLE": 0,
+    "T_FRAME_TABLE": 0,
+    "EVENT_TABLE": 55340232221128654848,
+    "TIMING_OK_TABLE": false,
+    "TARGET_OK_TABLE": false
+  }
+}

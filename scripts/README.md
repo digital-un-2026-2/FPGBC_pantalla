@@ -26,22 +26,37 @@ Los nombres LiteScope están fijados en `SIGNALS`: un cambio de elaboración
 puede exigir compararlos con el CSV real y adaptar el script. Las comprobaciones
 dependen de la codificación y tiempos del motor actual, no son un receptor general.
 
-## Secuenciador y motor conectados
+## `display_control.py`: cadena DSI integrada
 
-`test_init_hw.py` usa el target **`debug_init`**, no `debug`. Verifica los
-11 paquetes, ECC/CRC, handshake y marcas de ciclo de toda la secuencia.
-Requiere bitstream cargado, CSV correspondientes y `litex_server` activo.
-No programa ni accede al panel; aplica reset local a los dos módulos por CSR.
+Controla el target `gateware.targets.display` mediante su banco CSR y un
+`litex_server` activo. Incluye estado, reset coordinado, configuración,
+inicialización LPDT desde un JSON explícito, START y STOP al final de cuadro.
+No programa hardware ni contiene una secuencia supuesta para el LCD.
+[Mapa, formato JSON y límites](../dsi_display/README.md).
+Para el bitstream físico LPDT, usar `--csr-csv build/display_board_lpdt/csr.csv`.
+`check_display_board.py` contrasta pines y opciones con la tabla de continuidad;
+`--implemented` verifica también el hash, la inhibición HS y el timing del
+bitstream LPDT. [Procedimiento de placa](../docs/implementacion_fpga.md).
 
 ```sh
-pixi run python scripts/test_init_hw.py --output-dir build/debug_init/captures/prueba_01
-pixi run python -m unittest scripts.test_init_debug -v
+pixi run --locked python scripts/display_control.py --help
 ```
 
-La segunda orden **no usa hardware**: prueba el monitor y genera/simula el
-wrapper real con Icarus, incluidos arranque, pérdida LP, reset y timeout LP.
-No simula UARTWishbone ni LiteScope. Procedimiento y límites en
-[depuración conjunta](../docs/debug_secuenciador_init.md).
+## `probe_fpgbc_firmware.py`: análisis estático del firmware original
+
+Ensaya checksums, compresión y un conjunto acotado de hipótesis de cifrado;
+escribe informes en `build/reverse_v1_4/probes/`. Requiere un Python con
+`numpy` y `cryptography` (incluido `hazmat.decrepit`), dependencias opcionales
+que no forman parte del entorno FPGA de Pixi.
+
+```sh
+python3 scripts/probe_fpgbc_firmware.py --input build/reverse_v1_4/original/update.bin
+```
+
+El binario se obtiene por separado. La procedencia, el SHA-256 y los límites
+del análisis están en el [informe de firmware](../docs/analisis_firmware_v1_4.md).
+El script no accede al hardware; los resultados actuales no recuperan
+contenido descifrado verificado.
 
 ## `setup_env.sh`: preparación con efectos adicionales
 

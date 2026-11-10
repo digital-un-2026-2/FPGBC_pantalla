@@ -57,61 +57,66 @@ Este enlace local puede necesitar recrearse al reinstalar el entorno.
 descarga un compilador RISC-V y modifica reglas udev del sistema mediante `sudo`.
 Consultar [scripts](../scripts/README.md) antes de decidir ejecutarlo.
 
-## 2. Pruebas sin FPGA: motor original
+## 2. Comprobar el RTL sin FPGA
 
 ```sh
-pixi run test
-pixi run make -C motor_lpdt test TARGET=reg
-pixi run sim
-pixi run wave
+pixi run check-rtl
 ```
 
-| Orden | Resultado |
-|---|---|
-| `test` | Compila y ejecuta las seis pruebas, incluidos modos de 7 y 15 bytes |
-| `test TARGET=reg` mediante Make | Prueba solo el registro `reg_0.v` |
-| `sim` | Ejecuta la integrada y abre GTKWave |
-| `wave` | Abre ondas existentes; no vuelve a ejecutar la prueba |
+Elabora el núcleo `dphy_lpdt_tx`, los dos preparadores DSI, el puente de
+prueba, el controlador de modos, el packer, transporte HS, secuenciador HS,
+wrapper Gowin y generador RGB888 con Icarus sin generar un ejecutable.
+Es una comprobación de elaboración, no una simulación.
 
-Los resultados van a `motor_lpdt/build/`. Las vistas `motor_lpdt/waves/*.gtkw`
-guardan qué señales mostrar, no sus datos. Los fallos y timeouts de los
-testbenches terminan con `$fatal`.
-
-Sin Pixi, con Make e Icarus instalados: `make -C motor_lpdt test-all`.
-**`make -C motor_lpdt test` ejecuta solo la integrada de 7 bytes**, no las seis.
-Para la ampliada: `pixi run make -C motor_lpdt test TARGET=motor_lpdt_15`.
-Cobertura y límites: [testbenches originales](../motor_lpdt/TB/README.md).
-
-## 3. Alcance de las simulaciones
-
-### Secuenciador autónomo, sin FPGA
+Para simular el preparador de paquetes DCS cortos:
 
 ```sh
-pixi run make -C secuenciador_init test                 # FSM con modelos e inyección de fallos
-pixi run make -C secuenciador_init test TARGET=secuenciador_init  # ROM y motor reales
-pixi run make -C secuenciador_init test-all             # Ambas pruebas
-pixi run make -C secuenciador_init sim TARGET=secuenciador_init  # Simular y abrir FST
-pixi run make -C secuenciador_init wave TARGET=secuenciador_init # Abrir FST existente
+pixi run test-dsi-packet
 ```
 
-La integrada reconstruye los 11 paquetes desde D0 y comprueba ECC/CRC y
-285 ms de esperas DCS sin reducirlas; solo acorta algunos tiempos de arranque.
-`test` no genera ondas en esta prueba; `sim` sí. Resultados en
-`build/secuenciador_init/`. [Interfaz, diagramas y límites](../secuenciador_init/README.md).
-`pixi run test` sigue ejecutando únicamente la regresión del motor.
+Comprueba ECC, bytes, handshake, pausas, reset y comandos consecutivos;
+ver [interfaz y cobertura](../dsi_lp_packet_tx/README.md).
+Las tareas de pruebas y ondas de los módulos retirados ya no están disponibles.
 
-Las pruebas de `motor_lpdt/TB/` verifican el motor Verilog y sus auxiliares.
-No simulan la integración LiteX, el reset de arranque, el supervisor CSR ni el
-puente UARTWishbone. No hay actualmente una prueba automatizada de simulación
-para esa integración; las capturas internas en FPGA complementan las pruebas
-del motor, pero no sustituyen esa cobertura pendiente.
+Para comprobar el generador autónomo de franjas y su enlace al preparador largo:
+
+```sh
+pixi run --locked test-dsi-test-pattern
+pixi run --locked make -C dsi_test_pattern check-structure
+```
+
+Comprueba cuadros RGB888, pausas, marcas, reset, parámetros y la estructura de
+24 bits del perfil 720×720. Ver [cobertura y límites](../dsi_test_pattern/docs/verificacion.md).
+
+Para comprobar el recorrido de paquetes cortos hasta los estados lógicos de D0:
+
+```sh
+pixi run --locked test-dsi-lpdt-bridge
+```
+
+El [puente de prueba](../dsi_lpdt_bridge/README.md) conecta el preparador corto
+y el motor LPDT en simulación. Comprueba bytes, fases, pausas, permiso,
+rechazos y reset. No utiliza UART ni FPGA; no modifica el target `debug`.
+Para guardar ondas: `pixi run --locked make -C dsi_lpdt_bridge waves`.
+
+Para probar arbitraje LP/HS y el recorrido LPDT real con una PHY HS simulada:
+
+```sh
+pixi run --locked test-dphy-mode
+pixi run --locked make -C dphy_mode_ctrl waves
+```
+
+Incluye prueba unitaria de fases, arbitraje, PLL, fallos y reset, y prueba
+integrada con el preparador corto, puente y motor LPDT. Las latencias HS son
+valores de prueba; no representan temporización eléctrica D-PHY.
+
+## 3. Alcance de la comprobación
+
+La elaboración no verifica temporización física, recepción del panel ni
+integración LiteX. El target de depuración mantiene D0 interno y usa el núcleo
+LPDT directamente. La secuencia de inicialización corresponde al software.
 
 ## 4. Generar el diseño y sintetizar
-
-Para probar **secuenciador y motor conectados**, usar el target independiente
-`gateware.targets.debug_init` y el procedimiento de
-[depuración conjunta](debug_secuenciador_init.md). Los comandos `debug` de esta
-página siguen correspondiendo a la prueba del motor aislado.
 
 Para generar Verilog y mapas de registros **sin síntesis**:
 
@@ -178,9 +183,6 @@ openFPGALoader \
 Al perder alimentación se pierde esta configuración; el comportamiento del
 próximo arranque depende de lo que ya tenga la placa en su memoria de arranque.
 El 1 MHz de programación no sustituye el reloj de control de 40 MHz.
-
-No usar `test-EDA` como alternativa: apunta a una Tang Nano 9K e incluye carga
-automática. Ver [prueba experimental de entorno](../test/README.md).
 
 ## 6. Abrir la comunicación de depuración
 
@@ -287,5 +289,5 @@ en documentación, no depender de que otro usuario tenga el mismo `build/`.
 | El destino ya existe | Elegir otro `--output` o `--output-dir`; conservar la captura anterior |
 | Build correcto, dudas de timing | Revisar informes y `--timing-allow-fail`; no interpretar el código de salida como cierre temporal |
 
-`pixi run test` no programa nada. `python -m gateware.targets.debug --build`
-tampoco. `openFPGALoader --write-sram ...` y `test-EDA` **sí intentan cargar hardware**.
+`pixi run check-rtl` no programa nada. `python -m gateware.targets.debug --build`
+tampoco. `openFPGALoader --write-sram ...` **sí intenta cargar hardware**.

@@ -1,5 +1,9 @@
 # Configuración local del editor y temporales de diagrams.net.
 /.nvim/
+*.history
+*.swp
+*.swo
+*~
 .*.drawio.dtmp
 .*.drawio.bkp
 /book_oct27_2026.pdf

@@ -1,91 +1,77 @@
 # FPGBC_pantalla
 
-Desarrollo de un **host MIPI DSI** para la pantalla de la consola
-[FunnyPlaying FPGBC](https://funnyplaying.com/products/fpgbc-kit).
-Un host es el emisor: prepara los comandos y la imagen que recibe la pantalla.
-DSI es el protocolo usado para transportarlos.
+Transmisor MIPI DSI para la pantalla de la FunnyPlaying FPGBC,
+con FPGA Gowin GW2AR-LV18EQ144PC8/I7.
 
-El objetivo es llevar la imagen de una PPU (bloque que produce píxeles) hasta
-la pantalla, usando dos canales de datos. **Todavía no es un controlador de
-pantalla completo ni eléctricamente validado.**
+La cadena digital completa integra LPDT, generador de franjas, planificador,
+paquetes y transporte HS con el wrapper Gowin y control CSR de LiteX.
+El target `display_image` inicializa el panel con la secuencia pública JDI
+LT031MDZ4000 y transmite automáticamente ocho barras RGB888 de 720×720 a
+60 Hz, con HS habilitado a 480 Mbit/s/lane y los doce pines de placa asignados.
+El bitstream está construido y supera timing. En la primera prueba del usuario
+no hubo imagen y la retroiluminación permaneció apagada; con el firmware original
+sí funciona. Se añade una variante de diagnóstico con comandos de brillo DCS.
+[Construcción, carga y diagnóstico](docs/imagen_en_pantalla.md).
 
-## Qué funciona y qué falta
+```sh
+pixi run --locked build-display-image
+pixi run --locked check-display-image
+```
 
-| Estado | Contenido |
-|---|---|
-| Implementado | Motor LPDT Verilog de 1–7/15 bytes y secuenciador autónomo de 11 comandos DCS, con ROM y esperas; verificados en simulación |
-| Integración de depuración | LiteX conecta el motor a registros controlables desde el PC y a LiteScope, un capturador de señales internas |
-| Flujo disponible | Simulación, síntesis para FPGBC, carga temporal en FPGA y pruebas internas por UART |
-| Pendiente | Implementar y validar la interfaz física LP, comprobar inicialización en el panel, transmitir imagen en HS e integrar PPU |
+El archivo para cargar es `build/display_image/gateware/display_image.fs`.
+Los targets de depuración y LPDT siguen disponibles por separado.
 
-**El target de depuración no conecta la salida LPDT al panel.** Una captura
-correcta demuestra comportamiento lógico interno, no recepción de la pantalla.
+## Archivos principales
 
-Para sintetizar **secuenciador y motor conectados en un único bitstream** y
-capturar ambos con LiteScope, usar el target `debug_init`:
-[procedimiento de depuración conjunta](docs/debug_secuenciador_init.md).
+- [Implementación en FPGA](docs/implementacion_fpga.md): pines, estándares, bitstreams de placa, CST/SDC y pruebas de construcción.
+- [Imagen en pantalla](docs/imagen_en_pantalla.md): target autónomo, inicialización, vídeo activo y carga en SRAM.
+- [Identificación de pantalla](docs/panel_lcd49754.md): fuentes encontradas para LCD-49754/LT031MDZ4000 y controlador candidato R63308.
+- [dsi_display/](dsi_display/README.md): integración completa, mailbox entre relojes, control CSR y pruebas desde los pads simulados; target LiteX y controlador Python.
+- [dsi_video_scheduler/](dsi_video_scheduler/README.md): planificador RTL WAIT/RGB/END, especificación Draw.io/PDF y verificación integrada.
+- [dsi_test_pattern/](dsi_test_pattern/README.md): generador RTL autónomo de ocho franjas RGB888; control/datapath separados y pruebas con el preparador largo real.
+- [dphy_lpdt_tx/src/dphy_lpdt_tx.v](dphy_lpdt_tx/src/dphy_lpdt_tx.v): motor LPDT.
+- [dsi_lp_packet_tx/](dsi_lp_packet_tx/README.md): preparador RTL de paquetes DCS cortos con ECC y salida `valid/ready`.
+- [dsi_long_packet_tx/](dsi_long_packet_tx/README.md): preparador RTL de paquetes largos DSI con ECC, CRC16 y carga útil mediante `valid/ready`.
+- [dsi_lane_packer/](dsi_lane_packer/README.md): empaquetador lógico de dos bytes para D0/D1, con máscara del último grupo parcial y simulación con los preparadores reales.
+- [dsi_hs_transport/](dsi_hs_transport/README.md): transporte lógico con buffer de paquete completo y salida HS continua en simulación.
+- [dphy_hs_tx/](dphy_hs_tx/README.md): secuenciador HS RTL con perfil sintético S320 y verificación serial de testbench; sin primitivas ni pads.
+- [dphy_gowin_tx/](dphy_gowin_tx/README.md): wrapper RTL Gowin con retardo común, supervisor y adaptadores de primitivas; probado con modelos ideales y perfil físico bloqueado por defecto.
+- [dsi_lpdt_bridge/](dsi_lpdt_bridge/README.md): puente de prueba de cuatro bytes entre el preparador corto y el motor LPDT, con simulación hasta los estados de D0.
+- [dphy_mode_ctrl/](dphy_mode_ctrl/README.md): árbitro LPDT/HS en simulación, con preparación/parada mediante confirmaciones de un modelo de PHY.
+- [dsi_lp_packet_tx/docs/DSI_LP_PACKET_TX.drawio](dsi_lp_packet_tx/docs/DSI_LP_PACKET_TX.drawio): flujo, datapath y FSM del preparador de paquetes DCS cortos, editables con Draw.io. Vistas del [datapath](dsi_lp_packet_tx/docs/datapath.svg) y la [FSM](dsi_lp_packet_tx/docs/fsm.svg).
+- [gateware/](gateware/README.md): integración LiteX y depuración por UART.
+- [scripts/](scripts/README.md): captura interna y preparación del entorno.
+- [docs/hardware.md](docs/hardware.md): conexiones, alimentación y precauciones.
+- [docs/flujo_de_trabajo.md](docs/flujo_de_trabajo.md): herramientas y uso del target.
 
-## Primera prueba: sin conectar la FPGA
-
-En Linux x86_64, instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:
+## Entorno
 
 ```sh
 pixi install --locked
-pixi run test                    # Seis pruebas, incluidos modos de 7 y 15 bytes
-pixi run make -C secuenciador_init test-all  # Control y secuencia completa con motor real
-pixi run sim                     # Prueba integrada y visor GTKWave
+pixi run check-rtl
+pixi run test-dsi-packet
+pixi run test-dsi-long-packet
+pixi run test-dsi-lane-packer
+pixi run test-dsi-hs-transport
+pixi run test-dsi-lpdt-bridge
+pixi run test-dphy-mode
+pixi run test-dphy-hs
+pixi run test-dphy-gowin
+pixi run test-dsi-test-pattern
+pixi run test-dsi-display
+pixi run test-display-image
+pixi run generate-display
+pixi run build-display-lpdt
+pixi run check-display-lpdt
 ```
 
-Para trabajar con las herramientas directamente:
+`check-rtl` comprueba con Icarus el motor LPDT, los dos preparadores DSI,
+el empaquetador de dos lanes, el transporte lógico HS, el secuenciador HS,
+el puente de prueba, el árbitro LP/HS, el wrapper Gowin (declaraciones de primitivas)
+y el generador de franjas RGB888 y la integración completa de pantalla.
+`test-dsi-packet` simula el preparador de paquetes; no requiere hardware.
 
-```sh
-pixi shell
-# Aquí están disponibles python, iverilog, yosys, etc.
-exit                            # Salir del entorno
-```
-
-La primera instalación requiere Internet. `pixi.toml` y `pixi.lock` se
-versionan; `.pixi/`, las ondas y los resultados de compilación no.
-
-## Qué leer
-
-1. [Arquitectura explicada](docs/arquitectura.md): de la PPU a la pantalla,
-   significado de los términos y diferencia entre lo previsto y lo existente.
-2. [Flujo de trabajo](docs/flujo_de_trabajo.md): entorno, simulaciones, síntesis,
-   carga en SRAM y capturas en FPGA, paso a paso.
-3. [Hardware y seguridad](docs/hardware.md): revisar **antes de programar**.
-4. [Depuración LiteX](docs/litex_debug.md): registros, supervisor y analizador.
-
-El [índice de documentación](docs/README.md) reúne las referencias detalladas.
-
-## Organización
-
-| Carpeta | Para qué sirve |
-|---|---|
-| [motor_lpdt/](motor_lpdt/README.md) | Motor Verilog original, contrato de interfaz y pruebas |
-| [secuenciador_init/](secuenciador_init/README.md) | Arranque autónomo Verilog: ROM de comandos, temporizadores, supervisor, pruebas y diagramas |
-| [gateware/](gateware/README.md) | Integración LiteX y plataforma FPGBC |
-| [scripts/](scripts/README.md) | Herramientas de entorno y prueba interna desde el PC |
-| [test/](test/README.md) | Prueba experimental del entorno EDA; no es la regresión LPDT |
-| [docs/](docs/README.md) | Arquitectura, procedimientos y hardware |
-| `build/` | Archivos generados de LiteX y capturas; no editar ni versionar |
-| `pixi.toml`, `pixi.lock` | Comandos y dependencias reproducibles; `.pixi/` y `.toolchain/` son entornos locales ignorados |
-
-Los comandos de los manuales parten de la raíz del repositorio. No ejecutar
-`setup-env` o `test-EDA` como preparación automática: el primero modifica el
-sistema con `sudo` y el segundo intenta programar un diseño de otra placa.
-
-## Hardware de trabajo
-
-FPGA **GW2AR-LV18EQ144PC8/I7**, reloj de control de **40 MHz** y pantalla
-LCD-49754, cuya variante completa sigue pendiente. El reloj de control no es
-el reloj de transmisión de alta velocidad. El RESET físico del panel no es
-accesible; la secuencia ROM comienza con un comando de reset por DSI.
-
-El camino autónomo previsto es `secuenciador_init → motor_lpdt → interfaz LP
-→ panel`. Los dos primeros están implementados; la interfaz física aún no.
-LiteX es un arnés externo de depuración, no una dependencia del arranque autónomo.
-
-No escribir flash ni modificar alimentaciones, resistencias o E/S sin revisión
-y autorización. La prueba interna tampoco sustituye la revisión de los pines
-no utilizados y de los bancos conectados al panel.
+El reloj de control es de 40 MHz y el de byte de `display_image` es de 60 MHz.
+El usuario identificó el marcado LCD-49754-001/111, correspondiente al
+LT031MDZ4000 documentado. La recepción DSI y el control de retroiluminación
+siguen pendientes de validación física.
