@@ -34,8 +34,7 @@ pythondata-software-compiler_rt = { git = "https://github.com/litex-hub/pythonda
 pythondata-cpu-vexriscv = { git = "https://github.com/litex-hub/pythondata-cpu-vexriscv.git", branch = "master" }
 
 [tasks]
-setup-env = "bash scripts/setup_env.sh"
-test-EDA = "bash test/env/eda_test.sh"
 test = "make -C motor_lpdt test-all"
+test-init = "make -C secuenciador_init test-all"
 sim = "make -C motor_lpdt sim"
 wave = "make -C motor_lpdt wave"

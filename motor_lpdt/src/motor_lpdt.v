@@ -1,4 +1,5 @@
-// Paquete completo e inmutable hasta terminado. Ancho 3: 1..7; ancho 4: 1..15.
+// Paquete completo e inmutable hasta terminado.
+// Ancho 3: 1..7; ancho 4: 1..15; ancho 5: 1..31 (captura: hasta 22 bytes DSI).
 // El almacén responde a POS con antelación al negedge de carga del byte.
 // Reset interno: mantener rst durante un posedge y el negedge posterior.
 // permiso_arranque presupone reposo D-PHY y drivers ya preparados externamente.

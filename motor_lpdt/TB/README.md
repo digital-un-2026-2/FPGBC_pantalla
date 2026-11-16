@@ -20,8 +20,9 @@ make -C motor_lpdt sim
 | `motor_control` | FSM con datapath modelado; vector inicial, longitudes 1–4, permiso, avisos y reset por estado |
 | `motor_lpdt` | FSM y datapath RTL reales, con almacén síncrono modelado; longitudes 1–7, longitud cero, permiso y reset por estado |
 | `motor_lpdt_15` | Mismo test integrado con ancho 4; todas las longitudes 1–15, cruce 7→8, paquete BE de 15 bytes y aborto después del índice 7 |
+| `motor_lpdt_31` | Ancho 5; todas las longitudes 1–31, cruce 15→16, B7 capturado de 22 bytes, aborto en índice 16 y reenvío completo |
 
-Los dos tests del motor comparan P/N ciclo a ciclo y reconstruyen
+Los tres tests del motor comparan P/N ciclo a ciclo y reconstruyen
 `87 05 01 00 10`, LSB primero; para ese vector comprueban 340 ciclos (8,5 µs).
 También prueban patrones `00/FF/55/AA` y solicitudes adicionales durante envío.
 El integrado comprueba posiciones válidas, salida en negedge y aviso final
@@ -31,7 +32,7 @@ Los integrados comprueban también que retirar permiso tras aceptar no aborta,
 y que no aparecen nuevos envíos al quedar en reposo sin solicitud.
 El paquete BE comprueba transporte, no valida independientemente su ECC/CRC.
 
-Verificación local: los seis targets finalizaron en `PASS` con `test-all`.
+Verificación local: los siete targets finalizaron en `PASS` con `test-all`.
 Icarus emitió advertencias de `timescale` heredado de los testbenches, sin
 errores de compilación ni de simulación. Esto no equivale a validar la placa.
 
@@ -57,6 +58,8 @@ errores de compilación ni de simulación. Esto no equivale a validar la placa.
 
 Se generan `motor_lpdt/build/<target>_TB.vcd` y `.out`; las vistas están en
 `motor_lpdt/waves/<target>_TB.gtkw`. Las del motor agrupan control, tiempo, bytes y LP.
+Para el nuevo target `motor_lpdt_31` no hay aún una vista `.gtkw` dedicada;
+GTKWave puede abrir directamente el VCD.
 La FSM muestra `state_name` en ASCII con `BENCH`, activado por el Makefile:
 0 IDLE, 1 ESC_10, 2 ESC_00_A, 3 ESC_01, 4 ESC_00_B, 5 MARK, 6 SPACE,
 7 EXIT_10, 8 DONE. Las vistas no sustituyen las comprobaciones automáticas.

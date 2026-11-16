@@ -4,6 +4,10 @@ ifeq ($(TARGET),secuenciador_init)
 OBJS ?= src/secuenciador_init.v src/secuenciador_control.v src/rom_descriptores.v src/rom_paquetes.v src/validador_descriptor.v ../motor_lpdt/src/count.v ../motor_lpdt/src/comp.v ../motor_lpdt/src/reg_0.v ../motor_lpdt/src/mux.v ../motor_lpdt/src/motor_lpdt.v ../motor_lpdt/src/motor_control.v
 WAVE_EXT = fst
 SIM_ARGS = -fst +waves
+else ifeq ($(TARGET),validador_descriptor)
+OBJS ?= src/validador_descriptor.v src/rom_descriptores.v src/rom_paquetes.v
+WAVE_EXT = vcd
+SIM_ARGS =
 else
 OBJS ?= src/$(TARGET).v
 WAVE_EXT = vcd
@@ -24,6 +28,7 @@ test:
 	cd $(BUILD_DIR) && $(VVP) $(TARGET)_TB.out $(VVP_ARGS)
 
 test-all:
+	$(MAKE) test TARGET=validador_descriptor BUILD_DIR=$(BUILD_DIR)
 	$(MAKE) test TARGET=secuenciador_control BUILD_DIR=$(BUILD_DIR)
 	$(MAKE) test TARGET=secuenciador_init BUILD_DIR=$(BUILD_DIR)
 

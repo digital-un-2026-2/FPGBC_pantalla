@@ -132,7 +132,8 @@ module motor_lpdt_TB #(
 
   initial begin
     if (ANCHO_LONGITUD == 3) $dumpfile("motor_lpdt_TB.vcd");
-    else $dumpfile("motor_lpdt_15_TB.vcd");
+    else if (ANCHO_LONGITUD == 4) $dumpfile("motor_lpdt_15_TB.vcd");
+    else $dumpfile("motor_lpdt_31_TB.vcd");
     $dumpvars(0, motor_lpdt_TB);
     paquete[0] = 8'h05;
     paquete[1] = 8'h01;
@@ -197,13 +198,35 @@ module motor_lpdt_TB #(
       end
       resetear;
     end
+    if (ANCHO_LONGITUD == 5) begin
+      // B7 capturado: 4 cabecera/ECC + 16 payload + 2 CRC.
+      // No fragmentar ni truncar al pasar del índice 15 al 16.
+      {paquete[0], paquete[1], paquete[2], paquete[3], paquete[4],
+       paquete[5], paquete[6], paquete[7], paquete[8], paquete[9],
+       paquete[10], paquete[11], paquete[12], paquete[13], paquete[14],
+       paquete[15], paquete[16], paquete[17], paquete[18], paquete[19],
+       paquete[20], paquete[21]} =
+          176'h2910003AB7180018180C09AC095C090C090010004432;
+      cantidad_bytes = 22;
+      enviar;
+      @(negedge clk); #1;
+      solicitud = 1;
+      permiso_arranque = 1;
+      @(posedge clk); #1;
+      if (!aceptado) $fatal(1, "FAIL: aceptación B7 antes de aborto");
+      @(negedge clk); #1; solicitud = 0;
+      while (dut.w_indice_byte < 16) begin
+        @(posedge clk); #1;
+      end
+      resetear;
+    end
     enviar;
     $display("PASS: motor_lpdt_TB; integración lógica, no validación eléctrica");
     $finish;
   end
 
   initial begin
-    #1000000;
+    #3000000;
     $fatal(1, "FAIL: timeout motor_lpdt_TB");
   end
 endmodule

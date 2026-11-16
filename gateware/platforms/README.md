@@ -16,12 +16,7 @@ La referencia y el pinout están confirmados por el responsable. El código decl
 `LVCMOS33` para esos recursos; esa configuración no se aplica a las líneas DSI.
 El mapa eléctrico completo y sus precauciones viven en `docs/hardware.md`.
 
-No tiene un comando independiente. El target la instancia:
-
-```sh
-pixi run python -m gateware.targets.debug
-```
-
-Las restricciones generadas se consultan en `build/debug/gateware/debug.cst`.
-No editar ese archivo para cambiar los pines: corregir la fuente y regenerar.
-Revisar también el tratamiento de pines no utilizados antes de programar.
+No tiene un comando independiente ni un target que la instancie en esta rama.
+Se conserva como referencia para la futura integración autónoma LP.
+Revisar el tratamiento de los doce pines DSI y los no utilizados antes
+de implementar o programar un diseño.

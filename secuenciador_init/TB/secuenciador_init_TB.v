@@ -9,10 +9,10 @@ module secuenciador_init_TB;
   wire aceptado, ocupado, terminado;
   wire init_en_curso, init_completa, fallo;
   wire [2:0] codigo_fallo;
-  wire [3:0] pos, cantidad_bytes;
+  wire [4:0] pos, cantidad_bytes;
   wire [7:0] byte_almacen;
   wire [1:0] estado_D0;
-  reg [7:0] recibidos [0:14];
+  reg [7:0] recibidos [0:21];
   reg [7:0] reconstruido;
   reg [7:0] valor;
   reg [1:0] lp_esperado;
@@ -20,7 +20,9 @@ module secuenciador_init_TB;
   integer paso, n, c, offset, bit_n, byte_n, fin_datos, total;
   integer i, j, wc;
   integer envios = 0, descriptores = 0;
+  integer ecc_validos = 0, crc_validos = 0;
   time inicio_espera;
+  realtime fin_lp_anterior = 0;
 
   initial begin
     if ($test$plusargs("waves")) begin
@@ -43,7 +45,7 @@ module secuenciador_init_TB;
       .fallo(fallo), .codigo_fallo(codigo_fallo)
   );
 
-  motor_lpdt #(.ANCHO_LONGITUD(4)) motor (
+  motor_lpdt #(.ANCHO_LONGITUD(5)) motor (
       .clk(clk), .rst(rst_motor), .permiso_arranque(permiso_arranque),
       .solicitud(solicitud), .cantidad_bytes(cantidad_bytes), .byte_almacen(byte_almacen),
       .aceptado(aceptado), .ocupado(ocupado), .terminado(terminado),
@@ -52,35 +54,48 @@ module secuenciador_init_TB;
 
   function integer longitud(input integer p);
     case (p)
-      2: longitud = 12;
-      3, 6: longitud = 10;
-      7: longitud = 15;
-      default: longitud = 4;
+      1: longitud = 12;
+      2: longitud = 10;
+      4, 11: longitud = 4;
+      5: longitud = 9;
+      6: longitud = 19;
+      7: longitud = 18;
+      8, 13: longitud = 15;
+      14: longitud = 22;
+      15: longitud = 20;
+      default: longitud = 8;
     endcase
   endfunction
 
   function integer espera(input integer p);
     case (p)
-      0, 9: espera = 800000;
-      1: espera = 200000;
-      5, 10: espera = 4800000;
-      default: espera = 0;
+      4, 9: espera = 2600000;
+      17: espera = 0;
+      default: espera = 360000;
     endcase
   endfunction
 
-  function [119:0] paquete(input integer p);
+  // Vectores fijos independientes de la ROM, extraídos de la captura LP.
+  function [175:0] paquete(input integer p);
     case (p)
-      0: paquete = 32'h05010010;
-      1: paquete = 32'h15B0003A;
-      2: paquete = 96'h39060030E400000000088716;
-      3: paquete = 80'h3904002CD0454571429E;
-      4: paquete = 32'h156F012B;
-      5: paquete = 32'h05110036;
-      6: paquete = 80'h3904002CD0524A711A14;
-      7: paquete = 120'h39090030BEFF0F00180404005DE7C4;
-      8: paquete = 32'h15BB2F39;
-      9: paquete = 32'h15B02F1A;
-      10: paquete = 32'h0529001C;
+      0: paquete = 64'h29020000B000D6CA;
+      1: paquete = 96'h29060023E400000000088716;
+      2: paquete = 80'h2904003FD0454571429E;
+      3: paquete = 64'h090200150000B8F0;
+      4: paquete = 32'h05114504;
+      5: paquete = 72'h2903001AD0524A25BB;
+      6: paquete = 152'h290D0000B902007600BABBBFCCE3468131D0E5;
+      7: paquete = 144'h290C001ABDFFFEFEFEFEFEFE802000002AE3;
+      8: paquete = 120'h29090023BEFF0F00180404005DE7C4;
+      9: paquete = 64'h29020000B0034DF8;
+      10: paquete = 64'h090200150000B8F0;
+      11: paquete = 32'h0529031F;
+      12: paquete = 64'h29020000B000D6CA;
+      13: paquete = 120'h29090023BEFF0F00180404005DE7C4;
+      14: paquete = 176'h2910003AB7180018180C09AC095C090C090010004432;
+      15: paquete = 160'h290E0006B8F8DA6DFBFFFF4F1F7F9FBFDFFFAB18;
+      16: paquete = 64'h29020000BB2F8BF7;
+      17: paquete = 64'h29020000B0034DF8;
       default: paquete = 0;
     endcase
   endfunction
@@ -105,6 +120,9 @@ module secuenciador_init_TB;
     if (!rst) begin
       if (aceptado) envios = envios + 1;
       if (dut.w_ld_desc) descriptores = descriptores + 1;
+      #1;
+      if (dut.ctrl.state == dut.ctrl.ESPERAR_COMANDO && estado_D0 !== 2'b11)
+        $fatal(1, "FAIL: no se mantuvo LP-11 durante la espera");
     end
   end
 
@@ -118,10 +136,10 @@ module secuenciador_init_TB;
     @(negedge clk); #1;
     lp_preparada = 1;
 
-    for (paso = 0; paso < 11; paso = paso + 1) begin
+    for (paso = 0; paso < 18; paso = paso + 1) begin
       wait (aceptado === 1'b1); #1;
       n = longitud(paso);
-      if (cantidad_bytes !== n[3:0] || dut.w_paso !== paso[3:0])
+      if (cantidad_bytes !== n[4:0] || dut.w_paso !== paso[4:0])
         $fatal(1, "FAIL: descriptor integrado paso %0d", paso);
       fin_datos = 16 + (n + 1) * 64;
       total = fin_datos + 4;
@@ -129,6 +147,11 @@ module secuenciador_init_TB;
 
       for (c = 0; c <= total; c = c + 1) begin
         @(negedge clk); #1;
+        // Intervalo real en D0: espera ROM más 9 ciclos de handshake/control.
+        if (c == 0 && paso > 0 &&
+            $realtime - fin_lp_anterior != (espera(paso - 1) + 9) * 25)
+          $fatal(1, "FAIL: intervalo LP-11 a Escape paso %0d: %0.1f ns",
+                 paso, $realtime - fin_lp_anterior);
         if (c < 4) lp_esperado = 2'b10;
         else if (c < 8) lp_esperado = 2'b00;
         else if (c < 12) lp_esperado = 2'b01;
@@ -149,13 +172,15 @@ module secuenciador_init_TB;
 
         if (estado_D0 !== lp_esperado || pos >= cantidad_bytes || fallo || init_completa)
           $fatal(1, "FAIL: LPDT paso %0d ciclo %0d", paso, c);
-        if (dut.w_paso !== paso[3:0] || cantidad_bytes !== n[3:0] || dut.w_ld_desc)
+        if (dut.w_paso !== paso[4:0] || cantidad_bytes !== n[4:0] || dut.w_ld_desc)
           $fatal(1, "FAIL: paquete alterado durante envio");
       end
+      fin_lp_anterior = $realtime;
 
       if (recibidos[3] !== ecc({recibidos[2], recibidos[1], recibidos[0]}))
         $fatal(1, "FAIL: ECC paso %0d", paso);
-      if (recibidos[0] == 8'h39) begin
+      ecc_validos = ecc_validos + 1;
+      if (recibidos[0] == 8'h29 || recibidos[0] == 8'h09) begin
         wc = {recibidos[2], recibidos[1]};
         if (wc + 6 != n) $fatal(1, "FAIL: WC paso %0d", paso);
         crc = 16'hffff;
@@ -166,6 +191,7 @@ module secuenciador_init_TB;
         end
         if ({recibidos[n-1], recibidos[n-2]} !== crc)
           $fatal(1, "FAIL: CRC paso %0d", paso);
+        crc_validos = crc_validos + 1;
       end
 
       @(posedge clk); #1;
@@ -180,11 +206,12 @@ module secuenciador_init_TB;
       $display("PASS: paso %0d, %0d bytes reconstruidos, ECC/CRC y espera %0d ciclos", paso, n, espera(paso));
     end
 
-    if (!init_completa || init_en_curso || codigo_fallo !== 0 || envios != 11 || descriptores != 11)
+    if (!init_completa || init_en_curso || codigo_fallo !== 0 ||
+        envios != 18 || descriptores != 18 || ecc_validos != 18 || crc_validos != 16)
       $fatal(1, "FAIL: secuencia integrada completa");
     repeat (5) begin
       @(posedge clk); #1;
-      if (aceptado || solicitud || permiso_arranque || !init_completa)
+      if (aceptado || solicitud || permiso_arranque || !init_completa || estado_D0 !== 2'b11)
         $fatal(1, "FAIL: duplicados tras inicializar");
     end
     @(negedge clk); #1;

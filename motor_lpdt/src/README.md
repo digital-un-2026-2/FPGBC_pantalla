@@ -25,4 +25,5 @@ pixi run test
 pixi run make -C motor_lpdt test TARGET=reg
 ```
 
-La síntesis no se ejecuta aquí: el target LiteX añade estas fuentes explícitamente.
+La síntesis física todavía no tiene target en esta rama. La integración lógica
+con el secuenciador se prueba mediante `pixi run test-init`, con ancho 5.
