@@ -78,7 +78,13 @@ El motor produce una codificación LPDT regular. La reproducción de bytes y
 esperas no implica copiar exactamente las fases extendidas de salida observadas
 en el emisor original. La comparación temporal debe registrar esa diferencia.
 
-## Interfaz física pendiente
+## Interfaz física: implementación candidata
+
+El bloque [motor_phy](../motor_phy/README.md) tiene RTL, fuente Draw.io,
+diagrama de flujo, datapath y FSM. Su estado cambia en posedge, el contador
+en negedge y todas las salidas de la FSM son combinacionales.
+La [integración LiteX/Migen](../gateware/README.md) conecta los tres tops y
+sitúa los buffers Gowin fuera del RTL lógico, sin CPU ni servicios de SoC.
 
 Conservar el mapa y las precauciones de [hardware](hardware.md).
 La rama LP utiliza el banco medido a 1,21 V; las ramas HS deben quedar
@@ -101,9 +107,12 @@ No se asume que el reset del motor produzca por sí solo niveles seguros.
    usando datapath/motor modelados; prueba integrada de pérdida LP en LISTO.
 6. Validación exhaustiva de 262144 combinaciones de paso/base/longitud.
 
-Pendiente: inyecciones de fallo durante cada fase con ambos tops reales;
-interfaz física y verificación desde pads; implementación con cierre temporal
-y validación física autorizada. LiteX permanece fuera de alcance.
+La nueva prueba del top generado reconstruye también los 18 paquetes / 204 bytes
+desde los pads modelados y comprueba abortos por reset/fallo durante transmisión.
+Pendiente: ampliar las inyecciones a cada fase con todos los tops reales,
+cierre temporal completo hasta pads y validación física autorizada.
+LiteX/Migen se usa solo como integración de platform, instancias y pads;
+no se añade CPU, UART, CSR ni LiteScope.
 
 Los diagramas Draw.io/PDF/SVG conservados del secuenciador son históricos,
 de la ROM de 11 comandos. El RTL y esta arquitectura describen la versión

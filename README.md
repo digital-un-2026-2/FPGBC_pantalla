@@ -38,11 +38,12 @@ Al terminar la secuencia se mantiene LP-11; **no se entra a HS**.
 - Esperas nominales posteriores de **9 ms y 65 ms** a 40 MHz.
   El control añade 225 ns entre ráfagas; después del último paquete no hay
   espera adicional programada.
-- La interfaz física LP y el top de placa todavía no están implementados aquí.
+- PHY lógico y [top de integración LiteX/Migen](gateware/README.md) implementados;
+  buffers Gowin y restricciones candidatos, sin validación eléctrica.
 - Se retiraron los arneses LiteX/UART/LiteScope y la prueba de otra placa.
-  La plataforma FPGBC se conserva como referencia para la futura integración.
+  La nueva integración solo conecta los RTL de inicialización, sin CPU ni UART.
 
-La reproducción es lógica: aún no hay interfaz física ni validación del LCD.
+La reproducción está verificada digitalmente; todavía no hay validación del LCD.
 
 ## Documentación y pruebas
 
@@ -52,6 +53,8 @@ La reproducción es lógica: aún no hay interfaz física ni validación del LCD
 - [Flujo de simulación](docs/flujo_de_trabajo.md).
 - [Motor LPDT](motor_lpdt/README.md).
 - [Secuenciador](secuenciador_init/README.md).
+- [Motor PHY](motor_phy/README.md): flujo, FSM, datapath y RTL lógico.
+- [Integración de pads y platform](gateware/README.md).
 
 ```sh
 pixi run test

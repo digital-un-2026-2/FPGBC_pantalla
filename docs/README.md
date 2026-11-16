@@ -6,3 +6,7 @@
 - [Hardware](hardware.md): mapa físico y precauciones.
 - [Motor LPDT](../motor_lpdt/README.md): interfaz RTL, tiempos y pruebas.
 - [Secuenciador](../secuenciador_init/README.md): FSM, ROM y esperas capturadas.
+- [motor_phy](../motor_phy/README.md): RTL lógico y
+  [diagramas editables](../motor_phy/docs/README.md).
+- [Integración LiteX/Migen](../gateware/README.md): top, pads y restricciones
+  candidatas; sin validación eléctrica todavía.

@@ -50,9 +50,10 @@ programador y cableado; no confundirla con los pines UART 28/27. La UART de
 depuración se ha usado en `/dev/ttyACM2`, pero Linux puede asignar otro puerto.
 No hay todavía un procedimiento de carga para el nuevo top LP.
 
-Todavía no hay un target que exporte `estado_D0` al panel. Esto no resuelve por sí
-solo el estado de los pines no utilizados: revisar su configuración y los bancos
-conectados a la pantalla antes de cargar incluso una prueba interna.
+El nuevo [target LP](../gateware/README.md) exporta los pads para revisión,
+sin programar la placa. Usa buffers LP y buffers HS permanentemente deshabilitados.
+Todavía hay que revisar también los pines no utilizados y los bancos conectados
+a la pantalla antes de cargar incluso una prueba interna.
 
 ## Mapa físico
 
@@ -107,7 +108,9 @@ conductores del panel.
 - UG289-2.2.1E documenta buffers `TBUF`/`TLVDS_TBUF` con salida habilitada
   por `OEN=0`. Alta impedancia requiere revisar también pulls, keeper y
   terminaciones. Durante configuración existen pull-ups débiles fuera del
-  control del RTL; la interfaz física sigue sin implementar.
+  control del RTL. El adaptador Migen instancia esos buffers, con HS siempre
+  deshabilitado; LP usa LVCMOS12, HS LVDS25 y PULL_MODE=NONE como configuración
+  candidata posterior a configuración, sin validación eléctrica todavía.
 - En HS, las ramas GPIO pueden conducirse a cero para participar en la carga
   resistiva de referencia. No asumir alta impedancia sin validar la solución.
 - Las seis resistencias de rama **no son una terminación entre P y N**.
