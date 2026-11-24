@@ -1,91 +1,82 @@
-# FPGBC_pantalla
+# Inicialización LP de la pantalla FPGBC
 
-Desarrollo de un **host MIPI DSI** para la pantalla de la consola
-[FunnyPlaying FPGBC](https://funnyplaying.com/products/fpgbc-kit).
-Un host es el emisor: prepara los comandos y la imagen que recibe la pantalla.
-DSI es el protocolo usado para transportarlos.
+Objetivo: transmitir autónomamente los **18 paquetes DSI y sus esperas**
+extraídos de `LP_MIPI_DSI.kvdat`, sin CPU, UART ni vídeo HS.
 
-El objetivo es llevar la imagen de una PPU (bloque que produce píxeles) hasta
-la pantalla, usando dos canales de datos. **Todavía no es un controlador de
-pantalla completo ni eléctricamente validado.**
+## Arquitectura
 
-## Qué funciona y qué falta
-
-| Estado | Contenido |
-|---|---|
-| Implementado | Motor LPDT Verilog de 1–7/15 bytes y secuenciador autónomo de 11 comandos DCS, con ROM y esperas; verificados en simulación |
-| Integración de depuración | LiteX conecta el motor a registros controlables desde el PC y a LiteScope, un capturador de señales internas |
-| Flujo disponible | Simulación, síntesis para FPGBC, carga temporal en FPGA y pruebas internas por UART |
-| Pendiente | Implementar y validar la interfaz física LP, comprobar inicialización en el panel, transmitir imagen en HS e integrar PPU |
-
-**El target de depuración no conecta la salida LPDT al panel.** Una captura
-correcta demuestra comportamiento lógico interno, no recepción de la pantalla.
-
-Para sintetizar **secuenciador y motor conectados en un único bitstream** y
-capturar ambos con LiteScope, usar el target `debug_init`:
-[procedimiento de depuración conjunta](docs/debug_secuenciador_init.md).
-
-## Primera prueba: sin conectar la FPGA
-
-En Linux x86_64, instala [Pixi](https://pixi.sh) y ejecuta desde la raíz:
-
-```sh
-pixi install --locked
-pixi run test                    # Seis pruebas, incluidos modos de 7 y 15 bytes
-pixi run make -C secuenciador_init test-all  # Control y secuencia completa con motor real
-pixi run sim                     # Prueba integrada y visor GTKWave
+```text
+clk40 + reset
+      │
+      ▼
+secuenciador_init ◄── ROM de descriptores (base, longitud, espera)
+      │                         │
+      │ solicitud / longitud    ▼
+      ├─────────────────── ROM de paquetes
+      │                         │ byte solicitado por pos
+      ▼                         ▼
+                    motor_lpdt
+                         │ estado_D0 = {P,N}
+                         ▼
+                 interfaz física LP
+                         │
+                     D0P / D0N
 ```
 
-Para trabajar con las herramientas directamente:
+El motor devuelve `aceptado`, `ocupado` y `terminado` al secuenciador.
+La interfaz física debe confirmar su preparación antes de autorizar el envío.
+Al terminar la secuencia se mantiene LP-11; **no se entra a HS**.
+
+## Estado real
+
+- Secuenciador adaptado a los **18 paquetes capturados**: 204 bytes en ROM,
+  con cabeceras, ECC, payload y CRC exactos.
+- Longitud, posición e índice de paso de **5 bits**. Paquetes de hasta
+  **22 bytes DSI**, sin contar el selector `87`.
+- Motor parametrizable verificado con `ANCHO_LONGITUD=3`, `4` y `5`
+  (1–7, 1–15 y 1–31 bytes, respectivamente).
+- Esperas nominales posteriores de **9 ms y 65 ms** a 40 MHz.
+  El control añade 225 ns entre ráfagas; después del último paquete no hay
+  espera adicional programada.
+- PHY lógico y [top de integración LiteX/Migen](gateware/README.md) implementados;
+  buffers Gowin y restricciones candidatos, sin validación eléctrica.
+- Botón de reset global y auditorías offline de pads y fusibles implementados;
+  las seis ramas HS permanecen deshabilitadas.
+- Se retiraron los arneses LiteX/UART/LiteScope y la prueba de otra placa.
+  La nueva integración solo conecta los RTL de inicialización, sin CPU ni UART.
+
+La reproducción está verificada digitalmente. La comparación de la captura
+física de la iteración 2 confirma los bytes de los 18 paquetes, pero quedan
+diferencias de arranque y temporización; no hay validación de recepción del LCD.
+
+## Documentación y pruebas
+
+- [Arquitectura y contrato de implementación](docs/arquitectura.md).
+- [Secuencia capturada](docs/secuencia_capturada.md).
+- [Hardware y precauciones](docs/hardware.md).
+- [Flujo de simulación](docs/flujo_de_trabajo.md).
+- [Validación LPDT en placa por captura de seis canales](docs/validacion_lpdt.md).
+- [Comparación de la captura de la iteración 2](docs/comparacion_LP_ITERATION_2.md).
+- [Auditoría de E/S y fusibles](docs/revision_io_lp.md).
+- [Herramientas de comparación y empaquetado LP](scripts/README.md).
+- [Motor LPDT](motor_lpdt/README.md).
+- [Secuenciador](secuenciador_init/README.md).
+- [Motor PHY](motor_phy/README.md): flujo, FSM, datapath y RTL lógico.
+- [Integración de pads y platform](gateware/README.md).
 
 ```sh
-pixi shell
-# Aquí están disponibles python, iverilog, yosys, etc.
-exit                            # Salir del entorno
+pixi run test
+pixi run test-init
+pixi run test-phy
+pixi run test-gateware
+pixi run test-captures
 ```
 
-La primera instalación requiere Internet. `pixi.toml` y `pixi.lock` se
-versionan; `.pixi/`, las ondas y los resultados de compilación no.
+Las pruebas reconstruyen los 18 paquetes desde D0, comprueban ECC/CRC y
+miden las esperas completas. No verifican recepción eléctrica del panel.
+No se programa la FPGA ni se escribe flash.
 
-## Qué leer
-
-1. [Arquitectura explicada](docs/arquitectura.md): de la PPU a la pantalla,
-   significado de los términos y diferencia entre lo previsto y lo existente.
-2. [Flujo de trabajo](docs/flujo_de_trabajo.md): entorno, simulaciones, síntesis,
-   carga en SRAM y capturas en FPGA, paso a paso.
-3. [Hardware y seguridad](docs/hardware.md): revisar **antes de programar**.
-4. [Depuración LiteX](docs/litex_debug.md): registros, supervisor y analizador.
-
-El [índice de documentación](docs/README.md) reúne las referencias detalladas.
-
-## Organización
-
-| Carpeta | Para qué sirve |
-|---|---|
-| [motor_lpdt/](motor_lpdt/README.md) | Motor Verilog original, contrato de interfaz y pruebas |
-| [secuenciador_init/](secuenciador_init/README.md) | Arranque autónomo Verilog: ROM de comandos, temporizadores, supervisor, pruebas y diagramas |
-| [gateware/](gateware/README.md) | Integración LiteX y plataforma FPGBC |
-| [scripts/](scripts/README.md) | Herramientas de entorno y prueba interna desde el PC |
-| [test/](test/README.md) | Prueba experimental del entorno EDA; no es la regresión LPDT |
-| [docs/](docs/README.md) | Arquitectura, procedimientos y hardware |
-| `build/` | Archivos generados de LiteX y capturas; no editar ni versionar |
-| `pixi.toml`, `pixi.lock` | Comandos y dependencias reproducibles; `.pixi/` y `.toolchain/` son entornos locales ignorados |
-
-Los comandos de los manuales parten de la raíz del repositorio. No ejecutar
-`setup-env` o `test-EDA` como preparación automática: el primero modifica el
-sistema con `sudo` y el segundo intenta programar un diseño de otra placa.
-
-## Hardware de trabajo
-
-FPGA **GW2AR-LV18EQ144PC8/I7**, reloj de control de **40 MHz** y pantalla
-LCD-49754, cuya variante completa sigue pendiente. El reloj de control no es
-el reloj de transmisión de alta velocidad. El RESET físico del panel no es
-accesible; la secuencia ROM comienza con un comando de reset por DSI.
-
-El camino autónomo previsto es `secuenciador_init → motor_lpdt → interfaz LP
-→ panel`. Los dos primeros están implementados; la interfaz física aún no.
-LiteX es un arnés externo de depuración, no una dependencia del arranque autónomo.
-
-No escribir flash ni modificar alimentaciones, resistencias o E/S sin revisión
-y autorización. La prueba interna tampoco sustituye la revisión de los pines
-no utilizados y de los bancos conectados al panel.
+Las capturas `.kvdat` se conservan localmente y están ignoradas por Git.
+La ROM y las pruebas contienen los bytes de referencia necesarios para
+simular sin esos archivos. Solo el comparador de capturas requiere aportarlos.
+Los productos de síntesis, simulación y empaquetado tampoco se versionan.

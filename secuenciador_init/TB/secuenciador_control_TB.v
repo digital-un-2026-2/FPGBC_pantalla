@@ -32,9 +32,9 @@ module secuenciador_control_TB;
   wire [2:0] sel_t, causa_fsm;
   wire solicitud, permiso_arranque, preparar_lp, abortar_motor;
   wire init_en_curso, init_completa, fallo;
-  reg [3:0] paso = 0;
-  reg [3:0] paso_activo = 0;
-  reg [3:0] longitud_activa = 0;
+  reg [4:0] paso = 0;
+  reg [4:0] paso_activo = 0;
+  reg [4:0] longitud_activa = 0;
   reg [15:0] espera_activa = 0;
   reg [15:0] tiempo = 0;
   reg [2:0] causa = 0;
@@ -59,7 +59,7 @@ module secuenciador_control_TB;
   wire fin_t = tiempo == limite;
 
   secuenciador_control dut (
-      .clk(clk), .rst(rst), .ultimo_paso(paso == 10),
+      .clk(clk), .rst(rst), .ultimo_paso(paso == 17),
       .descriptor_valido(descriptor_valido), .fin_t(fin_t),
       .lp_preparada(lp_habilitada && preparar_lp),
       .aceptado(aceptado), .ocupado(ocupado), .terminado(terminado),
@@ -83,12 +83,18 @@ module secuenciador_control_TB;
     endcase
   end
 
-  function [3:0] longitud(input [3:0] indice);
+  function [4:0] longitud(input [4:0] indice);
     case (indice)
-      2: longitud = 12;
-      3, 6: longitud = 10;
-      7: longitud = 15;
-      default: longitud = 4;
+      1: longitud = 12;
+      2: longitud = 10;
+      4, 11: longitud = 4;
+      5: longitud = 9;
+      6: longitud = 19;
+      7: longitud = 18;
+      8, 13: longitud = 15;
+      14: longitud = 22;
+      15: longitud = 20;
+      default: longitud = 8;
     endcase
   endfunction
 
@@ -108,7 +114,7 @@ module secuenciador_control_TB;
         capturas = capturas + 1;
       end
       if (ld_desc) begin
-        if (paso !== descriptores[3:0]) $fatal(1, "FAIL: orden de descriptores");
+        if (paso !== descriptores[4:0]) $fatal(1, "FAIL: orden de descriptores");
         paso_activo <= paso;
         longitud_activa <= longitud(paso);
         espera_activa <= paso[0] ? 16'd3 : 16'd0;
@@ -116,7 +122,7 @@ module secuenciador_control_TB;
       end
       if (inc_paso) avances = avances + 1;
       if (aceptado && !manual) begin
-        if (paso_activo !== envios[3:0] || longitud_activa !== longitud(paso_activo))
+        if (paso_activo !== envios[4:0] || longitud_activa !== longitud(paso_activo))
           $fatal(1, "FAIL: descriptor antes de aceptar");
         envios = envios + 1;
       end
@@ -282,14 +288,14 @@ module secuenciador_control_TB;
         retardo_aceptacion = 4;
       end
       esperar_estado(LISTO);
-      if (!init_completa || init_en_curso || !preparar_lp || paso != 10 ||
-          envios != 11 || descriptores != 11 || avances != 10 || capturas != 0)
+      if (!init_completa || init_en_curso || !preparar_lp || paso != 17 ||
+          envios != 18 || descriptores != 18 || avances != 17 || capturas != 0)
         $fatal(1, "FAIL: secuencia completa");
       repeat (10) tick;
-      if (envios != 11 || solicitud || permiso_arranque || !init_completa)
+      if (envios != 18 || solicitud || permiso_arranque || !init_completa)
         $fatal(1, "FAIL: envios duplicados en LISTO");
     end
-    $display("PASS: 11 pasos, esperas exactas, aceptacion retrasada y ausencia de duplicados");
+    $display("PASS: 18 pasos, esperas exactas, aceptacion retrasada y ausencia de duplicados");
 
     preparar_caso(1);
     lp_habilitada = 0;
@@ -398,7 +404,7 @@ module secuenciador_control_TB;
     end
     preparar_caso(0);
     esperar_estado(LISTO);
-    if (envios != 11 || !init_completa) $fatal(1, "FAIL: recuperacion tras reset");
+    if (envios != 18 || !init_completa) $fatal(1, "FAIL: recuperacion tras reset");
     if ((estados_visitados & 32767) != 32767) $fatal(1, "FAIL: estados sin visitar");
     $display("PASS: reset prioritario en los 15 estados y secuencia posterior");
     $display("PASS: secuenciador_control_TB; control con datapath y motor modelados");

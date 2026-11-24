@@ -1,59 +1,38 @@
-# Scripts del PC y del entorno
+# Herramientas de inicialización LP
 
-[Inicio](../README.md) · [Flujo completo](../docs/flujo_de_trabajo.md)
+| Archivo | Función |
+|---|---|
+| `compare_lp_captures.py` | Compara bytes, estados, tiempos y actividad previa de las capturas LP |
+| `kvdat_lp.py` | Lee el formato Kingst observado y combina los estados P/N |
+| `pack_lp_checked.py` | Ejecuta el empaquetador con auditoría de pads y fusibles |
+| `test_compare_lp_captures.py` | Pruebas sintéticas del lector y el comparador |
 
-## `test_lpdt_hw.py`: prueba lógica dentro de la FPGA
+## Comparar capturas
 
-Necesita un bitstream `debug` ya cargado, sus `csr.csv`/`analyzer.csv` y
-`litex_server` activo. **No sintetiza, no programa y no accede al panel.**
-Escribe registros por UARTWishbone, captura con LiteScope, reconstruye los bytes
-LPDT y verifica datos, estados y tiempos muestreados.
-
-Desde la raíz, dentro de `pixi shell`:
-
-```sh
-python scripts/test_lpdt_hw.py --help
-python scripts/test_lpdt_hw.py --output build/debug/captures/patron_01.vcd
-```
-
-El patrón actual tiene siete bytes; su destino predeterminado conserva el nombre
-histórico `tres_bytes.vcd`. Elegir un destino explícito y nuevo: no sobrescribe.
-`--dcs-sequence` prueba tres paquetes DCS cortos, calcula ECC en el PC y produce
-capturas y resumen JSON; requiere especificar ambas esperas. Ejemplo y límites
-en el [flujo de trabajo](../docs/flujo_de_trabajo.md#7-capturar-y-verificar-el-motor-en-fpga).
-
-Los nombres LiteScope están fijados en `SIGNALS`: un cambio de elaboración
-puede exigir compararlos con el CSV real y adaptar el script. Las comprobaciones
-dependen de la codificación y tiempos del motor actual, no son un receptor general.
-
-## Secuenciador y motor conectados
-
-`test_init_hw.py` usa el target **`debug_init`**, no `debug`. Verifica los
-11 paquetes, ECC/CRC, handshake y marcas de ciclo de toda la secuencia.
-Requiere bitstream cargado, CSV correspondientes y `litex_server` activo.
-No programa ni accede al panel; aplica reset local a los dos módulos por CSR.
+Los `.kvdat` son archivos locales ignorados por Git. Para reproducir la
+[comparación de la iteración 2](../docs/comparacion_LP_ITERATION_2.md), colocar
+en la raíz `LP_ITERATION_2.kvdat`, `MIPI_DSI.kvdat` y
+`LP_MIPI_DSI_NEW.kvdat`:
 
 ```sh
-pixi run python scripts/test_init_hw.py --output-dir build/debug_init/captures/prueba_01
-pixi run python -m unittest scripts.test_init_debug -v
+mkdir -p build/lpdt_iteration_02_reset
+pixi run python scripts/compare_lp_captures.py > build/lpdt_iteration_02_reset/capture_comparison.json
 ```
 
-La segunda orden **no usa hardware**: prueba el monitor y genera/simula el
-wrapper real con Icarus, incluidos arranque, pérdida LP, reset y timeout LP.
-No simula UARTWishbone ni LiteScope. Procedimiento y límites en
-[depuración conjunta](../docs/debug_secuenciador_init.md).
+También se pueden indicar otras capturas:
 
-## `setup_env.sh`: preparación con efectos adicionales
+```sh
+pixi run python scripts/compare_lp_captures.py captura.kvdat referencia.kvdat
+pixi run test-captures
+```
 
-La tarea `pixi run setup-env` ejecuta este script. Hace tres cosas:
+El comparador exige 18 paquetes LPDT y conserva la actividad anterior y los
+escapes sin carga por separado. Compara los bytes entre capturas; no certifica
+los niveles analógicos ni decodifica vídeo HS. Las pruebas no necesitan
+capturas reales ni paquetes adicionales de Python.
 
-1. Crea o reemplaza el enlace local al nombre de nextpnr esperado por LiteX.
-2. Descarga y extrae un compilador RISC-V en `.toolchain/`, sin verificar checksum.
-3. Usa `sudo` para escribir `/etc/udev/rules.d/70-ft232-fpga.rules` y recargar reglas.
+## Empaquetado
 
-udev gestiona dispositivos y permisos de acceso en Linux. La regla incluida
-selecciona USB `0403:6001`; no necesariamente corresponde a todos los adaptadores.
-No ejecutar como preparación automática ni como prueba inocua. El target actual
-no necesita el compilador RISC-V. El manual explica cómo resolver únicamente el
-nombre de nextpnr sin ejecutar las otras acciones. Este cambio documental no
-modifica el comportamiento del script.
+`pack_lp_checked.py` se integra en el script generado por el
+[target LP](../gateware/README.md). Sin `-o`, audita sin escribir bitstream;
+con `-o`, solo serializa si pasan los controles. No programa dispositivos.

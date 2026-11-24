@@ -15,10 +15,10 @@ module secuenciador_init #(
     input aceptado,
     input ocupado,
     input terminado,
-    input [3:0] pos,
+    input [4:0] pos,
     output solicitud,
     output permiso_arranque,
-    output [3:0] cantidad_bytes,
+    output [4:0] cantidad_bytes,
     output [7:0] byte_almacen,
     output rst_motor,
 
@@ -30,16 +30,16 @@ module secuenciador_init #(
 
   wire w_rst_paso;
   wire w_inc_paso;
-  wire [3:0] w_paso;
+   wire [4:0] w_paso;
   wire w_ultimo_paso;
 
-  wire [33:0] w_descriptor;
-  wire [33:0] w_desc_activo;
+   wire [35:0] w_descriptor;
+   wire [35:0] w_desc_activo;
   wire w_ld_desc;
-  wire [6:0] w_base_activa;
+   wire [7:0] w_base_activa;
   wire [W-1:0] w_espera_activa;
   wire w_descriptor_valido;
-  wire [6:0] w_direccion;
+   wire [7:0] w_direccion;
 
   wire [2:0] w_sel_t;
   wire w_rst_t;
@@ -52,14 +52,14 @@ module secuenciador_init #(
   wire [2:0] w_causa_fsm;
   wire w_abortar_motor;
 
-  assign w_base_activa = w_desc_activo[33:27];
-  assign cantidad_bytes = w_desc_activo[26:23];
+   assign w_base_activa = w_desc_activo[35:28];
+   assign cantidad_bytes = w_desc_activo[27:23];
   assign w_espera_activa = w_desc_activo[22:0];
-  assign w_direccion = w_base_activa + {3'b000, pos};
+   assign w_direccion = w_base_activa + {3'b000, pos};
   assign rst_motor = rst | w_abortar_motor;
 
   count #(
-      .BITS(4)
+       .BITS(5)
   ) paso (
       .clk(clk),
       .rst(rst | w_rst_paso),
@@ -68,10 +68,10 @@ module secuenciador_init #(
   );
 
   comp #(
-      .BITS(4)
+       .BITS(5)
   ) ultimo_paso (
       .A(w_paso),
-      .B(4'd10),
+       .B(5'd17),
       .z(w_ultimo_paso)
   );
 
@@ -81,8 +81,8 @@ module secuenciador_init #(
   );
 
   reg_0 #(
-      .BITS(34),
-      .RESET_VALUE(34'd0)
+       .BITS(36),
+       .RESET_VALUE(36'd0)
   ) desc_activo (
       .clk(clk),
       .rst(rst),

@@ -6,6 +6,10 @@ Este documento reúne los datos físicos y las precauciones. El procedimiento de
 síntesis y carga está en el manual de trabajo. La confirmación del pinout por el
 responsable no equivale a una validación eléctrica completa de D-PHY.
 
+La [revisión offline de E/S LP](revision_io_lp.md) contrasta los pads enrutados,
+los ajustes de corriente/slew y el comportamiento durante configuración.
+No hay mediciones nuevas ni autorización de carga.
+
 ## Datos disponibles
 
 | Elemento | Estado |
@@ -22,11 +26,14 @@ EarthLCD asocia LCD-49754-001 con JDI LT031MDZ4000 (720 × 720).
 Es una referencia comercial, no identificación de todas las variantes ni
 justificación para adoptar sus temporizaciones de vídeo.
 
-Se prevé DCS Software Reset: requiere un receptor DSI operativo y no garantiza
-recuperar cualquier fallo físico. Los seis conductores DSI no incluyen
-alimentación, tierra ni retroiluminación.
+La secuencia capturada no incluye DCS Software Reset; no se añadirá al
+reproducirla. Los seis conductores DSI no incluyen alimentación, tierra ni
+retroiluminación.
 
-## Conexiones de la integración de depuración
+## Conexiones de referencia de placa
+
+El arnés de depuración de `main` se retiró. Las conexiones siguientes se
+conservan como referencia, no como un target disponible en esta rama.
 
 Referencia y pinout confirmados por el responsable para `gateware/platforms/fpgbc.py`:
 
@@ -41,15 +48,16 @@ el transmisor del adaptador se conecta al receptor de la FPGA y viceversa,
 con referencia de tierra común y niveles compatibles. No aplicar estos
 estándares de 3,3 V a las ramas LP del panel.
 
-La carga de configuración usa openFPGALoader con un FT232RL y la asignación
+La integración anterior usaba openFPGALoader con un FT232RL y la asignación
 `TXD:CTS:RTS:RXD` indicada por el responsable. Esa asignación depende del
 programador y cableado; no confundirla con los pines UART 28/27. La UART de
 depuración se ha usado en `/dev/ttyACM2`, pero Linux puede asignar otro puerto.
-Consultar los [comandos y comprobaciones](flujo_de_trabajo.md#5-cargar-temporalmente-en-la-fpga).
+No hay todavía un procedimiento de carga para el nuevo top LP.
 
-El target actual **no exporta `estado_D0` al panel**. Esto no resuelve por sí
-solo el estado de los pines no utilizados: revisar su configuración y los bancos
-conectados a la pantalla antes de cargar incluso una prueba interna.
+El nuevo [target LP](../gateware/README.md) exporta los pads para revisión,
+sin programar la placa. Usa buffers LP y buffers HS permanentemente deshabilitados.
+Todavía hay que revisar también los pines no utilizados y los bancos conectados
+a la pantalla antes de cargar incluso una prueba interna.
 
 ## Mapa físico
 
@@ -104,7 +112,11 @@ conductores del panel.
 - UG289-2.2.1E documenta buffers `TBUF`/`TLVDS_TBUF` con salida habilitada
   por `OEN=0`. Alta impedancia requiere revisar también pulls, keeper y
   terminaciones. Durante configuración existen pull-ups débiles fuera del
-  control del RTL; la interfaz física sigue sin implementar.
+  control del RTL. El adaptador Migen instancia esos buffers, con HS siempre
+  deshabilitado: LP usa TBUF/LVCMOS12 y las ramas HS IOBUF/LVCMOS25 con OEN=1.
+  No se instancia un transmisor diferencial HS; no se conducen 2,5 V sobre el
+  panel. Todos los pads DSI tienen PULL_MODE=NONE como configuración posterior
+  a configuración, sin validación eléctrica todavía.
 - En HS, las ramas GPIO pueden conducirse a cero para participar en la carga
   resistiva de referencia. No asumir alta impedancia sin validar la solución.
 - Las seis resistencias de rama **no son una terminación entre P y N**.

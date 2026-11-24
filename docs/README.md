@@ -1,32 +1,18 @@
 # Documentación
 
-[Inicio del proyecto](../README.md)
-
-## Recorrido recomendado
-
-1. [Arquitectura](arquitectura.md): entender el recorrido de imagen y comandos,
-   las palabras técnicas y el estado real de cada bloque.
-2. [Flujo de trabajo](flujo_de_trabajo.md): preparar el entorno, simular,
-   sintetizar, cargar en SRAM y capturar señales internas.
-3. [Hardware y seguridad](hardware.md): conexiones confirmadas, medidas y
-   precauciones. Leer antes de cualquier programación o trabajo eléctrico.
-4. [Depuración LiteX](litex_debug.md): registros y comportamiento del supervisor.
-
-## Referencias del motor
-
-- [Interfaz RTL](../motor_lpdt/README.md): contrato entre el motor y su supervisor.
-- [LPDT y vector inicial](../motor_lpdt/docs/lpdt.md): protocolo y tiempos.
-- [Cobertura de pruebas](../motor_lpdt/TB/README.md): qué se comprueba y qué falta.
-- [Diagramas](../motor_lpdt/README.md#diagramas): fuente Draw.io, PDF y SVG.
-
-## Secuenciador de inicialización
-
-- [Función, interfaz y comandos](../secuenciador_init/README.md).
-- [Fuentes y ROM](../secuenciador_init/src/README.md): responsabilidad de cada módulo.
-- [Pruebas y límites](../secuenciador_init/TB/README.md).
-- [Depuración conjunta en FPGA](debug_secuenciador_init.md): target, monitor y LiteScope.
-- [Flujo, datapath y FSM](../secuenciador_init/README.md#diagramas): Draw.io, PDF y SVG.
-
-Los procedimientos generales viven en `flujo_de_trabajo.md`; los README locales
-explican las carpetas y enlazan esos procedimientos. Los diagramas son
-conceptuales: para usar el motor prevalece su contrato RTL.
+- [Arquitectura LP](arquitectura.md): bloques, interfaces y alcance.
+- [Secuencia capturada](secuencia_capturada.md): los 18 paquetes objetivo.
+- [Simulación](flujo_de_trabajo.md): pruebas de motor y secuencia capturada.
+- [Hardware](hardware.md): mapa físico y precauciones.
+- [Revisión de E/S LP](revision_io_lp.md): auditoría offline, defaults del packer
+  y comprobaciones pendientes antes de cargar.
+- [Validación LPDT](validacion_lpdt.md): procedimiento de captura e iteraciones.
+- [Comparación de la iteración 2](comparacion_LP_ITERATION_2.md): bytes coincidentes
+  y diferencias pendientes de arranque y temporización.
+- [Herramientas LP](../scripts/README.md): comparación de capturas y empaquetado.
+- [Motor LPDT](../motor_lpdt/README.md): interfaz RTL, tiempos y pruebas.
+- [Secuenciador](../secuenciador_init/README.md): FSM, ROM y esperas capturadas.
+- [motor_phy](../motor_phy/README.md): RTL lógico y
+  [diagramas editables](../motor_phy/docs/README.md).
+- [Integración LiteX/Migen](../gateware/README.md): top, pads y restricciones
+  candidatas; sin validación eléctrica todavía.

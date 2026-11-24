@@ -1,193 +1,119 @@
-# Arquitectura: de los píxeles a la pantalla
+# Arquitectura: inicialización LP capturada
 
-[Inicio](../README.md) · [Documentación](README.md) · [Flujo de trabajo](flujo_de_trabajo.md)
+## Alcance
 
-## 1. La idea general
+Reproducir los 18 paquetes de `LP_MIPI_DSI.kvdat` y sus esperas.
+No incluye vídeo, HS, PPU, BTA, lectura de registros, CPU ni control por PC.
+No se usa `DATA HS.kvdat` como referencia.
 
-La pantalla necesita dos cosas: **comandos para configurarse** e **imagen para
-mostrar**. No basta con conectar píxeles a unos pines: hay que organizarlos en
-paquetes, enviarlos en el orden correcto y producir las señales eléctricas
-adecuadas.
+## Bloques
 
-Este es el recorrido **previsto**, no una lista de bloques ya terminados:
-
-```text
-IMAGEN
-PPU → adaptador → buffers → preparación de paquetes DSI ──┐
-                                                        ▼
-                                                planificador
-                                                        │
-COMANDOS                                                │
-Secuenciador autónomo / preparación de paquetes DSI ──────┘
-                                                        │
-                              ┌─────────────────────────┴──────────────┐
-                              ▼                                        ▼
-                    motor LPDT / baja potencia              transporte HS / alta velocidad
-                              └─────────────────────────┬──────────────┘
-                                                        ▼
-                                        PHY: estados, drivers y señales
-                                                        ▼
-                                           red eléctrica de la FPGBC
-                                                        ▼
-                                                     pantalla
-```
-
-La PHY es la **capa física**. Incluye tanto reglas de señalización como los
-drivers, circuitos que conducen los pines. El motor LPDT ya implementa parte
-de esas reglas lógicas; el dibujo separa responsabilidades, no exige un módulo
-independiente por cada caja.
-
-## 2. Recorrido de una imagen
-
-1. **PPU (unidad de procesamiento de imagen).** Produce píxeles y referencias
-   de línea/cuadro. Una línea es una fila de píxeles; un cuadro es una imagen
-   completa. Su interfaz concreta aún no está definida.
-2. **Adaptador.** Acomoda el formato y el ritmo de la PPU al resto del diseño.
-   Por ejemplo, convertiría colores al formato que se elija para la pantalla.
-3. **Buffers.** Almacenan temporalmente datos. Una FIFO entrega los datos en
-   el mismo orden en que entraron; un framebuffer almacena una imagen completa.
-   Todavía no se ha elegido la estrategia. Un buffer absorbe pausas, pero no
-   resuelve que la fuente sea permanentemente más rápida que el enlace.
-4. **Preparación de paquetes DSI.** DSI significa Display Serial Interface:
-   organiza píxeles, comandos y eventos en mensajes con encabezado y datos.
-   Este bloque añadirá los campos de identificación y protección de errores.
-5. **Planificador.** Decide qué paquete enviar y cuándo. Deberá coordinar
-   imagen, comandos, tiempos de espera y disponibilidad del transporte.
-6. **HS (High Speed, alta velocidad).** Es la vía prevista para imagen.
-   Serializar significa convertir bytes en una secuencia de bits. Habrá que
-   repartir los bytes entre las dos lanes o canales de datos, D0 y D1, y
-   generar el reloj del enlace por CLK. No se reparten los colores por lane.
-7. **PHY y red de la placa.** Producen las tensiones, transiciones y conexiones
-   que recibe la pantalla. La solución eléctrica de la FPGBC combina ramas
-   de baja potencia y de alta velocidad: [mapa y precauciones](hardware.md).
-
-PPU, buffers, planificador, generación de paquetes de imagen y transporte HS
-**siguen pendientes**. No se han fijado formato de color, resolución operativa,
-intervalos entre líneas/cuadros ni velocidad por canal.
-
-## 3. Recorrido de un comando por LPDT
-
-DCS (Display Command Set) define el significado de comandos como reset,
-salir de reposo o encender la imagen. DSI los empaqueta. D-PHY define cómo
-señalizarlos eléctricamente. Son capas distintas.
-
-LPDT significa Low-Power Data Transmission: envío de datos mediante estados
-de baja potencia. En este proyecto es la primera vía de transporte desarrollada.
-**No es una UART** y no necesita que el par CLK oscile para enviar sus bits.
-
-Ejemplo: un Software Reset se prepara como `05 01 00 10`:
-
-1. La ROM del secuenciador conserva el paquete completo, incluido ECC/CRC;
-   en el arnés de depuración lo prepara el software del PC.
-2. Un supervisor conserva una copia estable y pide al motor que lo envíe.
-3. El motor espera permiso, acepta la petición y añade el selector LPDT `87`.
-4. Codifica cada bit en los estados lógicos del par D0, en orden LSB primero
-   (primero el bit de menor peso del byte).
-5. Regresa al reposo LP-11 y emite `terminado`.
-6. El secuenciador respeta las esperas de su ROM antes del siguiente comando.
-   `terminado` **no confirma que el panel lo recibió**.
-
-Los estados LP-00, LP-01, LP-10 y LP-11 nombran los valores lógicos de los
-conductores P y N. No son valores de tensión ni autorizan usar 3,3 V.
-El [manual LPDT](../motor_lpdt/docs/lpdt.md) detalla la codificación y los tiempos.
-
-LP y HS son modos de señalización, no modos de imagen. Video Mode envía un
-flujo de vídeo con tiempos de línea/cuadro; Command Mode actualiza mediante
-comandos, normalmente una memoria de imagen del panel. La elección sigue abierta.
-El uso de DCS para inicializar no determina esa elección.
-
-## 4. Lo que existe hoy: depuración interna
-
-```text
-PC: script Python
-      │ conexión local al servidor
-      ▼
-litex_server → UART → puente UARTWishbone → registros CSR
-                                              │
-                                    supervisor LPDTDebug
-                                              │ copia privada de bytes
-                                              ▼
-                                      motor LPDT Verilog
-                                              │ estados D0 internos
-                                              ▼
-                                 LiteScope → captura leída por el PC
-
-                                 SIN conexión D0 al panel
-```
-
-- **LiteX** construye la integración digital. **Migen** es la biblioteca Python
-  usada para describir hardware; ese Python genera circuitos, no se ejecuta
-  como programa dentro de la FPGA.
-- **SoCMini** reúne los bloques de este target. Aquí no incorpora una CPU:
-  el control lo hace el PC. No es la integración RISC-V futura.
-- **UART** es la comunicación serie de depuración, a 115200 baudios.
-- **Wishbone** es un bus interno: permite leer y escribir direcciones.
-  UARTWishbone convierte accesos del PC en operaciones sobre ese bus.
-- **CSR** son registros de control y estado: posiciones donde el PC escribe
-  bytes/órdenes y lee resultados.
-- **LiteScope** toma muestras de señales internas y permite descargarlas como
-  ondas VCD, archivos que puede mostrar GTKWave.
-
-El supervisor de esta prueba admite paquetes de 1–7 bytes, rechaza órdenes
-mientras está ocupado y no tiene cola. No implementa todavía el supervisor
-completo del panel, ni sus esperas o recuperación eléctrica.
-
-Separado de LiteX, [secuenciador_init](../secuenciador_init/README.md) implementa
-el arranque autónomo: 11 paquetes fijos, temporizadores y fallos enclavados.
-Su prueba integrada usa el motor real con ancho 4 (hasta 15 bytes).
-La interfaz física LP sigue pendiente: no se ha validado el arranque en el panel.
-
-## 5. Reloj y límites de la prueba
-
-El reloj de control es de **40 MHz**: un ciclo dura **25 ns**. La lógica de
-control del motor cambia en el flanco ascendente (posedge); sus registros y
-salida LP cambian en el descendente (negedge). Entre ambos hay **12,5 ns**.
-
-El análisis de timing comprueba que los datos llegan antes de que el registro
-destino los capture. Estos caminos de medio ciclo deben revisarse después de
-implementar el circuito; una simulación ideal no mide esos retardos físicos.
-Los 40 MHz no son la velocidad ni el reloj HS.
-
-Una captura interna correcta no comprueba tensiones, flancos eléctricos,
-drivers HS/LP, CLK/D1, recepción del panel ni conformidad D-PHY.
-
-## 6. Siguientes etapas
-
-1. Completar pruebas del motor y del supervisor CSR, incluidos reset, rechazos
-   y envíos consecutivos; revisar timing del diseño integrado.
-2. Validar la PHY LP y las E/S antes de conectar la salida lógica al panel.
-3. Integrar el secuenciador autónomo con la interfaz LP y validar su secuencia
-   en el panel. Completar fallos integrados y confirmar la variante de pantalla.
-4. Desarrollar HS: reloj, serialización, cambios LP/HS y reparto entre canales.
-5. Añadir paquetes de imagen, buffers, adaptación e integración con PPU.
-6. Definir la integración RISC-V y evaluar recepción de respuestas del panel.
-
-## Glosario de consulta
-
-| Término | Significado en este proyecto |
+| Bloque | Responsabilidad |
 |---|---|
-| FPGA | Circuito digital reconfigurable: al cargar su configuración se establece qué lógica y conexiones utiliza |
-| CPU / RISC-V | CPU es un procesador que ejecuta instrucciones; RISC-V es una arquitectura de instrucciones prevista para una integración futura |
-| Síntesis | Conversión de la descripción del circuito en registros, puertas y otros recursos de la FPGA |
-| Implementación | Colocación de esos recursos en la FPGA y trazado de sus conexiones |
-| Timing / cierre temporal | Comprobación de retardos / cumplimiento de los límites de tiempo exigidos por el reloj |
-| E/S | Entradas y salidas físicas de la FPGA |
-| SRAM / flash | Memoria temporal que pierde el contenido sin alimentación / memoria que lo conserva |
-| LVCMOS33 | Estándar de E/S CMOS de 3,3 V declarado para reloj y UART; no para las ramas LP del panel |
-| Baudios | Símbolos transmitidos por segundo; en esta UART, 115200 baudios no equivalen a 115200 bytes por segundo |
-| RTL | Descripción del comportamiento de registros y lógica digital, aquí principalmente Verilog |
-| FSM | Máquina de estados: decide la siguiente acción según el estado actual y las entradas |
-| Handshake | Señales de petición y aceptación que coordinan dos bloques |
-| ECC | Bits que protegen el encabezado de un paquete DSI frente a errores |
-| CRC | Comprobación de integridad de los datos de un paquete largo; no aparece en los cortos |
-| VC | Canal virtual: identificador lógico dentro del enlace, distinto de una lane física |
-| WC | Número de bytes de datos de un paquete largo |
-| CDC | Paso de señales entre dominios de reloj distintos; requiere tratamiento específico |
-| Backpressure | Aviso al productor para que espere porque el receptor no puede aceptar más datos |
-| Underflow / overflow | Intentar leer un buffer vacío / escribir en uno lleno |
-| BTA | Cambio de quién conduce el enlace para permitir una respuesta del panel; pendiente |
-| Bitstream | Archivo de configuración que se carga en la FPGA para crear el circuito |
+| `secuenciador_init` | Recorrer los 18 descriptores, solicitar cada envío, supervisar el motor y contar la espera posterior |
+| `rom_descriptores` | Base del paquete, número de bytes DSI y espera posterior en ciclos |
+| `rom_paquetes` | Bytes exactos capturados: cabecera, ECC, payload y CRC cuando corresponda |
+| `motor_lpdt` | Entrada Escape, selector `87`, datos LSB primero, salida a LP-11 |
+| Interfaz física LP | Llevar los estados lógicos a los pads, mantener D1/CLK en reposo LP y evitar que las ramas HS conduzcan |
+| Top autónomo | Conectar reloj, reset, secuenciador, motor e interfaz física |
 
-Referencia de paquetes: corto = encabezado de 3 bytes + ECC; largo =
-encabezado de 3 bytes + ECC + WC bytes de datos + CRC de 2 bytes.
-El motor actual no genera estos campos: recibe el paquete ya preparado.
+Se reutilizan la FSM y el datapath de `main`, con anchos y ROM ampliados;
+no se necesita un generador
+dinámico de paquetes, ECC ni CRC. Almacenar el paquete completo evita alterar
+los bytes Data1 observados en los DCS cortos y permite emitir Null Packets.
+
+## Flujo
+
+```text
+RESET → preparación física LP → espera inicial configurable
+      → cargar descriptor → validar → solicitar paquete
+      → esperar aceptado → esperar terminado → espera posterior
+      → siguiente descriptor / LISTO
+```
+
+El orden exacto de preparación y estabilización del controlador heredado
+debe revisarse al integrar los pads; nunca autorizar el motor sin LP preparada.
+Un timeout, descriptor inválido o pérdida de preparación conduce a FALLO.
+No hay reintentos ni paquetes adicionales automáticos.
+
+## Interfaces y tamaños implementados
+
+- Reloj de control: **40 MHz**.
+- `pos` y `cantidad_bytes`: **5 bits**; máximo observado: 22 bytes DSI.
+- Índice de paso: **5 bits**, valores 0…17.
+- Dirección de ROM: **8 bits**, para **204 bytes**.
+- Descriptor: **36 bits**, base [35:28], longitud [27:23], espera [22:0].
+- Validación: paso 0…17, longitud 1…22 y suma de 9 bits para comprobar
+  que base + longitud ≤204 sin desbordamiento.
+- Handshake: `solicitud`, `permiso_arranque`, `aceptado`, `ocupado`, `terminado`.
+- Estado de salida del motor: `estado_D0[1:0] = {D0P,D0N}`.
+- Preparación física: `preparar_lp` / `lp_preparada`; es un handshake local,
+  **no una respuesta de la pantalla**.
+- Estado público: `init_en_curso`, `init_completa`, `fallo`, `codigo_fallo`.
+
+`init_completa` solo confirma transmisión y cumplimiento de las esperas.
+Después se permanece en LP-11 hasta reset.
+
+## Temporización
+
+El motor existente usa cuatro ciclos por fase: 100 ns Mark + 100 ns Space,
+aproximadamente **5 Mbit/s LPDT**.
+
+Las esperas ordinarias capturadas son aproximadamente 9 ms y las largas
+65 ms: **360000 y 2600000 ciclos** a 40 MHz. Se miden desde el retorno
+físico a LP-11 hasta la siguiente entrada Escape; no desde la solicitud.
+La prueba integrada mide **9 ciclos adicionales (225 ns)** de control
+entre retorno a LP-11 y siguiente Escape: las pausas resultan de
+9,000225 ms y 65,000225 ms, respectivamente.
+
+El último paquete no tiene un paquete LP siguiente en la captura.
+Su espera final programada es explícitamente **cero**: se entra a LISTO
+tras observar la finalización local y permanece LP-11. No se añade una
+espera de 7 ms a partir de HS ni se inicia HS.
+
+La espera inicial debe ser configurable: no se capturó alimentación/RESET.
+No interpretar los 382 ms del primer paquete como una especificación de arranque.
+
+El motor produce una codificación LPDT regular. La reproducción de bytes y
+esperas no implica copiar exactamente las fases extendidas de salida observadas
+en el emisor original. La comparación temporal debe registrar esa diferencia.
+
+## Interfaz física: implementación candidata
+
+El bloque [motor_phy](../motor_phy/README.md) tiene RTL, fuente Draw.io,
+diagrama de flujo, datapath y FSM. Su estado cambia en posedge, el contador
+en negedge y todas las salidas de la FSM son combinacionales.
+La [integración LiteX/Migen](../gateware/README.md) conecta los tres tops y
+sitúa los buffers Gowin fuera del RTL lógico, sin CPU ni servicios de SoC.
+
+Conservar el mapa y las precauciones de [hardware](hardware.md).
+La rama LP utiliza el banco medido a 1,21 V; las ramas HS deben quedar
+eléctricamente deshabilitadas durante este objetivo exclusivamente LP.
+No basta con fijar a cero sus datos.
+
+La implementación debe definir el estado de los doce pines relacionados con
+DSI, incluidos reset y fallo, y verificarlo antes de cargar un bitstream.
+No se asume que el reset del motor produzca por sí solo niveles seguros.
+
+## Validación lógica implementada
+
+1. ROM y vectores de test contrastados byte a byte con la captura: 204 bytes.
+2. Motor probado en longitudes 1…31, incluido el B7 de 22 bytes y reset
+   después del cruce al índice 16.
+3. Reconstrucción desde D0 de los 18 paquetes, con 18 ECC y 16 CRC válidos.
+4. Esperas completas de 265 ms, intervalos entre ráfagas, LP-11 final y
+   ausencia de duplicados.
+5. Control con 18 pasos, aceptación retrasada, timeouts, reset y pérdida LP
+   usando datapath/motor modelados; prueba integrada de pérdida LP en LISTO.
+6. Validación exhaustiva de 262144 combinaciones de paso/base/longitud.
+
+La nueva prueba del top generado reconstruye también los 18 paquetes / 204 bytes
+desde los pads modelados y comprueba abortos por reset/fallo durante transmisión.
+Pendiente: ampliar las inyecciones a cada fase con todos los tops reales,
+cierre temporal completo hasta pads y validación física autorizada.
+LiteX/Migen se usa solo como integración de platform, instancias y pads;
+no se añade CPU, UART, CSR ni LiteScope.
+
+Los diagramas Draw.io/PDF/SVG conservados del secuenciador son históricos,
+de la ROM de 11 comandos. El RTL y esta arquitectura describen la versión
+actual de 18 paquetes.

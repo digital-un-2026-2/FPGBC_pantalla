@@ -7,6 +7,8 @@ ifeq ($(TARGET),motor_lpdt)
 OBJS ?= src/motor_lpdt.v src/motor_control.v src/count.v src/comp.v src/reg_0.v src/mux.v
 else ifeq ($(TARGET),motor_lpdt_15)
 OBJS ?= TB/motor_lpdt_TB.v src/motor_lpdt.v src/motor_control.v src/count.v src/comp.v src/reg_0.v src/mux.v
+else ifeq ($(TARGET),motor_lpdt_31)
+OBJS ?= TB/motor_lpdt_TB.v src/motor_lpdt.v src/motor_control.v src/count.v src/comp.v src/reg_0.v src/mux.v
 else ifeq ($(TARGET),count)
 OBJS ?= src/count.v src/comp.v
 else ifeq ($(TARGET),reg)

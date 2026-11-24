@@ -9,9 +9,11 @@
 | `flujo.svg`, `datapath.svg`, `fsm.svg` | Vistas consultables desde GitHub |
 | [referencias.md](referencias.md) | Revisiones de los drivers usados para contrastar la secuencia |
 
-Describen la lógica implementada, no drivers LP/HS ni funcionamiento probado
-en el panel. El contrato RTL prevalece. Los tiempos de alimentación y
-preparación son valores de trabajo pendientes de validación física.
+**Son diagramas históricos de la secuencia de 11 comandos.** No reflejan
+el paso de 5 bits, los descriptores de 36 bits, la ROM de 204 bytes ni las
+esperas actuales. No certifican drivers LP/HS ni recepción del panel.
+Para el diseño vigente prevalecen el RTL y
+[la arquitectura LP](../../docs/arquitectura.md).
 
 Regenerar desde la raíz con Draw.io Desktop y Poppler (no necesarios para
 simular); editar primero el `.drawio`:
