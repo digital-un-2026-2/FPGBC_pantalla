@@ -23,29 +23,33 @@ class LPTargetTest(unittest.TestCase):
     def test_constraints(self):
         directory = self.export(True)
         cst = (directory / "fpgbc_lp_init.cst").read_text()
+        self.assertIn('IO_LOC "global_rst_n" 120;', cst)
+        self.assertIn('IO_PORT "global_rst_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;', cst)
         for polarity, pins in (("p", (122, 124, 126)), ("n", (123, 125, 128))):
             for lane, pin in enumerate(pins):
                 self.assertIn(f'IO_LOC "dsi_lp_{polarity}[{lane}]" {pin};', cst)
                 self.assertIn(
-                    f'IO_PORT "dsi_lp_{polarity}[{lane}]" IO_TYPE=LVCMOS12 PULL_MODE=NONE;',
+                    f'IO_PORT "dsi_lp_{polarity}[{lane}]" IO_TYPE=LVCMOS12 '
+                    'PULL_MODE=NONE DRIVE=8 SLEW_RATE=FAST;',
                     cst,
                 )
         for lane, pins in enumerate(("117,116", "115,114", "113,112")):
-            self.assertIn(f'IO_LOC "dsi_hs_p[{lane}]" {pins};', cst)
             self.assertIn(
-                f'IO_PORT "dsi_hs_p[{lane}]" IO_TYPE=LVDS25 PULL_MODE=NONE;', cst,
+                f'IO_PORT "dsi_hs_p[{lane}]" IO_TYPE=LVCMOS25 PULL_MODE=NONE;', cst,
             )
             p, n = pins.split(",")
             self.assertIn(f'IO_LOC "dsi_hs_p[{lane}]" {p};', cst)
             self.assertIn(f'IO_LOC "dsi_hs_n[{lane}]" {n};', cst)
             self.assertIn(
-                f'IO_PORT "dsi_hs_n[{lane}]" IO_TYPE=LVDS25 PULL_MODE=NONE;', cst,
+                f'IO_PORT "dsi_hs_n[{lane}]" IO_TYPE=LVCMOS25 PULL_MODE=NONE;', cst,
             )
         ys = (directory / "fpgbc_lp_init.ys").read_text()
         self.assertIn("-family gw2a", ys)
         self.assertNotIn("-noiopads", ys)
         script = (directory / "build_fpgbc_lp_init.sh").read_text()
         self.assertNotIn("--timing-allow-fail", script)
+        self.assertIn("pack_lp_checked.py", script)
+        self.assertNotIn("gowin_pack -d", script)
         self.assertEqual(len(RTL_SOURCES), len(set(RTL_SOURCES)))
 
     def simulate(self, active):

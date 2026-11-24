@@ -36,5 +36,8 @@ pythondata-cpu-vexriscv = { git = "https://github.com/litex-hub/pythondata-cpu-v
 [tasks]
 test = "make -C motor_lpdt test-all"
 test-init = "make -C secuenciador_init test-all"
+test-phy = "make -C motor_phy test-all"
+test-gateware = "python -m unittest gateware.tests.test_lp_target gateware.tests.test_review_io gateware.tests.test_review_fuses -v"
+test-captures = "python -m unittest discover -s scripts -p 'test_*.py' -v"
 sim = "make -C motor_lpdt sim"
 wave = "make -C motor_lpdt wave"

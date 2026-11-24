@@ -17,12 +17,10 @@ def check_netlist(path):
             raise ValueError(message)
 
     require(counts["TBUF"] == 6, "Se requieren seis TBUF LP")
-    require(counts["TLVDS_TBUF"] == 3, "Se requieren tres TLVDS_TBUF HS")
-    require(counts["IBUF"] == 1, "Se requiere un IBUF de reloj")
-    # Son marcadores de pad que nextpnr fusiona con los TLVDS_TBUF, no seis
-    # drivers independientes. pack_diff_iobs() requiere precisamente esta red.
-    require(counts["OBUF"] == 6, "Se requieren seis marcadores OBUF de pad HS")
-    require(counts["IOBUF"] == 0, "IOBUF inesperado")
+    require(counts["TLVDS_TBUF"] == 0, "No se permite un transmisor diferencial HS")
+    require(counts["IBUF"] == 2, "Se requieren IBUF de reloj y botón de reset")
+    require(counts["OBUF"] == 0, "No se permiten buffers de salida sin OEN")
+    require(counts["IOBUF"] == 6, "Se requieren seis IOBUF HS apagados")
 
     high = {"1"}
     for cell in cells.values():
@@ -30,54 +28,48 @@ def check_netlist(path):
             high.update(cell["connections"]["V"])
 
     ports = top["ports"]
-    output_buffers = {
-        tuple(cell["connections"]["I"]): cell["connections"]["O"]
-        for cell in cells.values() if cell["type"] == "OBUF"
-    }
+    for name, port in (("clk40_buf", "clk40"), ("reset_buf", "global_rst_n")):
+        require(cells[name]["type"] == "IBUF" and
+                cells[name]["connections"]["I"] == ports[port]["bits"],
+                f"Entrada {port} sin su IBUF")
     for lane in range(3):
-        hs = cells[f"hs_off_buf_{lane}"]["connections"]
-        require(set(hs["OEN"]) <= high, f"HS {lane}: OEN no está fijado a uno")
-        require(output_buffers.get(tuple(hs["O"])) == [ports["dsi_hs_p"]["bits"][lane]],
-                "Pad HS P incorrecto")
-        require(output_buffers.get(tuple(hs["OB"])) == [ports["dsi_hs_n"]["bits"][lane]],
-                "Pad HS N incorrecto")
         for polarity in ("p", "n"):
+            hs = cells[f"hs_{polarity}_off_buf_{lane}"]["connections"]
+            require(len(hs["OEN"]) == 1 and set(hs["OEN"]) <= high,
+                    f"HS {lane}/{polarity}: OEN no está fijado a uno")
+            require(hs["IO"] == [ports[f"dsi_hs_{polarity}"]["bits"][lane]],
+                    "Pad HS incorrecto")
             lp = cells[f"lp_{polarity}_buf_{lane}"]["connections"]
             require(lp["O"] == [ports[f"dsi_lp_{polarity}"]["bits"][lane]],
                     f"Pad LP {lane}/{polarity} incorrecto")
             if lane > 0:
                 require(set(lp["I"]) <= high, "D1/CLK no están fijados a LP-11")
-    print("PASS: 6 TBUF LP, 3 TLVDS_TBUF HS con OEN=1 y sus marcadores de pad")
+    print("PASS: 6 TBUF LP y 6 IOBUF HS con OEN=1, sin transmisor diferencial")
 
 
 def check_routed(path):
     design = json.loads(Path(path).read_text())
     top = design["modules"]["top"]
     high = top["netnames"]["$PACKER_VCC"]["bits"]
-    diff = [cell for cell in top["cells"].values()
-            if cell.get("parameters", {}).get("DIFF_TYPE") == "TLVDS_TBUF"]
-    if len(diff) != 6:
-        raise ValueError("Deben conservarse los seis pads diferenciales HS")
-    positive = [cell for cell in diff if cell["parameters"]["DIFF"] == "P"]
-    negative = [cell for cell in diff if cell["parameters"]["DIFF"] == "N"]
-    if len(positive) != 3 or len(negative) != 3:
-        raise ValueError("Pares HS incompletos")
-    for cell in diff:
-        attrs = cell["attributes"]
-        if "NEXTPNR_BEL" not in attrs or "&PULL_MODE=NONE" not in attrs:
-            raise ValueError("Pad HS sin ubicación o sin PULL_MODE=NONE")
-    for cell in positive:
-        # En el par físico OEN lo gobierna la rama P tras pack_diff_iobs().
-        if cell["connections"]["OEN"] != high:
-            raise ValueError("Un driver HS no conserva OEN=1 tras place-and-route")
-    lp = [cell for cell in top["cells"].values() if cell["type"] == "TBUF"]
-    if len(lp) != 6:
-        raise ValueError("Faltan pads LP en el diseño enrutado")
-    for cell in lp:
-        attrs = cell["attributes"]
-        if not {"NEXTPNR_BEL", "&IO_TYPE=LVCMOS12", "&PULL_MODE=NONE"} <= attrs.keys():
-            raise ValueError("Pad LP sin restricciones esperadas")
-    print("PASS: diseño enrutado conserva los doce pads y los tres drivers HS apagados")
+    for port in ("dsi_lp_p", "dsi_lp_n", "dsi_hs_p", "dsi_hs_n"):
+        for bit in top["ports"][port]["bits"]:
+            hs = port.startswith("dsi_hs")
+            pad_port = "IO" if hs else "O"
+            matches = [cell for cell in top["cells"].values()
+                       if cell["connections"].get(pad_port) == [bit]]
+            if len(matches) != 1 or matches[0]["type"] != ("IOBUF" if hs else "TBUF"):
+                raise ValueError("Pad DSI sin buffer independiente")
+            cell = matches[0]
+            attrs = cell["attributes"]
+            standard = "LVCMOS25" if port.startswith("dsi_hs") else "LVCMOS12"
+            if not {"NEXTPNR_BEL", f"&IO_TYPE={standard}", "&PULL_MODE=NONE"} <= attrs.keys():
+                raise ValueError("Pad DSI sin restricciones esperadas")
+            if port.startswith("dsi_hs"):
+                if cell["connections"]["OEN"] != high:
+                    raise ValueError("Un GPIO de las ramas HS podría conducir")
+                if cell["parameters"].get("NET_OEN") != "VCC":
+                    raise ValueError("El packer no recibe metadata de HS apagado")
+    print("PASS: doce pads enrutados; seis GPIO de ramas HS apagados con NET_OEN=VCC")
 
 
 if __name__ == "__main__":

@@ -6,6 +6,10 @@ Este documento reúne los datos físicos y las precauciones. El procedimiento de
 síntesis y carga está en el manual de trabajo. La confirmación del pinout por el
 responsable no equivale a una validación eléctrica completa de D-PHY.
 
+La [revisión offline de E/S LP](revision_io_lp.md) contrasta los pads enrutados,
+los ajustes de corriente/slew y el comportamiento durante configuración.
+No hay mediciones nuevas ni autorización de carga.
+
 ## Datos disponibles
 
 | Elemento | Estado |
@@ -109,8 +113,10 @@ conductores del panel.
   por `OEN=0`. Alta impedancia requiere revisar también pulls, keeper y
   terminaciones. Durante configuración existen pull-ups débiles fuera del
   control del RTL. El adaptador Migen instancia esos buffers, con HS siempre
-  deshabilitado; LP usa LVCMOS12, HS LVDS25 y PULL_MODE=NONE como configuración
-  candidata posterior a configuración, sin validación eléctrica todavía.
+  deshabilitado: LP usa TBUF/LVCMOS12 y las ramas HS IOBUF/LVCMOS25 con OEN=1.
+  No se instancia un transmisor diferencial HS; no se conducen 2,5 V sobre el
+  panel. Todos los pads DSI tienen PULL_MODE=NONE como configuración posterior
+  a configuración, sin validación eléctrica todavía.
 - En HS, las ramas GPIO pueden conducirse a cero para participar en la carga
   resistiva de referencia. No asumir alta impedancia sin validar la solución.
 - Las seis resistencias de rama **no son una terminación entre P y N**.

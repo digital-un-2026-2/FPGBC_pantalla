@@ -8,6 +8,9 @@
 /AGENTS.md
 /ejemplo.drawio
 
+# Capturas locales del analizador; los bytes de inicialización están en la ROM.
+*.kvdat
+
 # Entorno local de Pixi (el manifiesto y el lock sí se versionan).
 /.pixi/
 /.toolchain/

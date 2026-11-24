@@ -40,10 +40,14 @@ Al terminar la secuencia se mantiene LP-11; **no se entra a HS**.
   espera adicional programada.
 - PHY lógico y [top de integración LiteX/Migen](gateware/README.md) implementados;
   buffers Gowin y restricciones candidatos, sin validación eléctrica.
+- Botón de reset global y auditorías offline de pads y fusibles implementados;
+  las seis ramas HS permanecen deshabilitadas.
 - Se retiraron los arneses LiteX/UART/LiteScope y la prueba de otra placa.
   La nueva integración solo conecta los RTL de inicialización, sin CPU ni UART.
 
-La reproducción está verificada digitalmente; todavía no hay validación del LCD.
+La reproducción está verificada digitalmente. La comparación de la captura
+física de la iteración 2 confirma los bytes de los 18 paquetes, pero quedan
+diferencias de arranque y temporización; no hay validación de recepción del LCD.
 
 ## Documentación y pruebas
 
@@ -51,6 +55,10 @@ La reproducción está verificada digitalmente; todavía no hay validación del 
 - [Secuencia capturada](docs/secuencia_capturada.md).
 - [Hardware y precauciones](docs/hardware.md).
 - [Flujo de simulación](docs/flujo_de_trabajo.md).
+- [Validación LPDT en placa por captura de seis canales](docs/validacion_lpdt.md).
+- [Comparación de la captura de la iteración 2](docs/comparacion_LP_ITERATION_2.md).
+- [Auditoría de E/S y fusibles](docs/revision_io_lp.md).
+- [Herramientas de comparación y empaquetado LP](scripts/README.md).
 - [Motor LPDT](motor_lpdt/README.md).
 - [Secuenciador](secuenciador_init/README.md).
 - [Motor PHY](motor_phy/README.md): flujo, FSM, datapath y RTL lógico.
@@ -59,8 +67,16 @@ La reproducción está verificada digitalmente; todavía no hay validación del 
 ```sh
 pixi run test
 pixi run test-init
+pixi run test-phy
+pixi run test-gateware
+pixi run test-captures
 ```
 
 Las pruebas reconstruyen los 18 paquetes desde D0, comprueban ECC/CRC y
 miden las esperas completas. No verifican recepción eléctrica del panel.
 No se programa la FPGA ni se escribe flash.
+
+Las capturas `.kvdat` se conservan localmente y están ignoradas por Git.
+La ROM y las pruebas contienen los bytes de referencia necesarios para
+simular sin esos archivos. Solo el comparador de capturas requiere aportarlos.
+Los productos de síntesis, simulación y empaquetado tampoco se versionan.

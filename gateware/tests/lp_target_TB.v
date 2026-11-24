@@ -2,6 +2,7 @@
 module lp_target_TB;
   parameter ENABLE_LP = 1;
   reg clk = 0;
+  reg reset_n = 1;
   always #12.5 clk = ~clk;
   wire [2:0] lp_p, lp_n, hs_p, hs_n;
   wire [1:0] d0 = {lp_p[0], lp_n[0]};
@@ -12,7 +13,7 @@ module lp_target_TB;
   realtime fin_anterior = 0;
 
   fpgbc_lp_init dut(
-      .clk40(clk), .dsi_lp_p(lp_p), .dsi_lp_n(lp_n),
+      .clk40(clk), .global_rst_n(reset_n), .dsi_lp_p(lp_p), .dsi_lp_n(lp_n),
       .dsi_hs_p(hs_p), .dsi_hs_n(hs_n)
   );
   // Solo se acorta la espera inicial de alimentación. Las esperas de 9/65 ms,
@@ -78,10 +79,19 @@ module lp_target_TB;
   task resetear;
     begin
       @(negedge clk); #2;
-      force dut.sys_rst = 1'b1;
+      reset_n = 0;
+      repeat (5) @(negedge clk);
       #1; aislado;
-      repeat (2) @(negedge clk);
-      #2; release dut.sys_rst;
+      repeat (20) begin
+        @(negedge clk); #1; aislado;
+        if (dut.sys_rst !== 1) $fatal(1, "Botón no mantiene reset global");
+      end
+      #2; reset_n = 1;
+      repeat (10) begin
+        @(negedge clk); #1; aislado;
+        if (dut.sys_rst !== 1) $fatal(1, "Reset se liberó demasiado pronto");
+      end
+      wait (dut.sys_rst === 0);
     end
   endtask
 
@@ -171,6 +181,30 @@ module lp_target_TB;
     end
     if (bytes_ok != 204) $fatal(1, "No se reconstruyeron 204 bytes");
     $display("PASS: 18 paquetes / 204 bytes desde pads, pausas reales y abortos");
+    resetear;
+    wait (dut.aceptado === 1);
+    // Volver a comprobar el selector y el primer paquete completo tras LISTO.
+    n = longitud(0);
+    fin_datos = 16 + (n + 1) * 64;
+    total = fin_datos + 4;
+    for (c = 0; c <= total; c = c + 1) begin
+      @(negedge clk); #2;
+      if (c < 4) esperado = 2'b10;
+      else if (c < 8) esperado = 2'b00;
+      else if (c < 12) esperado = 2'b01;
+      else if (c < 16) esperado = 2'b00;
+      else if (c < fin_datos) begin
+        offset = c - 16;
+        b = offset / 64;
+        bit_n = (offset % 64) / 8;
+        valor = b == 0 ? 8'h87 : paquete(0) >> (8 * (n - b));
+        esperado = offset % 8 >= 4 ? 2'b00 : (valor[bit_n] ? 2'b10 : 2'b01);
+      end else if (c < total) esperado = 2'b10;
+      else esperado = 2'b11;
+      if (d0 !== esperado || dut.fallo)
+        $fatal(1, "No se reinició el primer paquete tras el botón");
+    end
+    $display("PASS: botón físico aborta, mantiene reset y reinicia desde paso 0 tras LISTO");
     $finish;
   end
 

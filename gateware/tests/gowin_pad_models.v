@@ -4,9 +4,9 @@ module TBUF(input I, input OEN, output O);
   assign O = OEN ? 1'bz : I;
 endmodule
 
-module TLVDS_TBUF(input I, input OEN, output O, output OB);
-  assign O = OEN ? 1'bz : I;
-  assign OB = OEN ? 1'bz : ~I;
+module IOBUF(input I, input OEN, output O, inout IO);
+  assign IO = OEN ? 1'bz : I;
+  assign O = IO;
 endmodule
 
 module IBUF(input I, output O);

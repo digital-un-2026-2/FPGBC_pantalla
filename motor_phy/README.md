@@ -52,8 +52,9 @@ en LP-11. No genera paquetes, esperas de 9/65 ms, ECC ni CRC.
 | `hs_oen[2:0]` | Salida interna | Siempre `111`: buffers HS deshabilitados, polaridad física Gowin |
 
 El adaptador `gateware/cores/phy_pads.py` convierte `lp_oe` a `OEN=~lp_oe` para los TBUF.
-Los buffers diferenciales HS deben tener su `OEN=1` real; fijar sus datos a
-cero no los deshabilita. La elección final de primitivas y restricciones de
+Las ramas HS deben estar realmente sin conducción; fijar sus datos a
+cero no las deshabilita. El adaptador usa seis IOBUF GPIO con OEN=1
+constante, sin instanciar un transmisor diferencial HS. La elección de primitivas y restricciones de
 E/S se comprueba digitalmente para GW2AR-18C, pero requiere revisión eléctrica
 antes de generar o cargar un bitstream.
 

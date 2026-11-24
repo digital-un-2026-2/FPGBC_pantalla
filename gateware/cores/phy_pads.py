@@ -1,6 +1,6 @@
 """Adaptador Gowin exclusivamente LP, sin registros ni lógica de protocolo."""
 
-from migen import Instance, Module
+from migen import Instance, Module, Signal
 
 
 class GowinLPPads(Module):
@@ -19,10 +19,16 @@ class GowinLPPads(Module):
                     "TBUF", name=f"lp_n_buf_{lane}",
                     i_I=lp_n[lane], i_OEN=~lp_oe[lane], o_O=lp_pads.n[lane],
                 ),
-                # No existe control que pueda habilitar HS en este objetivo.
-                # Fijar I=0 NO basta: OEN=1 es lo que deshabilita el driver.
+                # Objetivo solo LP: no instanciar un transmisor diferencial.
+                # Cada GPIO de las ramas HS permanece deshabilitado. IOBUF
+                # evita además que el packer omita BANK1 al clasificar TBUF
+                # como salida; la lectura de entrada no se utiliza.
                 Instance(
-                    "TLVDS_TBUF", name=f"hs_off_buf_{lane}",
-                    i_I=0, i_OEN=1, o_O=hs_pads.p[lane], o_OB=hs_pads.n[lane],
+                    "IOBUF", name=f"hs_p_off_buf_{lane}",
+                    i_I=0, i_OEN=1, io_IO=hs_pads.p[lane], o_O=Signal(),
+                ),
+                Instance(
+                    "IOBUF", name=f"hs_n_off_buf_{lane}",
+                    i_I=0, i_OEN=1, io_IO=hs_pads.n[lane], o_O=Signal(),
                 ),
             ]

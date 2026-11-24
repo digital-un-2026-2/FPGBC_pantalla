@@ -13,16 +13,22 @@ clk40 → reset de arranque → secuenciador_init ↔ motor_lpdt
 ## Archivos
 
 - `platforms/fpgbc.py`: dispositivo, reloj y mapa de doce pines DSI.
-  LP usa `LVCMOS12`; HS usa `LVDS25`; ambos con `PULL_MODE=NONE`.
-  En Apicula se fija la familia Yosys `gw2a` y se añaden restricciones
-  individuales de los seis pines HS para evitar la resolución incompleta
-  de pares vectoriales del nextpnr instalado.
-- `cores/phy_pads.py`: seis `TBUF` LP con `OEN=~lp_oe` y tres
-  `TLVDS_TBUF` HS con `OEN=1` constante. Sin registros ni reloj.
+  LP usa `LVCMOS12`, `DRIVE=8`, `SLEW_RATE=FAST`; las ramas HS usan
+  GPIO `LVCMOS25` con salida permanentemente deshabilitada.
+  Todos los pads DSI tienen `PULL_MODE=NONE`. Se fija la familia Yosys `gw2a`.
+- `cores/phy_pads.py`: seis `TBUF` LP con `OEN=~lp_oe` y seis
+  `IOBUF` sobre las ramas HS con `OEN=1` constante. No hay transmisor
+  diferencial HS ni lógica de recepción; las entradas de IOBUF se ignoran.
+  No se conducen 2,5 V sobre el panel. Sin registros ni reloj.
 - `cores/lp_init.py`: instancia y conecta los tres tops RTL; incluye
   los bloques compartidos una sola vez.
 - `targets/fpgbc_lp_init.py`: reloj de 40 MHz, reset inicial de 16 ciclos y
   exportación del diseño. El reset del PHY es global, no `rst_motor`.
+  El pulsador central de volumen (`global_rst_n`, pin FPGA 120, activo bajo,
+  LVCMOS33 con pull-up, como en `FPGBC_digital_UN`) reinicia toda la cadena.
+  Se sincroniza con dos registros y mantiene reset al menos 16 ciclos tras
+  detectar la liberación; no implementa un antirrebote de milisegundos.
+  No resetea físicamente el LCD.
 
 ## Exportación y pruebas
 
@@ -53,13 +59,18 @@ pixi run python -m gateware.tests.check_netlist build/fpgbc_lp_init/fpgbc_lp_ini
 
 Se ha comprobado síntesis GW2A y place-and-route con nextpnr a **40 MHz**.
 En la ejecución de revisión, el reloj interno pasa con Fmax informada de
-73,30 MHz; no equivale a cierre temporal externo ni a validación D-PHY.
+85,05 MHz; no equivale a cierre temporal externo ni a validación D-PHY.
 El JSON enrutado se puede comprobar con la misma utilidad y `--routed`.
-No se ha ejecutado el empaquetador ni generado un bitstream de este top.
+La auditoría de fusibles pasa: las seis ramas HS tienen salida estáticamente
+apagada (`ODMUX_1=0`) y todos los pads DSI conservan pulls desactivados.
+Se generó un candidato **no medido eléctricamente** y se verificó que al
+releerlo reproduce exactamente el mapa de fusibles comprobado.
 
-**Nota de Apicula:** los seis `OBUF` HS del JSON sintetizado son marcadores de
-pad que nextpnr fusiona con los tres `TLVDS_TBUF`. No usar `-noiopads`:
-nextpnr necesita esos marcadores para ubicar las ramas P/N y aplicar OEN.
+**Nota de Apicula:** usar `scripts/pack_lp_checked.py`, no `gowin_pack` directo.
+La versión instalada no registra los pads usados antes de su bucle de pines
+no utilizados. El wrapper corrige ese registro en memoria, comprueba los
+atributos/fusibles y se niega a serializar si falla algún control.
+No modifica la instalación ni programa hardware.
 
 ## Antes de la placa
 
@@ -71,10 +82,25 @@ No se cambia ninguna resistencia ni alimentación.
 
 El exportador no ofrece opciones de carga ni ejecuta la generación de bitstream.
 **El script shell que LiteX deja en `build/` sí contiene una llamada al
-empaquetador:** no ejecutarlo sin la revisión anterior. Los scripts se generan
+empaquetador comprobado:** no ejecutarlo sin la revisión anterior. Los scripts se generan
 sin permitir fallos de timing; nextpnr puede usarse por separado para revisión.
-No se ha programado la FPGA. Hace falta revisión y autorización separadas.
+Estos comandos no programan la FPGA; cualquier carga requiere revisión y
+autorización separadas. La captura física de la iteración 2 se documenta en la
+[comparación LP](../docs/comparacion_LP_ITERATION_2.md).
 Ver [hardware](../docs/hardware.md).
+
+La [revisión offline de E/S](../docs/revision_io_lp.md) añade un auditor del
+JSON enrutado contra la base del encapsulado. La comprobación del packer es separada:
+
+```sh
+pixi run python -m gateware.tests.review_io build/fpgbc_lp_gpio_review/fpgbc_lp_init_routed.json
+pixi run python -m gateware.tests.review_fuses build/fpgbc_lp_gpio_review/fpgbc_lp_init_routed.json
+pixi run python -m unittest gateware.tests.test_review_io gateware.tests.test_review_fuses -v
+```
+
+`review_io` solo lee archivos. `review_fuses` ejecuta el packer hasta los
+fusibles en memoria y no serializa salvo que se pida `-o archivo.fs`.
+Ninguno certifica eléctricamente la placa ni se comunica con ella.
 
 No sintetizar ni programar bitstreams antiguos de `build/` como si
 correspondieran a esta arquitectura.
