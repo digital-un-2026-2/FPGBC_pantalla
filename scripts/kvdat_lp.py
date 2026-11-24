@@ -2,6 +2,7 @@
 
 from collections import defaultdict
 import hashlib
+from itertools import pairwise
 from pathlib import Path
 import struct
 import xml.etree.ElementTree as ET
@@ -30,9 +31,10 @@ def load_capture(path):
         # La última marca es fin de adquisición, no un flanco de la señal.
         if not timestamps or timestamps[-1] != samples:
             raise ValueError("Missing acquisition endpoint")
-        if timestamps != sorted(timestamps):
+        if any(b < a for a, b in pairwise(timestamps)):
             raise ValueError("Non-monotonic timestamps")
-        channels[channel] = (initial, timestamps[:-1])
+        timestamps.pop()
+        channels[channel] = (initial, timestamps)
         pos = end
     return {
         "sha256": hashlib.sha256(raw).hexdigest(),
