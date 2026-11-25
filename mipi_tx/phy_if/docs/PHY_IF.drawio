@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram id="phy-if-datapath" name="Datapath">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="1" pageScale="1" pageWidth="1664" pageHeight="1140" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="PHY_IF — datapath de MIPI_TX" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontSize=31;fontStyle=1;fontColor=#20313F;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="20" width="1600" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Adaptador lógico LP/HS · selección combinacional · sin FSM ni control de E/S físicas" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontSize=16;fontColor=#344654;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="70" width="980" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="Un color por señal · trazo fino: 1 bit · trazo grueso: bus" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontSize=15;fontColor=#344654;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1080" y="70" width="552" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-tx" value="LP_TX" style="rounded=0;html=1;fillColor=#E5F0E2;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=9;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="32" y="188" width="202" height="83" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-tx-d0" value="LP_D0[1:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#1D5B9C;fontSize=18;" vertex="1" connectable="0" parent="lp-tx">
+          <mxGeometry x="12" y="44" width="178" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="link" value="LINK_FSM" style="rounded=0;html=1;fillColor=#D8EAF0;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=12;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="32" y="278" width="202" height="184" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-sel" value="SEL_OUT[1:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#B15316;fontSize=18;" vertex="1" connectable="0" parent="link">
+          <mxGeometry x="12" y="50" width="178" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-force" value="LP_FORCE[1:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#A7303D;fontSize=18;" vertex="1" connectable="0" parent="link">
+          <mxGeometry x="12" y="84" width="178" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-sot" value="SOT_EN" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#63701B;fontSize=18;" vertex="1" connectable="0" parent="link">
+          <mxGeometry x="12" y="118" width="178" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="packer" value="HS_PACKER" style="rounded=0;html=1;fillColor=#E5F0E2;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=11;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="32" y="526" width="202" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="packer-word" value="WORD[15:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#674594;fontSize=18;" vertex="1" connectable="0" parent="packer">
+          <mxGeometry x="12" y="48" width="178" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy" value="&lt;b style=&quot;font-size:21px&quot;&gt;PHY&lt;/b&gt;&lt;br&gt;Fuera de alcance" style="rounded=0;html=1;fillColor=#F3E7DF;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=12;fontColor=#20313F;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1451" y="188" width="181" height="462" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy-lp-p" value="LP_P[2:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#106957;fontSize=18;" vertex="1" connectable="0" parent="phy">
+          <mxGeometry x="12" y="76" width="157" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy-lp-n" value="LP_N[2:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#815C96;fontSize=18;" vertex="1" connectable="0" parent="phy">
+          <mxGeometry x="12" y="108" width="157" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy-byte0" value="HS_BYTE0[7:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#006986;fontSize=18;" vertex="1" connectable="0" parent="phy">
+          <mxGeometry x="12" y="336" width="157" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy-byte1" value="HS_BYTE1[7:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#914E26;fontSize=18;" vertex="1" connectable="0" parent="phy">
+          <mxGeometry x="12" y="368" width="157" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="clk-name" value="CLK_BYTE" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#485664;fontSize=18;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="901" y="101" width="113" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="rst-name" value="RST_BYTE" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#8F305B;fontSize=18;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1256" y="101" width="113" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="clk-port" style="ellipse;aspect=fixed;fillColor=#FFFFFF;strokeColor=#485664;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1023" y="108" width="10" height="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="rst-port" style="ellipse;aspect=fixed;fillColor=#FFFFFF;strokeColor=#8F305B;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1378" y="108" width="10" height="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy-if" value="PHY_IF" style="container=1;collapsible=0;recursiveResize=0;rounded=0;html=1;fillColor=#F3F2DB;strokeColor=#3B505C;strokeWidth=2;align=left;verticalAlign=top;spacing=0;spacingLeft=17;spacingTop=10;fontColor=#20313F;fontSize=23;fontStyle=1;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="280" y="128" width="1125" height="551" as="geometry"/>
+        </mxCell>
+        <mxCell id="out-sel" value="OUT_SEL" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=12;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" parent="phy-if">
+          <mxGeometry x="43" y="150" width="324" height="184" as="geometry"/>
+        </mxCell>
+        <mxCell id="out-sel-mode" value="SEL_OUT[1:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#B15316;fontSize=18;" vertex="1" connectable="0" parent="out-sel">
+          <mxGeometry x="12" y="50" width="134" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="out-sel-force" value="LP_FORCE[1:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#A7303D;fontSize=18;" vertex="1" connectable="0" parent="out-sel">
+          <mxGeometry x="12" y="84" width="134" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="out-sel-sot" value="SOT_EN" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#63701B;fontSize=18;" vertex="1" connectable="0" parent="out-sel">
+          <mxGeometry x="12" y="118" width="134" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="out-sel-use-d0" value="LP_USE_D0" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#137987;fontSize=18;" vertex="1" connectable="0" parent="out-sel">
+          <mxGeometry x="177" y="50" width="135" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="out-sel-forced-pn" value="FORCED_PN[1:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#82542C;fontSize=18;" vertex="1" connectable="0" parent="out-sel">
+          <mxGeometry x="159" y="84" width="153" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="out-sel-hs" value="HS_SEL[1:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#267744;fontSize=18;" vertex="1" connectable="0" parent="out-sel">
+          <mxGeometry x="177" y="134" width="135" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-mux" value="LP_MUX" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=12;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" parent="phy-if">
+          <mxGeometry x="406" y="60" width="301" height="225" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-mux-d0" value="LP_D0[1:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#1D5B9C;fontSize=18;" vertex="1" connectable="0" parent="lp-mux">
+          <mxGeometry x="12" y="44" width="170" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-mux-use-d0" value="LP_USE_D0" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#137987;fontSize=18;" vertex="1" connectable="0" parent="lp-mux">
+          <mxGeometry x="12" y="140" width="170" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-mux-forced-pn" value="FORCED_PN[1:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#82542C;fontSize=18;" vertex="1" connectable="0" parent="lp-mux">
+          <mxGeometry x="12" y="174" width="170" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-mux-p" value="LP_P_D[2:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#9A4172;fontSize=18;" vertex="1" connectable="0" parent="lp-mux">
+          <mxGeometry x="145" y="76" width="144" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-mux-n" value="LP_N_D[2:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#465C91;fontSize=18;" vertex="1" connectable="0" parent="lp-mux">
+          <mxGeometry x="145" y="108" width="144" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-mux" value="HS_MUX" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=12;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" parent="phy-if">
+          <mxGeometry x="406" y="340" width="301" height="182" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-mux-sel" value="HS_SEL[1:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#267744;fontSize=18;" vertex="1" connectable="0" parent="hs-mux">
+          <mxGeometry x="12" y="48" width="130" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-mux-word" value="WORD[15:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#674594;fontSize=18;" vertex="1" connectable="0" parent="hs-mux">
+          <mxGeometry x="12" y="106" width="130" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-mux-byte0" value="BYTE0_D[7:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#785825;fontSize=18;" vertex="1" connectable="0" parent="hs-mux">
+          <mxGeometry x="137" y="56" width="152" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-mux-byte1" value="BYTE1_D[7:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#8E5760;fontSize=18;" vertex="1" connectable="0" parent="hs-mux">
+          <mxGeometry x="137" y="88" width="152" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg" value="6 bits · ↓ CLK_BYTE · EN = 1&lt;br&gt;Reset propuesto: LP_P = LP_N = 111" style="rounded=0;html=1;fillColor=#E5F0E2;strokeColor=#3B505C;strokeWidth=2;verticalAlign=bottom;spacing=0;spacingBottom=15;fontColor=#20313F;fontSize=15;" vertex="1" parent="phy-if">
+          <mxGeometry x="797" y="60" width="281" height="225" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg-title" value="LP_OUT_REG" style="text;html=1;align=center;verticalAlign=middle;spacing=0;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" connectable="0" parent="lp-reg">
+          <mxGeometry x="12" y="35" width="257" height="29" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg-clk" value="CLK_BYTE" style="text;html=1;align=center;verticalAlign=middle;spacing=0;fontColor=#485664;fontSize=18;" vertex="1" connectable="0" parent="lp-reg">
+          <mxGeometry x="12" y="5" width="118" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg-rst" value="RST_BYTE" style="text;html=1;align=center;verticalAlign=middle;spacing=0;fontColor=#8F305B;fontSize=18;" vertex="1" connectable="0" parent="lp-reg">
+          <mxGeometry x="152" y="5" width="118" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg-p-d" value="LP_P_D[2:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#9A4172;fontSize=18;" vertex="1" connectable="0" parent="lp-reg">
+          <mxGeometry x="12" y="76" width="122" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg-n-d" value="LP_N_D[2:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#465C91;fontSize=18;" vertex="1" connectable="0" parent="lp-reg">
+          <mxGeometry x="12" y="108" width="122" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg-p" value="LP_P[2:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#106957;fontSize=18;" vertex="1" connectable="0" parent="lp-reg">
+          <mxGeometry x="146" y="76" width="123" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-reg-n" value="LP_N[2:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#815C96;fontSize=18;" vertex="1" connectable="0" parent="lp-reg">
+          <mxGeometry x="146" y="108" width="123" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg" value="16 bits · ↓ CLK_BYTE · EN = 1&lt;br&gt;Reset propuesto: ambos bytes = 00" style="rounded=0;html=1;fillColor=#E5F0E2;strokeColor=#3B505C;strokeWidth=2;verticalAlign=bottom;spacing=0;spacingBottom=14;fontColor=#20313F;fontSize=15;" vertex="1" parent="phy-if">
+          <mxGeometry x="797" y="340" width="281" height="182" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg-title" value="HS_OUT_REG" style="text;html=1;align=center;verticalAlign=middle;spacing=0;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" connectable="0" parent="hs-reg">
+          <mxGeometry x="12" y="31" width="257" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg-clk" value="CLK_BYTE" style="text;html=1;align=center;verticalAlign=middle;spacing=0;fontColor=#485664;fontSize=18;" vertex="1" connectable="0" parent="hs-reg">
+          <mxGeometry x="12" y="5" width="118" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg-rst" value="RST_BYTE" style="text;html=1;align=center;verticalAlign=middle;spacing=0;fontColor=#8F305B;fontSize=18;" vertex="1" connectable="0" parent="hs-reg">
+          <mxGeometry x="152" y="5" width="118" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg-byte0-d" value="BYTE0_D[7:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#785825;fontSize=18;" vertex="1" connectable="0" parent="hs-reg">
+          <mxGeometry x="12" y="56" width="127" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg-byte1-d" value="BYTE1_D[7:0]" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontColor=#8E5760;fontSize=18;" vertex="1" connectable="0" parent="hs-reg">
+          <mxGeometry x="12" y="88" width="127" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg-byte0" value="HS_BYTE0[7:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#006986;fontSize=18;" vertex="1" connectable="0" parent="hs-reg">
+          <mxGeometry x="149" y="56" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-reg-byte1" value="HS_BYTE1[7:0]" style="text;html=1;align=right;verticalAlign=middle;spacing=0;fontColor=#914E26;fontSize=18;" vertex="1" connectable="0" parent="hs-reg">
+          <mxGeometry x="149" y="88" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="tap-clk" style="ellipse;aspect=fixed;fillColor=#485664;strokeColor=none;" vertex="1" parent="phy-if">
+          <mxGeometry x="744" y="26" width="8" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="tap-rst" style="ellipse;aspect=fixed;fillColor=#8F305B;strokeColor=none;" vertex="1" parent="phy-if">
+          <mxGeometry x="1099" y="26" width="8" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-d0" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#1D5B9C;strokeWidth=4.5;exitX=1;exitY=0.6746988;exitPerimeter=0;entryX=0;entryY=0.2488889;entryPerimeter=0;" edge="1" parent="1" source="lp-tx" target="lp-mux">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sel-out" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#B15316;strokeWidth=4.5;exitX=1;exitY=0.3369565;exitPerimeter=0;entryX=0;entryY=0.3369565;entryPerimeter=0;" edge="1" parent="1" source="link" target="out-sel">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-force" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#A7303D;strokeWidth=4.5;exitX=1;exitY=0.5217391;exitPerimeter=0;entryX=0;entryY=0.5217391;entryPerimeter=0;" edge="1" parent="1" source="link" target="out-sel">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sot-en" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#63701B;strokeWidth=2;exitX=1;exitY=0.7065217;exitPerimeter=0;entryX=0;entryY=0.7065217;entryPerimeter=0;" edge="1" parent="1" source="link" target="out-sel">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="word" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#674594;strokeWidth=4.5;exitX=1;exitY=0.6;exitPerimeter=0;entryX=0;entryY=0.6483516;entryPerimeter=0;" edge="1" parent="1" source="packer" target="hs-mux">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-use-d0" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#137987;strokeWidth=2;exitX=1;exitY=0.3369565;exitPerimeter=0;entryX=0;entryY=0.6755556;entryPerimeter=0;" edge="1" parent="phy-if" source="out-sel" target="lp-mux">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="forced-pn" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#82542C;strokeWidth=4.5;exitX=1;exitY=0.5217391;exitPerimeter=0;entryX=0;entryY=0.8266667;entryPerimeter=0;" edge="1" parent="phy-if" source="out-sel" target="lp-mux">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-sel" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#267744;strokeWidth=4.5;exitX=1;exitY=0.7934783;exitPerimeter=0;entryX=0;entryY=0.3296703;entryPerimeter=0;" edge="1" parent="phy-if" source="out-sel" target="hs-mux">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="296"/>
+              <mxPoint x="385" y="400"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lp-p-d" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#9A4172;strokeWidth=4.5;exitX=1;exitY=0.3911111;exitPerimeter=0;entryX=0;entryY=0.3911111;entryPerimeter=0;" edge="1" parent="phy-if" source="lp-mux" target="lp-reg">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-n-d" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#465C91;strokeWidth=4.5;exitX=1;exitY=0.5333333;exitPerimeter=0;entryX=0;entryY=0.5333333;entryPerimeter=0;" edge="1" parent="phy-if" source="lp-mux" target="lp-reg">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-byte0-d" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#785825;strokeWidth=4.5;exitX=1;exitY=0.3736264;exitPerimeter=0;entryX=0;entryY=0.3736264;entryPerimeter=0;" edge="1" parent="phy-if" source="hs-mux" target="hs-reg">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-byte1-d" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#8E5760;strokeWidth=4.5;exitX=1;exitY=0.5494505;exitPerimeter=0;entryX=0;entryY=0.5494505;entryPerimeter=0;" edge="1" parent="phy-if" source="hs-mux" target="hs-reg">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-p" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#106957;strokeWidth=4.5;exitX=1;exitY=0.3911111;exitPerimeter=0;entryX=0;entryY=0.1904762;entryPerimeter=0;" edge="1" parent="1" source="lp-reg" target="phy">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lp-n" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#815C96;strokeWidth=4.5;exitX=1;exitY=0.5333333;exitPerimeter=0;entryX=0;entryY=0.2597403;entryPerimeter=0;" edge="1" parent="1" source="lp-reg" target="phy">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-byte0" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#006986;strokeWidth=4.5;exitX=1;exitY=0.3736264;exitPerimeter=0;entryX=0;entryY=0.7532468;entryPerimeter=0;" edge="1" parent="1" source="hs-reg" target="phy">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="hs-byte1" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#914E26;strokeWidth=4.5;exitX=1;exitY=0.5494505;exitPerimeter=0;entryX=0;entryY=0.8225108;entryPerimeter=0;" edge="1" parent="1" source="hs-reg" target="phy">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="clk-in" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=none;strokeColor=#485664;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0.5;entryPerimeter=0;" edge="1" parent="1" source="clk-port" target="tap-clk">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rst-in" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=none;strokeColor=#8F305B;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0.5;entryPerimeter=0;" edge="1" parent="1" source="rst-port" target="tap-rst">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="clk-lp" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#485664;strokeWidth=2;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.252669;entryY=0;entryPerimeter=0;" edge="1" parent="phy-if" source="tap-clk" target="lp-reg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="868" y="30"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rst-lp" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#8F305B;strokeWidth=2;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.7508897;entryY=0;entryPerimeter=0;" edge="1" parent="phy-if" source="tap-rst" target="lp-reg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1008" y="30"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="clk-hs" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#485664;strokeWidth=2;jumpStyle=gap;jumpSize=10;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.252669;entryY=0;entryPerimeter=0;" edge="1" parent="phy-if" source="tap-clk" target="hs-reg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="748" y="311"/>
+              <mxPoint x="868" y="311"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rst-hs" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=9;endFill=1;strokeColor=#8F305B;strokeWidth=2;jumpStyle=gap;jumpSize=10;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.7508897;entryY=0;entryPerimeter=0;" edge="1" parent="1" source="tap-rst" target="hs-reg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1383" y="439"/>
+              <mxPoint x="1288" y="439"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="selection-note" value="&lt;div style=&quot;font-size:20px;margin-bottom:8px&quot;&gt;&lt;b&gt;Selección lógica · codificación propuesta&lt;/b&gt;&lt;/div&gt;
+          &lt;table cellpadding=&quot;5&quot; cellspacing=&quot;0&quot; style=&quot;width:100%;text-align:left&quot;&gt;
+            &lt;tr style=&quot;background:#D8EAF0&quot;&gt;&lt;th&gt;SEL_OUT[1:0]&lt;/th&gt;&lt;th&gt;D0&lt;/th&gt;&lt;th&gt;D1&lt;/th&gt;&lt;th&gt;CLK&lt;/th&gt;&lt;th&gt;HS_SEL[1:0]&lt;/th&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#FFFFFF&quot;&gt;&lt;td&gt;00 · Reposo&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;00&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#EBEFF3&quot;&gt;&lt;td&gt;01 · LPDT&lt;/td&gt;&lt;td&gt;LP_D0&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;00&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#FFFFFF&quot;&gt;&lt;td&gt;10 · LP forzado&lt;/td&gt;&lt;td&gt;LP_FORCE&lt;/td&gt;&lt;td&gt;LP_FORCE&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;00&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#EBEFF3&quot;&gt;&lt;td&gt;11 · HS&lt;/td&gt;&lt;td&gt;00&lt;/td&gt;&lt;td&gt;00&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;01 si SOT_EN=1, si no 10&lt;/td&gt;&lt;/tr&gt;
+          &lt;/table&gt;
+          &lt;div style=&quot;margin-top:9px;line-height:1.35&quot;&gt;
+            &lt;b&gt;OUT_SEL:&lt;/b&gt; LP_USE_D0 = 1 solo en LPDT. FORCED_PN es LP_FORCE en modo forzado, LP00 en HS y LP11 en los demás modos.&lt;br&gt;
+            &lt;b&gt;Entrada a HS:&lt;/b&gt; LINK_FSM aplica LP_FORCE = 01 → 00 en D0 y D1.&lt;br&gt;
+            &lt;b&gt;LP_MUX:&lt;/b&gt; en LPDT toma LP_D0 para D0; si no, toma FORCED_PN para D0 y D1. LP_D0 y LP_FORCE usan {P,N}. En ambos buses LP: [2] = CLK, [1] = D1, [0] = D0 (propuesta).&lt;br&gt;
+            &lt;b&gt;HS_MUX (D0 / D1):&lt;/b&gt; 01 → B8 / B8; 10 → WORD[7:0] / WORD[15:8]; otros → 00 / 00 (sin datos).
+          &lt;/div&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F2F7FA;strokeColor=#A9B8C1;strokeWidth=1.5;align=left;verticalAlign=top;spacing=0;spacingTop=12;spacingLeft=14;spacingRight=14;fontColor=#20313F;fontSize=16;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="700" width="654" height="414" as="geometry"/>
+        </mxCell>
+        <mxCell id="timing-note" value="&lt;div style=&quot;font-size:20px;margin-bottom:8px&quot;&gt;&lt;b&gt;Flancos de CLK_BYTE · ↓0 acepta PK_START&lt;/b&gt;&lt;/div&gt;
+          &lt;table cellpadding=&quot;5&quot; cellspacing=&quot;0&quot; style=&quot;width:100%;text-align:left&quot;&gt;
+            &lt;tr style=&quot;background:#D8EAF0&quot;&gt;&lt;th&gt;Flanco&lt;/th&gt;&lt;th&gt;Control estable desde ↑&lt;/th&gt;&lt;th&gt;HS_PACKER: WORD antes de ↓; efecto del ↓&lt;/th&gt;&lt;th&gt;PHY_IF tras ↓ (D0 / D1)&lt;/th&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#FFFFFF&quot;&gt;&lt;td&gt;↓−1&lt;/td&gt;&lt;td&gt;HS, SOT_EN=1, PK_START=0&lt;/td&gt;&lt;td&gt;W0 = 0x703E; CNT sigue en 0&lt;/td&gt;&lt;td&gt;&lt;b&gt;B8 / B8&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#EBEFF3&quot;&gt;&lt;td&gt;↓0&lt;/td&gt;&lt;td&gt;HS, SOT_EN=0, PK_START=1&lt;/td&gt;&lt;td&gt;W0 = 0x703E; acepta PK_START → CNT=1&lt;/td&gt;&lt;td&gt;&lt;b&gt;3E / 70&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#FFFFFF&quot;&gt;&lt;td&gt;↓1&lt;/td&gt;&lt;td&gt;HS, SOT_EN=0, PK_START=0&lt;/td&gt;&lt;td&gt;W1 = 0x1308; CNT pasa a 2&lt;/td&gt;&lt;td&gt;&lt;b&gt;08 / 13&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#EBEFF3&quot;&gt;&lt;td&gt;↓2…↓1081&lt;/td&gt;&lt;td&gt;HS, SOT_EN=0&lt;/td&gt;&lt;td&gt;Una palabra de píxeles por ↓&lt;/td&gt;&lt;td&gt;Píxeles D0 / D1&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#FFFFFF&quot;&gt;&lt;td&gt;↓1082&lt;/td&gt;&lt;td&gt;HS, SOT_EN=0&lt;/td&gt;&lt;td&gt;W1082 = CRC; tras ↓ sube PK_DONE&lt;/td&gt;&lt;td&gt;CRC_L / CRC_H&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr style=&quot;background:#EBEFF3&quot;&gt;&lt;td&gt;↓1083&lt;/td&gt;&lt;td&gt;Fuera de HS (propuesta)&lt;/td&gt;&lt;td&gt;Sin palabra; CNT vuelve a 0&lt;/td&gt;&lt;td&gt;00 / 00 (sin datos)&lt;/td&gt;&lt;/tr&gt;
+          &lt;/table&gt;
+          &lt;div style=&quot;margin-top:9px;line-height:1.35&quot;&gt;
+            &lt;b&gt;Integración:&lt;/b&gt; LINK_FSM lee PK_DONE en ↑ entre ↓1082 y ↓1083. PK_START y PK_DONE no son puertos de PHY_IF. Cuándo lee el PHY y cómo cierra tras el CRC (EoT/T_TRAIL) quedan abiertos.&lt;br&gt;
+            &lt;b&gt;Muestreo:&lt;/b&gt; ambos registros capturan lo estable antes de ↓ y mantienen las salidas hasta el siguiente ↓. Si LP_TX cambia LP_D0 en ↓, el nuevo símbolo se captura en el ↓ siguiente.&lt;br&gt;
+            &lt;b&gt;Reset propuesto:&lt;/b&gt; RST_BYTE síncrono, activo en 1 y prioritario al ↓; LP11 en los tres pares y 00 / 00 en HS. No es PANEL_RST ni una habilitación de drivers.
+          &lt;/div&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F2F7FA;strokeColor=#A9B8C1;strokeWidth=1.5;align=left;verticalAlign=top;spacing=0;spacingTop=12;spacingLeft=14;spacingRight=14;fontColor=#20313F;fontSize=16;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="708" y="700" width="924" height="414" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
