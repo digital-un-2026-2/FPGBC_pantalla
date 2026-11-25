@@ -1,0 +1,49 @@
+[*] HS_PACKER: captura en negedge; PK_DONE se lee en posedge.
+[timestart] 0
+[size] 1400 850
+*-16.000000 0
+[treeopen] hs_packer_TB.
+[treeopen] hs_packer_TB.dut.
+[signals_width] 270
+[sst_width] 220
+[sst_expanded] 1
+@28
+hs_packer_TB.CLK_BYTE
+hs_packer_TB.RST_BYTE
+@800200
+-CONTROL DEL PAQUETE
+@28
+hs_packer_TB.PK_START
+hs_packer_TB.PK_DONE
+hs_packer_TB.dut.CNT_EN
+@24
+hs_packer_TB.dut.CNT[10:0]
+@28
+hs_packer_TB.dut.SEL_WORD[1:0]
+@1000200
+-CONTROL DEL PAQUETE
+@800200
+-PIXEL Y CRC
+@28
+hs_packer_TB.VID_RD
+hs_packer_TB.dut.CRC_CLR
+@24
+hs_packer_TB.lecturas[31:0]
+@22
+hs_packer_TB.VID_WORD[15:0]
+hs_packer_TB.dut.HDR_WORD[15:0]
+hs_packer_TB.dut.CRC_WORD[15:0]
+@1000200
+-PIXEL Y CRC
+@800200
+-CAPTURA DEL MODELO PHY_IF
+@28
+hs_packer_TB.sot_en
+hs_packer_TB.captura_word
+@22
+hs_packer_TB.WORD[15:0]
+hs_packer_TB.palabra_phy[15:0]
+@24
+hs_packer_TB.capturas[31:0]
+@1000200
+-CAPTURA DEL MODELO PHY_IF
