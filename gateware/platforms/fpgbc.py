@@ -8,6 +8,9 @@ _io = [
     ("clk40", 0, Pins("11"), IOStandard("LVCMOS33")),
     # Misma entrada de reset de FPGBC_digital_UN/soc/FPGBC_unal_platform.py.
     ("global_rst_n", 0, Pins("120"), IOStandard("LVCMOS33"), Misc("PULL_MODE=UP")),
+    # BANK5: LVCMOS33 candidato; el CSV identifica los pines, no mide VCCIO5.
+    ("backlight_en", 0, Pins("46"), IOStandard("LVCMOS33"), Misc("PULL_MODE=NONE")),
+    ("backlight_pwm", 0, Pins("47"), IOStandard("LVCMOS33"), Misc("PULL_MODE=NONE")),
     (
         "serial",
         0,
