@@ -6,6 +6,7 @@
 
 # Archivos de trabajo locales, no destinados a GitHub.
 /AGENTS.md
+/docs/reglas_diseno_rtl.md
 /ejemplo.drawio
 
 # Capturas locales del analizador; los bytes de inicialización están en la ROM.
