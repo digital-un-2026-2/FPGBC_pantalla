@@ -51,6 +51,7 @@
     prev_clock = CLK_HS_PAD[1];
   end
 
+`ifndef PHY_SUPERVISED
   task automatic cut_and_reset(input bit aborting);
     reg prev_byte, prev_hs;
     if (aborting) begin
@@ -91,6 +92,7 @@
       $fatal(1, "Hubo una reanudación de HS durante reset");
     RST_BYTE = 0;
   endtask
+`endif
 
   task automatic trace_slots(output integer first_lp01);
     reg [1:0] want_dat, want_clk;
@@ -224,6 +226,9 @@
              last_clock - data_off, clock_off - last_clock);
   endtask
 
+`ifdef PHY_SUPERVISED
+  `include "supervised_link.vh"
+`else
   initial begin : scenario
     string init_hex;
     integer first, second, restarted, previous_reads;
@@ -259,3 +264,4 @@
     #(2 * 272 * P * BYTE_PERIOD + 1_000_000);
     $fatal(1, "Tiempo agotado en la prueba de pads");
   end
+`endif
