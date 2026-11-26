@@ -180,20 +180,23 @@ incluidos `LVDS_OUT=ON`, `TRIMUX_PADDT=SIG` y `TO=SIG` en HS. Reportes:
 distinta de la [auditoría LP](../../docs/revision_io_lp.md), que exige
 `LVDS_OUT=OFF` para la rama HS aislada.
 
-**Resultado:** con nextpnr 0.11.1 pasan las dos variantes de P&R. En
-Apicula 0.32 los atributos de pulls, fusión y OEN dinámico se conservan,
-pero **`audit` falla en las dos variantes**. El codificador usa como
-fallback `BANK_VCCIO=1.2` para el banco 1, que solo tiene salidas
-TLVDS en la sonda, y lo aplica a sus seis pads HS. En LP codifica
-`DRIVE=UNKNOWN` a pesar del `DRIVE=8` del CST: la comprobación de
-tipo LVDS reutiliza el modo del último buffer de la primera pasada
-en lugar del modo del IOB actual. La lectura de estos atributos no
-cambia el VCCIO físico medido de 2,52 V. Una copia temporal del
-codificador que seleccionó el banco de salida según `LVDS25` y leyó
-el modo del IOB actual pasó las dos auditorías en memoria; no se usa
-como empaquetador del proyecto. Antes de habilitar el perfil en placa
-queda por aprobar un flujo que conserve esos atributos y validar la
-red eléctricamente.
+**Resultado:** con nextpnr 0.11.1 y el [adaptador de Apicula 0.32](tools/apicula_mixed.py)
+pasan P&R y `audit` en las dos variantes. Antes del adaptador, el
+codificador excluía las salidas LVDS al seleccionar la tensión,
+aplicaba el fallback de 1,2 V al banco 1 y a sus seis pads HS, y
+reemplazaba `DRIVE=8` por `UNKNOWN` al consultar en LP el último modo
+de la primera pasada (`TLVDS_TBUF`).
+
+El adaptador verifica la versión y la huella de `gowin_pack.py` y
+aplica dos cambios a `place()` en memoria: deduce la tensión del banco
+1 de sus tres salidas LVDS25 (el IBUF LVCMOS25 de reset no selecciona
+la tensión) y usa el modo de cada IOB para decidir cómo tratar `DRIVE`.
+Se instala solo durante la auditoría mixta. La auditoría contrasta los
+atributos con las claves enviadas a las tablas de Apicula, registra
+ambas mitades de cada par y verifica en el mapa final los bits
+seleccionados para cada pad y la unión de las dos consultas de cada
+banco. Una selección vacía de pad o de la tabla `BANK`, o una captura
+incompleta, hace fallar la auditoría.
 
 P&R y simulación verifican conectividad y selección digital. Para
 integración quedan la secuencia LP de CLK, el adelanto y el cierre

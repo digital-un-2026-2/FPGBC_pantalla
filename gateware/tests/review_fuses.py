@@ -1,6 +1,8 @@
 """Audita fusibles Apicula; solo serializa si se solicita -o y pasan los controles."""
 
 import argparse
+from collections import Counter
+from functools import partial
 from hashlib import sha256
 import inspect
 import json
@@ -8,7 +10,6 @@ from pathlib import Path
 import sys
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
-from collections import Counter
 
 from apycula import attrids, gowin_pack as pack
 from apycula import bitmatrix
@@ -18,6 +19,74 @@ from gateware.tests.review_io import BACKLIGHT_PINS, DEVICE, expected_bel, revie
 
 class _StopBeforeSerialization(Exception):
     pass
+
+
+def _register_used_bels(get_bels, data):
+    # Apicula 0.32 reprocesa como libres los pads sin registrar. También se
+    # registra N de un diferencial aunque place() lo configure desde P.
+    frame = inspect.currentframe().f_back
+    db = frame.f_locals.get("db")
+    if frame.f_code is not pack.place.__code__ or db is None:
+        raise ValueError("No se pudo identificar la base usada por place()")
+    for item in get_bels(data):
+        typ, row, col, num, *_ = item
+        if typ in {"IBUF", "OBUF", "TBUF", "IOBUF"}:
+            bank = pack.chipdb.loc2bank(db, row - 1, col - 1)
+            name = pack.rc2tbrl(db, row, col, num)
+            pack._banks.setdefault(bank, pack.BankDesc(None, set())).bels.add(name)
+        yield item
+
+
+def verify_iob_encoding(db, effective, attributes):
+    encoded = set()
+    for name, value in effective.items():
+        if name in attrids.iob_attrids:
+            pack.add_attr_val(db, "IOB", encoded, attrids.iob_attrids[name],
+                              attrids.iob_attrvals[value])
+    if encoded != attributes:
+        raise ValueError("Los atributos observados no coinciden con los que codificó Apicula")
+
+
+def fuses_present(tile, bits):
+    return all(tile[row][col] == 1 for row, col in bits)
+
+
+def pack_to_tilemap(path):
+    """Ejecuta el packer con los observadores instalados hasta el mapa en memoria."""
+    final = {}
+
+    def stop(db, tilemap):
+        local = inspect.currentframe().f_back.f_locals
+        final.update(db=db, tilemap=tilemap, extra_slots=local["extra_slots"])
+        raise _StopBeforeSerialization
+
+    def forbid(*args, **kwargs):
+        raise RuntimeError("La auditoría no permite escribir un bitstream")
+
+    temp_base = Path("/tmp/opencode")
+    with TemporaryDirectory(prefix="fpgbc-fuse-review-",
+                            dir=temp_base if temp_base.is_dir() else None) as temp:
+        suppressed = Path(temp) / "NO_GENERAR.fs"
+        with (
+            patch.object(sys, "argv", ["review", str(path), "-d", "GW2A-18C",
+                                       "-o", str(suppressed)]),
+            patch.object(pack, "get_bels", new=partial(_register_used_bels, pack.get_bels)),
+            patch.object(pack, "_banks", {}),
+            patch.object(pack, "_io_bels", {}),
+            patch.object(pack, "_pip_bels", []),
+            patch.object(pack, "adc_iolocs", {}),
+            patch.object(pack, "_used_ihclk_wires", set()),
+            patch.object(pack.chipdb, "fuse_bitmap", new=stop),
+            patch.object(pack.bslib, "write_bitstream", new=forbid),
+            patch.object(pack.bslib, "write_bitstream_with_bsram_init", new=forbid),
+        ):
+            try:
+                pack.main()
+            except _StopBeforeSerialization:
+                pass
+        if not final or suppressed.exists():
+            raise RuntimeError("No se detuvo correctamente antes de serializar")
+    return final
 
 
 def validate_input(design):
@@ -79,25 +148,8 @@ def probe(path, output=None):
     path = Path(path).resolve()
     source = path.read_bytes()
     pinout = validate_input(json.loads(source))
-    captures, final = {}, {}
+    captures = {}
     original = pack.get_longval_fuses
-    original_bels = pack.get_bels
-
-    def marked_bels(data):
-        # Workaround local y reproducible: el packer instalado no registra los
-        # pads usados en _banks[].bels. Su bucle de "unused" vuelve a tocarlos.
-        # Este generador se consume desde place(), donde se dispone de su db.
-        frame = inspect.currentframe().f_back
-        db = frame.f_locals.get("db")
-        if db is None:
-            raise ValueError("No se pudo identificar la base usada por place()")
-        for item in original_bels(data):
-            typ, row, col, num, *_ = item
-            if typ in {"IBUF", "OBUF", "TBUF", "IOBUF"}:
-                bank = pack.chipdb.loc2bank(db, row - 1, col - 1)
-                name = pack.rc2tbrl(db, row, col, num)
-                pack._banks.setdefault(bank, pack.BankDesc(None, set())).bels.add(name)
-            yield item
 
     def trace(db, tile_type, attributes, table):
         bits = original(db, tile_type, attributes, table)
@@ -121,13 +173,7 @@ def probe(path, output=None):
         if key not in locations:
             return bits
         # Evitar confundir variables residuales del bucle de pines no usados.
-        encoded = set()
-        for name, value in effective.items():
-            if name in attrids.iob_attrids:
-                pack.add_attr_val(db, "IOB", encoded, attrids.iob_attrids[name],
-                                  attrids.iob_attrvals[value])
-        if encoded != attributes:
-            raise ValueError("Apicula cambió la interfaz de los atributos de pad")
+        verify_iob_encoding(db, effective, attributes)
         if key in captures:
             raise ValueError(f"El packer reescribió un pad esperado: {key}")
         number, port, index = locations[key]
@@ -137,44 +183,14 @@ def probe(path, output=None):
         }
         return bits
 
-    def stop(db, tilemap):
-        local = inspect.currentframe().f_back.f_locals
-        final.update(db=db, tilemap=tilemap, extra_slots=local["extra_slots"])
-        raise _StopBeforeSerialization
-
-    def forbid(*args, **kwargs):
-        raise RuntimeError("La auditoría no permite escribir un bitstream")
-
-    # Se detiene después de place(), routing y constantes, antes de formar el
-    # mapa serializado. Como defensa adicional, bloquear todos los escritores.
-    temp_base = Path("/tmp/opencode")
-    with TemporaryDirectory(prefix="fpgbc-fuse-review-",
-                            dir=temp_base if temp_base.is_dir() else None) as temp:
-        suppressed = Path(temp) / "NO_GENERAR.fs"
-        with (
-            patch.object(sys, "argv", ["review", str(path), "-d", "GW2A-18C",
-                                       "-o", str(suppressed)]),
-            patch.object(pack, "get_longval_fuses", new=trace),
-            patch.object(pack, "get_bels", new=marked_bels),
-            patch.object(pack.chipdb, "fuse_bitmap", new=stop),
-            patch.object(pack.bslib, "write_bitstream", new=forbid),
-            patch.object(pack.bslib, "write_bitstream_with_bsram_init", new=forbid),
-        ):
-            try:
-                pack.main()
-            except _StopBeforeSerialization:
-                pass
-        if not final or suppressed.exists():
-            raise RuntimeError("No se detuvo correctamente antes de serializar")
+    with patch.object(pack, "get_longval_fuses", new=trace):
+        final = pack_to_tilemap(path)
 
     pads = []
     for (row, col, _), captured in captures.items():
         entry = {key: value for key, value in captured.items() if key != "fuses"}
         entry["selected_fuse_count"] = len(captured["fuses"])
-        entry["selected_fuses_present"] = all(
-            final["tilemap"][row, col][bit_row][bit_col] == 1
-            for bit_row, bit_col in captured["fuses"]
-        )
+        entry["selected_fuses_present"] = fuses_present(final["tilemap"][row, col], captured["fuses"])
         pads.append(entry)
     pads.sort(key=lambda entry: entry["pin"])
     errors = validate_attributes(pads, pinout)
