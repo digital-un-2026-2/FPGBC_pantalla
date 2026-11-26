@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram id="hs-serializer-datapath" name="Datapath">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="1" pageScale="1" pageWidth="1840" pageHeight="1264" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="HS_SERIALIZER — datapath de un carril" style="text;html=1;align=left;verticalAlign=middle;spacing=0;fontSize=32;fontStyle=1;fontColor=#20313F;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="22" width="1700" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Propuesta para SERIALIZER_D0 y SERIALIZER_D1 · GW2AR-LV18EQ144PC8/I7 · perfil 55/220 MHz" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#344654;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="72" width="1120" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="Un color por señal · trazo fino: 1 bit · grueso: bus" style="text;html=1;align=right;spacing=0;fontSize=16;fontColor=#344654;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1262" y="72" width="540" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="ser" value="HS_SERIALIZER" style="container=1;collapsible=0;recursiveResize=0;rounded=0;html=1;fillColor=#F7F9FA;strokeColor=#8798A4;strokeWidth=1.5;dashed=1;dashPattern=3 4;align=left;verticalAlign=top;spacing=0;spacingLeft=16;spacingTop=9;fontSize=23;fontStyle=1;fontColor=#20313F;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="290" y="120" width="1190" height="520" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy-if" value="&lt;b style=&quot;font-size:21px&quot;&gt;PHY_IF&lt;/b&gt;&lt;br&gt;Registro en ↓CLK_BYTE" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F3F2DB;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=9;fontColor=#20313F;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="32" y="166" width="200" height="108" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy-if-out" value="HS_BYTEx[7:0]" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#267744;" vertex="1" connectable="0" parent="phy-if">
+          <mxGeometry x="12" y="68" width="175" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctrl" value="&lt;b style=&quot;font-size:21px&quot;&gt;PHY_CTRL&lt;/b&gt;&lt;br&gt;Modo desde ↑CLK_BYTE" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#D8EAF0;strokeColor=#3B505C;strokeWidth=2;spacing=0;fontColor=#20313F;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="32" y="288" width="200" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctrl-mode" value="SER_MODE[1:0]" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#694999;" vertex="1" connectable="0" parent="ctrl">
+          <mxGeometry x="12" y="0" width="175" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctrl-iso" value="ISO" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#A62E63;" vertex="1" connectable="0" parent="ctrl">
+          <mxGeometry x="112" y="132" width="75" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="reset-terminal" style="ellipse;aspect=fixed;fillColor=#FFFFFF;strokeWidth=2;strokeColor=#556477;" vertex="1" parent="1">
+          <mxGeometry x="217" y="469" width="10" height="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="reset-terminal-label" value="RST_BYTE" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#556477;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="462" width="175" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock-gen" value="CLOCK_GEN" style="rounded=0;html=1;fillColor=#E5F0E2;strokeColor=#3B505C;strokeWidth=2;verticalAlign=bottom;spacing=0;spacingBottom=8;fontColor=#20313F;fontSize=21;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="32" y="505" width="200" height="124" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock-gen-byte" value="CLK_BYTE" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#235F9A;" vertex="1" connectable="0" parent="clock-gen">
+          <mxGeometry x="12" y="13" width="175" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock-gen-hs" value="CLK_HS" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#137587;" vertex="1" connectable="0" parent="clock-gen">
+          <mxGeometry x="12" y="63" width="175" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="drivers" value="&lt;b style=&quot;font-size:21px&quot;&gt;HS_DRIVERS&lt;/b&gt;&lt;br&gt;OE físico fuera&lt;br&gt;del serializador" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F3F2DB;strokeColor=#3B505C;strokeWidth=2;verticalAlign=bottom;spacing=0;spacingBottom=16;fontColor=#20313F;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="225" width="252" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="drivers-in" value="HS_D" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#3D4184;" vertex="1" connectable="0" parent="drivers">
+          <mxGeometry x="13" y="32" width="132" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="drivers-note" value="Instancia D0: HS_D → HS_D0&lt;br&gt;Instancia D1: HS_D → HS_D1" style="text;html=1;whiteSpace=wrap;align=left;spacing=0;fontSize=16;fontColor=#344654;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1550" y="412" width="252" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="mux" value="&lt;b style=&quot;font-size:21px&quot;&gt;MUX DE SLOT&lt;/b&gt;&lt;br&gt;Combinacional" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#E9E4F4;strokeColor=#3B505C;strokeWidth=2;verticalAlign=bottom;spacing=0;spacingBottom=10;fontColor=#20313F;fontSize=16;" vertex="1" parent="ser">
+          <mxGeometry x="60" y="90" width="300" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="mux-byte" value="HS_BYTE[7:0]" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#267744;" vertex="1" connectable="0" parent="mux">
+          <mxGeometry x="12" y="24" width="145" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="mux-mode" value="SER_MODE[1:0]" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#694999;" vertex="1" connectable="0" parent="mux">
+          <mxGeometry x="12" y="78" width="155" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="mux-last" value="LAST_BIT" style="text;html=1;align=center;spacing=0;fontSize=17;fontColor=#936515;" vertex="1" connectable="0" parent="mux">
+          <mxGeometry x="100" y="4" width="100" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="mux-slot" value="SLOT_D[8:0]" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#985329;" vertex="1" connectable="0" parent="mux">
+          <mxGeometry x="160" y="47" width="128" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="capture" value="&lt;b style=&quot;font-size:21px&quot;&gt;REGISTRO DE SLOT&lt;/b&gt;&lt;br&gt;9 bits · ↓CLK_BYTE · CE = 1&lt;br&gt;RST_SER = 1 asíncrono → todos a 0" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#E5F0E2;strokeColor=#3B505C;strokeWidth=2;verticalAlign=bottom;spacing=0;spacingBottom=32;fontColor=#20313F;fontSize=16;" vertex="1" parent="ser">
+          <mxGeometry x="460" y="90" width="310" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="capture-in" value="SLOT_D[8:0]" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#985329;" vertex="1" connectable="0" parent="capture">
+          <mxGeometry x="12" y="47" width="129" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="capture-q" value="SLOT_Q[7:0]" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#186A62;" vertex="1" connectable="0" parent="capture">
+          <mxGeometry x="170" y="47" width="128" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="capture-last" value="LAST_BIT (bit 8)" style="text;html=1;align=center;spacing=0;fontSize=17;fontColor=#936515;" vertex="1" connectable="0" parent="capture">
+          <mxGeometry x="80" y="4" width="150" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="capture-reset" value="RST_SER" style="text;html=1;align=center;spacing=0;fontSize=17;fontColor=#A7303D;" vertex="1" connectable="0" parent="capture">
+          <mxGeometry x="20" y="161" width="100" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="capture-clock" value="CLK_BYTE" style="text;html=1;align=center;spacing=0;fontSize=17;fontColor=#235F9A;" vertex="1" connectable="0" parent="capture">
+          <mxGeometry x="157" y="161" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="oser" value="&lt;b style=&quot;font-size:21px&quot;&gt;OSER8 · IOLOGIC&lt;/b&gt;&lt;br&gt;Carga ↑PCLK · Q0 DDR, pin D0 primero&lt;br&gt;HWL=false · LSREN=true · GSREN=false&lt;br&gt;TX0…TX3 a 0 · Q1 libre" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#DBEDF1;strokeColor=#3B505C;strokeWidth=2;verticalAlign=bottom;spacing=0;spacingBottom=32;fontColor=#20313F;fontSize=16;" vertex="1" parent="ser">
+          <mxGeometry x="860" y="90" width="310" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="oser-d" value="D[7:0] · Dk = SLOT_Q[k]" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#186A62;" vertex="1" connectable="0" parent="oser">
+          <mxGeometry x="12" y="47" width="217" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="oser-q" value="Q0" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#3D4184;" vertex="1" connectable="0" parent="oser">
+          <mxGeometry x="228" y="47" width="70" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="oser-reset" value="RESET" style="text;html=1;align=center;spacing=0;fontSize=17;fontColor=#A7303D;" vertex="1" connectable="0" parent="oser">
+          <mxGeometry x="25" y="161" width="70" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="oser-pclk" value="PCLK" style="text;html=1;align=center;spacing=0;fontSize=17;fontColor=#235F9A;" vertex="1" connectable="0" parent="oser">
+          <mxGeometry x="125" y="161" width="70" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="oser-fclk" value="FCLK" style="text;html=1;align=center;spacing=0;fontSize=17;fontColor=#137587;" vertex="1" connectable="0" parent="oser">
+          <mxGeometry x="215" y="161" width="70" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="reset" value="&lt;b style=&quot;font-size:21px&quot;&gt;OR DE RESET&lt;/b&gt;&lt;br&gt;Activo en 1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F7E7E8;strokeColor=#3B505C;strokeWidth=2;verticalAlign=top;spacing=0;spacingTop=12;fontColor=#20313F;fontSize=16;" vertex="1" parent="ser">
+          <mxGeometry x="60" y="285" width="300" height="94" as="geometry"/>
+        </mxCell>
+        <mxCell id="reset-iso" value="ISO" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#A62E63;" vertex="1" connectable="0" parent="reset">
+          <mxGeometry x="12" y="15" width="75" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="reset-rst" value="RST_BYTE" style="text;html=1;align=left;spacing=0;fontSize=17;fontColor=#556477;" vertex="1" connectable="0" parent="reset">
+          <mxGeometry x="12" y="57" width="108" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="reset-out" value="RST_SER" style="text;html=1;align=right;spacing=0;fontSize=17;fontColor=#A7303D;" vertex="1" connectable="0" parent="reset">
+          <mxGeometry x="209" y="33" width="79" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="dot-reset" style="ellipse;aspect=fixed;strokeColor=#A7303D;fillColor=#A7303D;" vertex="1" parent="ser">
+          <mxGeometry x="526" y="326" width="8" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="dot-byte" style="ellipse;aspect=fixed;strokeColor=#235F9A;fillColor=#235F9A;" vertex="1" parent="ser">
+          <mxGeometry x="673" y="406" width="8" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="byte-in" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#267744;strokeWidth=3.4;exitX=1;exitY=0.740741;exitPerimeter=0;entryX=0;entryY=0.225;entryPerimeter=0;" edge="1" parent="1" source="phy-if" target="mux">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="mode-in" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#694999;strokeWidth=3.4;exitX=1;exitY=0.073171;exitPerimeter=0;entryX=0;entryY=0.5625;entryPerimeter=0;" edge="1" parent="1" source="ctrl" target="mux">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="last-feedback" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#936515;strokeWidth=1.8;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="ser" source="capture" target="mux">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="60"/>
+              <mxPoint x="210" y="60"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="slot-d" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#985329;strokeWidth=3.4;exitX=1;exitY=0.36875;exitPerimeter=0;entryX=0;entryY=0.310526;entryPerimeter=0;" edge="1" parent="ser" source="mux" target="capture">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="slot-q" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#186A62;strokeWidth=3.4;exitX=1;exitY=0.310526;exitPerimeter=0;entryX=0;entryY=0.310526;entryPerimeter=0;" edge="1" parent="ser" source="capture" target="oser">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="serial-out" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#3D4184;strokeWidth=1.8;exitX=1;exitY=0.310526;exitPerimeter=0;entryX=0;entryY=0.258824;entryPerimeter=0;" edge="1" parent="1" source="oser" target="drivers">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="iso-in" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#A62E63;strokeWidth=1.8;exitX=1;exitY=0.878049;exitPerimeter=0;entryX=0;entryY=0.287234;entryPerimeter=0;" edge="1" parent="1" source="ctrl" target="reset">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rst-in" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#556477;strokeWidth=1.8;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.734043;entryPerimeter=0;" edge="1" parent="1" source="reset-terminal" target="reset">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rst-to-dot" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=none;strokeColor=#A7303D;strokeWidth=1.8;exitX=1;exitY=0.478723;exitPerimeter=0;entryX=0.5;entryY=0.5;entryPerimeter=0;" edge="1" parent="ser" source="reset" target="dot-reset">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rst-reg" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#A7303D;strokeWidth=1.8;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.225806;entryY=1;entryPerimeter=0;" edge="1" parent="ser" source="dot-reset" target="capture">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rst-oser" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#A7303D;strokeWidth=1.8;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.193548;entryY=1;entryPerimeter=0;" edge="1" parent="ser" source="dot-reset" target="oser">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="330"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byte-to-dot" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=none;strokeColor=#235F9A;strokeWidth=1.8;exitX=1;exitY=0.201613;exitPerimeter=0;entryX=0.5;entryY=0.5;entryPerimeter=0;" edge="1" parent="1" source="clock-gen" target="dot-byte">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="byte-reg" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#235F9A;strokeWidth=1.8;jumpStyle=gap;jumpSize=9;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.7;entryY=1;entryPerimeter=0;" edge="1" parent="ser" source="dot-byte" target="capture">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="byte-oser" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#235F9A;strokeWidth=1.8;exitX=0.5;exitY=0.5;exitPerimeter=0;entryX=0.516129;entryY=1;entryPerimeter=0;" edge="1" parent="ser" source="dot-byte" target="oser">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1020" y="410"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hs-oser" style="edgeStyle=segmentEdgeStyle;rounded=0;endArrow=block;endSize=8;endFill=1;strokeColor=#137587;strokeWidth=1.8;exitX=1;exitY=0.604839;exitPerimeter=0;entryX=0.806452;entryY=1;entryPerimeter=0;" edge="1" parent="1" source="clock-gen" target="oser">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1400" y="580"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mode-note" value="&lt;b&gt;SLOT_D[8:0] = {último bit guardado, patrón[7:0]}&lt;/b&gt; · 00 OFF / 01 ZERO: {0, 00h} · 10 WORD: {HS_BYTE[7], HS_BYTE[7:0]}&lt;br&gt;11 TRAIL: {LAST_BIT, 8 repeticiones de ¬LAST_BIT} · ISO tiene prioridad: borra la carga incluso sin reloj." style="text;html=1;whiteSpace=wrap;align=left;spacing=0;fontSize=17;fontColor=#20313F;" vertex="1" connectable="0" parent="ser">
+          <mxGeometry x="60" y="472" width="1110" height="41" as="geometry"/>
+        </mxCell>
+        <mxCell id="table" value="&lt;b style=&quot;font-size:22px&quot;&gt;Flancos de consumo y emisión&lt;/b&gt;&lt;br&gt;Pᵢ = ↑PCLK que sigue a ↓i de CLK_BYTE. Fᵢ = ↑FCLK que inicia el slot en Q0 tras la latencia interna; Fᵢ₊₁ − Fᵢ = Tbyte.&lt;table style=&quot;border-collapse:collapse;margin-top:7px;width:1725px;table-layout:fixed&quot; cellpadding=&quot;4&quot;&gt;
+          &lt;tr style=&quot;background:#DDE8EC;&quot;&gt;&lt;th width=&quot;16%&quot; align=&quot;left&quot;&gt;CLK_BYTE&lt;/th&gt;&lt;th width=&quot;22%&quot; align=&quot;left&quot;&gt;PHY_IF publica tras ↓&lt;/th&gt;&lt;th width=&quot;23%&quot; align=&quot;left&quot;&gt;Captura lógica en ↓&lt;/th&gt;&lt;th width=&quot;7%&quot; align=&quot;left&quot;&gt;Carga&lt;/th&gt;&lt;th align=&quot;left&quot;&gt;Q0 en Fᵢ + j·UI, j = 0…7&lt;/th&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;↓−1&lt;/td&gt;&lt;td&gt;SoT B8/B8&lt;/td&gt;&lt;td&gt;ZERO, no captura dato&lt;/td&gt;&lt;td&gt;P₋₁&lt;/td&gt;&lt;td&gt;Nivel HS-0 por carril&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr style=&quot;background:#EAF1F5;&quot;&gt;&lt;td&gt;↓0&lt;/td&gt;&lt;td&gt;W0: 3E/70&lt;/td&gt;&lt;td&gt;WORD: SoT (registro previo)&lt;/td&gt;&lt;td&gt;P₀&lt;/td&gt;&lt;td&gt;0 0 0 1 1 1 0 1 en D0 y D1&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;↓1&lt;/td&gt;&lt;td&gt;W1: 08/13&lt;/td&gt;&lt;td&gt;WORD: W0&lt;/td&gt;&lt;td&gt;P₁&lt;/td&gt;&lt;td&gt;W0 b0…b7, contiguo a SoT&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr style=&quot;background:#EAF1F5;&quot;&gt;&lt;td&gt;↓2…↓1081&lt;/td&gt;&lt;td&gt;W2…W1081: píxeles&lt;/td&gt;&lt;td&gt;WORD: W1…W1080&lt;/td&gt;&lt;td&gt;Pᵢ&lt;/td&gt;&lt;td&gt;b0…b7 de cada byte; ↑ para j par y ↓ para j impar&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;↓1082&lt;/td&gt;&lt;td&gt;W1082: CRC bajo/alto&lt;/td&gt;&lt;td&gt;WORD: W1081, últimos píxeles&lt;/td&gt;&lt;td&gt;P₁₀₈₂&lt;/td&gt;&lt;td&gt;Últimos píxeles b0…b7&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr style=&quot;background:#EAF1F5;&quot;&gt;&lt;td&gt;↓1083&lt;/td&gt;&lt;td&gt;00/00 sin dato · HS_REQ bajo&lt;/td&gt;&lt;td&gt;WORD: CRC y su b7 por carril&lt;/td&gt;&lt;td&gt;P₁₀₈₃&lt;/td&gt;&lt;td&gt;CRC b0…b7, ocho UI completos en Q0&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;↓1084…&lt;/td&gt;&lt;td&gt;Sin dato&lt;/td&gt;&lt;td&gt;TRAIL, no captura del packer&lt;/td&gt;&lt;td&gt;Pᵢ&lt;/td&gt;&lt;td&gt;Nivel ¬LAST_BIT, desde el UI siguiente al CRC&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr style=&quot;background:#EAF1F5;&quot;&gt;&lt;td&gt;↓(1084 + T_TRAIL)&lt;/td&gt;&lt;td&gt;Sin dato&lt;/td&gt;&lt;td&gt;OFF, fin del trail lógico&lt;/td&gt;&lt;td&gt;Pᵢ&lt;/td&gt;&lt;td&gt;Relleno 0; el cierre del OE es externo&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="rounded=0;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacing=13;fillColor=#F5F8FA;strokeColor=#8798A4;fontSize=17;fontColor=#20313F;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="659" width="1770" height="339" as="geometry"/>
+        </mxCell>
+        <mxCell id="timing-note" value="&lt;b style=&quot;font-size:21px&quot;&gt;Latencia y habilitación&lt;/b&gt;&lt;br&gt;UI ≈ 2,273 ns · T&lt;sub&gt;byte&lt;/sub&gt; ≈ 18,182 ns. ↓i → Pᵢ: 9,091 ns nominales.&lt;br&gt;GW2A prim_sim (HWL=false): Pᵢ → Fᵢ de 5 a 8 ciclos FCLK con subidas nominales coincidentes, según la fase tras reset. δ = Fᵢ − ↓i ≈ 31,82…45,45 ns en ese modelo.&lt;br&gt;Si el OE se cierra en ↓(1084 + T_TRAIL), quedan T_TRAIL·T&lt;sub&gt;byte&lt;/sub&gt; − δ de trail. Con 1 slot se trunca el CRC; con 4 quedan 27,27…40,91 ns.&lt;br&gt;Mínimo D-PHY forward: ≈69,09 ns. Siete slots cubren el ejemplo nominal. Falta validar δ y acordar la ventana física de salida; ISO corta aparte." style="rounded=0;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacing=13;fillColor=#F6F0E6;strokeColor=#AD9270;fontColor=#20313F;fontSize=17;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="1017" width="866" height="209" as="geometry"/>
+        </mxCell>
+        <mxCell id="routing-note" value="&lt;b style=&quot;font-size:21px&quot;&gt;Bank 1 · dos destinos simultáneos&lt;/b&gt;&lt;br&gt;D0 117/116 (IOT40A/B, X39Y0) · D1 115/114 (IOT42A/B, X41Y0).&lt;br&gt;Cotejo estático: CLKOUTD → GCLK → CLK0 (PCLK); CLKOUT → HCLK superior, sección 1 → HCLK_OUT1 → FCLKA. Los dos sitios admiten esas entradas dedicadas.&lt;br&gt;PR #13 solo llegó a CLKDIV de la sección 0. Falta enrutar los dos OSER8 juntos y comprobar setup/hold, fase PCLK/FCLK y liberación del reset común en ambos sitios." style="rounded=0;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacing=13;fillColor=#EEF3F7;strokeColor=#8BA1B2;fontColor=#20313F;fontSize=17;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="920" y="1017" width="882" height="209" as="geometry"/>
+        </mxCell>
+        <mxCell id="refs" value="Contrato: MIPI_PHY_bloques.pdf · Gowin UG289 §4.3.4 / DS226 tabla 3-17 · Tektronix D-PHY MOI, pruebas 1.3.3 y 1.3.13" style="text;html=1;align=left;spacing=0;fontSize=15;fontColor=#344654;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="32" y="1233" width="1770" height="21" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
