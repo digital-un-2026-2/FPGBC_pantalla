@@ -30,7 +30,9 @@ module rPLL #(
   reg OSC_HS = 0, OSC_BYTE = 0;
   integer DIV_COUNT = 0;
   reg DROP_LOCK = 0;  // Inyección de estado crudo, no un detector de reloj.
+  reg HOLD_LOCK_HIGH = 0;  // Mantener LOCK alto incluso mientras el banco verifica el corte.
   reg PAUSE_OUTPUTS = 0;  // Fallo de prueba: parar ambos relojes conservando LOCK.
+  reg PAUSE_BYTE = 0;  // Fallo de prueba: parar solo CLKOUTD.
   wire RUNNING = (REF_EDGES != 0);
 
   initial begin
@@ -61,7 +63,7 @@ module rPLL #(
       OSC_BYTE <= 0;
       DIV_COUNT <= 0;
     end else if (DIV_COUNT == DYN_SDIV_SEL / 2 - 1) begin
-      OSC_BYTE <= !OSC_BYTE;
+      if (!PAUSE_BYTE) OSC_BYTE <= !OSC_BYTE;
       DIV_COUNT <= 0;
     end else begin
       DIV_COUNT <= DIV_COUNT + 1;
@@ -70,7 +72,7 @@ module rPLL #(
 
   assign CLKOUT = RUNNING && OSC_HS;
   assign CLKOUTD = RUNNING && OSC_BYTE;
-  assign LOCK = REF_EDGES == 4 && !DROP_LOCK;
+  assign LOCK = HOLD_LOCK_HIGH || (REF_EDGES == 4 && !DROP_LOCK);
   assign CLKOUTP = 1'bx;
   assign CLKOUTD3 = 1'bx;
 endmodule

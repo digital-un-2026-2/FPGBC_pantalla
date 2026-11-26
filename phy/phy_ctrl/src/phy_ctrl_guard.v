@@ -1,5 +1,5 @@
-// Corte físico propuesto sin CLK_BYTE y estado sincronizado para la lógica.
-// LOCK_RAW debe caer de forma fiable aunque el generador deje de dar flancos.
+// Corte físico sin CLK_BYTE y estado sincronizado para la lógica.
+// El supervisor aserta RST_BYTE si faltan flancos aunque LOCK_RAW quede alto.
 module phy_ctrl_guard #(
     parameter [2:0] SAFE_STATE = 3'b000
 ) (

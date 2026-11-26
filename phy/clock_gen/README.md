@@ -142,11 +142,11 @@ no demuestra la presencia de flancos en los consumidores.
 
 | Momento | Comportamiento propuesto |
 |---|---|
-| Arranque o recuperación con referencia inestable | El futuro supervisor mantiene `RST_BYTE=1` y la salida física inhibida. Con `CLK_REF` estabilizado, aplica `RESET=1` a la PLL durante al menos 10 ns (DS226) y lo libera sin depender de `CLK_BYTE` ni de `LOCK`. No se admite tráfico ni se cuenta con flancos válidos durante el reinicio de la PLL. |
+| Arranque o recuperación con referencia inestable | El [supervisor](../phy_supervisor/README.md) mantiene `RST_BYTE=1` y la salida física inhibida. Con `CLK_REF` estabilizado, mantiene cumplido el mínimo de 10 ns de `RESET=1` de la PLL (DS226) y lo libera sin depender de `CLK_BYTE` ni de `LOCK`. No se admite tráfico ni se cuenta con flancos válidos durante el reinicio de la PLL. |
 | Adquisición | Mantener `RST_BYTE=1` mientras se comprueba actividad de `CLK_BYTE` y se observa `LOCK_RAW` alto estable durante ≥2 ms. No esperar al `LOCK` de `PHY_CTRL` para liberar el reset ni realimentar `!LOCK` al reset de la PLL. |
 | Flancos válidos | Con `LOCK_RAW` ya estable, sostener `RST_BYTE=1` en al menos un `↑` válido y el `↓` siguiente, luego liberarlo cumpliendo setup/hold. `PHY_CTRL` cualifica su `LOCK` en dos `↓`; eso no sustituye los 2 ms. El rearme requiere reset observado y peticiones en reposo; no reanuda la transacción abortada. |
 | Reset lógico normal | `RST_BYTE` no reinicia la PLL. `CLK_BYTE` sigue corriendo en reposo y durante ese reset si la referencia y la PLL están operativas. Un reset físico de la PLL es distinto: no se prometen flancos durante su reinicio. |
-| Pérdida en servicio | `PHY_CTRL` puede cortar sin flancos si cae `LOCK_RAW` o se le aserta `RST_BYTE`, pero esto no protege si `LOCK_RAW` queda alto y se para un reloj. **Punto abierto de integración:** detectar ausencia de `CLK_REF`/`CLK_BYTE` desde una base de tiempo independiente, sostener el corte y garantizar el reset común al volver los flancos. No implementar esa protección en `CLOCK_GEN` ni confiarla al `LOCK` cualificado. |
+| Pérdida en servicio | `PHY_CTRL` corta sin flancos si cae `LOCK_RAW` o se le aserta `RST_BYTE`. Ante `LOCK_RAW` alto y un reloj detenido, el supervisor detecta la ausencia de `CLK_REF` o `CLK_BYTE` desde el oscilador independiente y aserta `RST_BYTE`. Su rearme garantiza el reset común al volver los flancos. |
 
 ## Pruebas de CLOCK_GEN
 
@@ -208,9 +208,9 @@ sumideros ni junto con sus `PCLK`.
 2. Decidir y validar el método de fase del reloj reenviado. Medir
    CLK/D0/D1, duty, jitter y niveles en la red real solo con revisión de
    E/S y autorización por separado.
-3. Cerrar la protección ante pérdida de referencia o parada de
-   `CLK_BYTE`, la cualificación al arrancar y la secuencia de rearme.
-   El ensayo no garantiza que `LOCK_RAW` caiga sin reloj.
+3. Conectar el supervisor al TOP para la protección ante pérdida de
+   referencia o parada de `CLK_BYTE`, la cualificación al arrancar y el
+   rearme. El ensayo de `CLOCK_GEN` no garantiza que `LOCK_RAW` caiga sin reloj.
 
 [pr12]: https://github.com/digital-un-2026-2/FPGBC_pantalla/blob/64b009ffc2f4cd6613ecbb7723dd0945f84227dc/phy/phy_ctrl/README.md
 [ds226]: https://cdn.gowinsemi.com.cn/DS226E.pdf

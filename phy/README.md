@@ -8,8 +8,9 @@ no continuo para el perfil candidato: 55 MHz de byte, 220 MHz de reloj HS,
 dos carriles de 440 Mbit/s y 1166 ciclos por línea. Configuración de
 `MIPI_TX`: `LP_DIV=6`, `T_CLK_START=27`, `T_LPX/PREP/ZERO/TRAIL=4/3/7/4`,
 `C_LINE=1166`. El TOP `phy` recibe `RESET` de PLL y `RST_BYTE` por separado.
-El target LP de LiteX conserva su propia inicialización y sus pads HS
-aislados.
+[`PHY_SUPERVISOR`](phy_supervisor/README.md) puede suministrar ambos resets
+desde una base de tiempo independiente. El target LP de LiteX conserva su
+propia inicialización y sus pads HS aislados.
 
 ## Simulación
 
@@ -84,9 +85,8 @@ la base del dispositivo y el codificador original y adaptado. Son
 resultados de empaquetado en memoria. La auditoría del target LP
 sigue usando el codificador original, también para backlight.
 
-Para el TOP de vídeo: cerrar primero el empaquetado HS y el supervisor
-de reloj/reset, con detección independiente de actividad y rearme seguro.
-Quedan por cerrar fase y red eléctrica. Después, integrar el TOP con el
-backlight existente y blanco fijo en `VIDEO_SOURCE`. Una línea blanca
+Para el TOP de vídeo: conectar el supervisor, coordinar el reset del panel
+y cerrar fase y red eléctrica. Integrar el backlight existente y blanco
+fijo en `VIDEO_SOURCE`. Una línea blanca
 correcta verifica el enlace modelado; aún hay que definir y validar el
 flujo de cuadro completo que acepte el panel.

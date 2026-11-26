@@ -4,15 +4,30 @@ module mipi_tx_TB #(
     parameter integer PROFILE = 0,
     parameter integer INIT_HZ = 55_000_000,
     parameter DELAY = 1'b0
+`ifdef PHY_SUPERVISED
+    , parameter integer OSC_HZ = 25_000_000
+`endif
 );
 `ifdef PHY_GOWIN
   localparam integer P = INIT_HZ / 1000;
   localparam realtime BYTE_PERIOD = 1000.0 / 55.0;
   localparam integer LP_DIV = 6, T_LPX = 4, T_PREP = 3, T_ZERO = 7,
                      T_TRAIL = 4, C_LINE = 1166, T_CLK_START = 27;
-  reg CLK_REF = 0, RESET = 1;
-  always #12.5 CLK_REF = !CLK_REF;
+  reg CLK_REF = 0;
   wire CLK_BYTE;
+`ifdef PHY_SUPERVISED
+  reg REF_ENABLED = 0, RST_SUP = 0, RST_LINK = 0;
+  wire RESET, RST_BYTE, LOCK_RAW;
+  always #12.5 if (REF_ENABLED) CLK_REF = !CLK_REF;
+  phy_supervisor supervisor (
+      .CLK_REF(CLK_REF), .CLK_BYTE(CLK_BYTE), .LOCK_RAW(LOCK_RAW),
+      .RST_SUP(RST_SUP), .RST_LINK(RST_LINK), .RESET(RESET), .RST_BYTE(RST_BYTE)
+  );
+  defparam supervisor.oscillator.TEST_HZ = OSC_HZ;
+`else
+  reg RESET = 1;
+  always #12.5 CLK_REF = !CLK_REF;
+`endif
 `else
   localparam integer P = (PROFILE == 0) ? 1 : 5;  // Ciclos de CLK_BYTE por ms simulado.
   localparam integer HALF_NS = 500_000 / P;
@@ -35,7 +50,9 @@ module mipi_tx_TB #(
   localparam integer CRC_TAKE = 1 + 2 + PIX_WORDS;  // Índice de consumo: SoT, W0, W1, PIX, CRC.
   localparam integer HS_WORDS = CRC_TAKE + 1, ABORT_READS = 17;
 
+`ifndef PHY_SUPERVISED
   reg RST_BYTE = 1;
+`endif
   integer cycle = 0;
   always @(negedge CLK_BYTE) cycle <= cycle + 1;
 
@@ -87,6 +104,9 @@ module mipi_tx_TB #(
   assign hs_activity = {D0_HS, D1_HS, CLK_HS_PAD} !== 6'bzzzzzz;
   phy #(.USE_IODELAY(DELAY), .STATIC_DELAY_TAPS(32)) phy (
       .CLK_REF(CLK_REF), .RESET(RESET), .RST_BYTE(RST_BYTE),
+`ifdef PHY_SUPERVISED
+      .LOCK_RAW(LOCK_RAW),
+`endif
       .HS_REQ(HS_REQ), .CLK_REQ(CLK_REQ), .CLK_BYTE(CLK_BYTE), .READY(READY), .LOCK(LOCK),
       .LP_P(LP_P), .LP_N(LP_N), .HS_BYTE0(HS_BYTE0), .HS_BYTE1(HS_BYTE1),
       .LP_D0_P(D0_LP[1]), .LP_D0_N(D0_LP[0]), .LP_D1_P(D1_LP[1]), .LP_D1_N(D1_LP[0]),

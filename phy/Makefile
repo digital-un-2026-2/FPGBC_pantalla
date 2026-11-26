@@ -4,7 +4,7 @@ GTKWAVE ?= gtkwave
 YOSYS ?= yosys
 NEXTPNR ?= yowasp-nextpnr-himbaechel-gowin
 PYTHON ?= python3
-BUILD_DIR ?= ../build/phy
+BUILD_DIR ?= $(if $(filter 1,$(SUPERVISED)),../build/phy_supervisor,../build/phy)
 INIT_HZ ?= 55000000
 SIM_DELAY ?= 0
 
@@ -26,8 +26,21 @@ SIM_LIB = local
 endif
 TB_TOP = mipi_tx_TB
 TB = $(MIPI)/TB/$(TB_TOP).v
+ifeq ($(SUPERVISED),1)
+OSC_HZ ?= 25000000
+SUPERVISOR_TB = phy_supervisor/TB
+SUPERVISOR_MODEL = $(SUPERVISOR_TB)/osc_model.v
+SUPERVISOR_DEPS = $(SUPERVISOR_TB)/supervised_link.vh $(SUPERVISOR_MODEL)
+SUPERVISOR_FLAGS = -DPHY_SUPERVISED -I$(SUPERVISOR_TB) -P$(TB_TOP).OSC_HZ=$(OSC_HZ)
+TB_EXEC = $(BUILD_DIR)/supervised_$(SIM_LIB)_$(INIT_HZ)_$(SIM_DELAY)_$(OSC_HZ).out
+FST = $(BUILD_DIR)/phy_supervisor.fst
+PROBE_PARAM = -set SUPERVISED 1
+ROUTE_SDC = phy_supervisor/tools/route_probe.sdc
+else
 TB_EXEC = $(BUILD_DIR)/pads_$(SIM_LIB)_$(INIT_HZ)_$(SIM_DELAY).out
 FST = $(BUILD_DIR)/phy_integration.fst
+ROUTE_SDC = tools/route_probe.sdc
+endif
 VERIFY = PYTHONPATH=.. $(PYTHON) dphy_pads/tools/verify_route.py
 
 .DELETE_ON_ERROR:
@@ -57,11 +70,12 @@ $(BUILD_DIR)/gowin_io.v: $(GOWIN_SIM) Makefile
 		copy {print} /^[[:space:]]*endmodule/ {copy = 0}' "$<" > "$@"
 endif
 
-$(TB_EXEC): $(TB) TB/check_hs_pads.vh $(RTL) $(ROM) $(PLL_MODEL) $(IO_MODELS) Makefile
+$(TB_EXEC): $(TB) TB/check_hs_pads.vh $(RTL) $(ROM) $(PLL_MODEL) $(IO_MODELS) $(SUPERVISOR_DEPS) Makefile
 	mkdir -p "$(@D)"
 	$(IVERILOG) -g2012 -Wall -Wno-timescale -DPHY_GOWIN $(VENDOR_DEFINE) \
 		-I"$(dir $(ROM))" -ITB -s $(TB_TOP) -P$(TB_TOP).INIT_HZ=$(INIT_HZ) \
-		-P$(TB_TOP).DELAY=$(SIM_DELAY) -o "$@" $(TB) $(RTL) $(PLL_MODEL) $(IO_MODELS)
+		-P$(TB_TOP).DELAY=$(SIM_DELAY) $(SUPERVISOR_FLAGS) \
+		-o "$@" $(TB) $(RTL) $(PLL_MODEL) $(IO_MODELS) $(SUPERVISOR_MODEL)
 
 synth: $(BUILD_DIR)/direct/probe.json $(BUILD_DIR)/delay/probe.json
 $(BUILD_DIR)/direct/probe.json: DELAY=0
@@ -71,7 +85,7 @@ $(BUILD_DIR)/delay/probe.json: DELAY=1
 $(BUILD_DIR)/direct/probe.json $(BUILD_DIR)/delay/probe.json: $(RTL) tools/route_probe.v $(ROM) Makefile
 	mkdir -p "$(@D)"
 	$(YOSYS) -Q -q -l "$(@D)/synth.log" \
-		-p 'read_verilog -I$(dir $(ROM)) $(RTL) tools/route_probe.v; chparam -set DELAY $(DELAY) route_probe; synth_gowin -family gw2a -nobram -top route_probe -json "$@"'
+		-p 'read_verilog -I$(dir $(ROM)) $(RTL) tools/route_probe.v; chparam -set DELAY $(DELAY) $(PROBE_PARAM) route_probe; synth_gowin -family gw2a -nobram -top route_probe -json "$@"'
 
 route: route-direct route-delay
 route-direct: $(BUILD_DIR)/direct/probe_routed.json
@@ -85,8 +99,8 @@ audit-direct: $(BUILD_DIR)/direct/probe_routed.json
 audit-delay: $(BUILD_DIR)/delay/probe_routed.json
 	$(VERIFY) "$(BUILD_DIR)/delay" delay --phy-prefix link. --fuses
 
-$(BUILD_DIR)/%/probe_routed.json: $(BUILD_DIR)/%/probe.json dphy_pads/tools/route_probe.cst tools/route_probe.sdc
+$(BUILD_DIR)/%/probe_routed.json: $(BUILD_DIR)/%/probe.json dphy_pads/tools/route_probe.cst $(ROUTE_SDC)
 	$(NEXTPNR) --device GW2AR-LV18EQ144PC8/I7 --vopt family=GW2A-18C \
 		--vopt cst=dphy_pads/tools/route_probe.cst --vopt disable_gp_clock_routing \
-		--sdc tools/route_probe.sdc --json "$<" --write "$@" --log "$(@D)/probe.log" \
+		--sdc $(ROUTE_SDC) --json "$<" --write "$@" --log "$(@D)/probe.log" \
 		--report "$(@D)/timing.json" --detailed-timing-report

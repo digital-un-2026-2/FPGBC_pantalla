@@ -1,8 +1,8 @@
-// Sonda offline de la cadena real hasta los pads. RESET_N es un estímulo
-// del reset de byte; el supervisor del futuro TOP no forma parte de la sonda.
+// Sonda offline de la cadena hasta los pads; RESET_N es un estímulo de prueba.
 module route_probe #(
     parameter DELAY = 1'b0,
-    parameter integer INIT_HZ = 55_000_000
+    parameter integer INIT_HZ = 55_000_000,
+    parameter SUPERVISED = 1'b0
 ) (
     input CLK_REF, RESET_N,
     output LP_D0_P, LP_D0_N, LP_D1_P, LP_D1_N, LP_CLK_P, LP_CLK_N,
@@ -13,7 +13,19 @@ module route_probe #(
   wire [15:0] VID_WORD;
   wire [7:0] INIT_BYTE, HS_BYTE0, HS_BYTE1;
   wire [2:0] LP_P, LP_N;
-  wire RST_BYTE = !RESET_N;
+  wire RESET, RST_BYTE, LOCK_RAW;
+
+  generate
+    if (SUPERVISED) begin : supervised
+      phy_supervisor supervisor (
+          .CLK_REF(CLK_REF), .CLK_BYTE(CLK_BYTE), .LOCK_RAW(LOCK_RAW),
+          .RST_SUP(!RESET_N), .RST_LINK(1'b0), .RESET(RESET), .RST_BYTE(RST_BYTE)
+      );
+    end else begin : manual_reset
+      assign RESET = 1'b0;
+      assign RST_BYTE = !RESET_N;
+    end
+  endgenerate
 
   init_sequencer #(.CLK_BYTE_HZ(INIT_HZ)) seq (
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE),
@@ -34,7 +46,7 @@ module route_probe #(
       .LP_P(LP_P), .LP_N(LP_N), .HS_BYTE0(HS_BYTE0), .HS_BYTE1(HS_BYTE1)
   );
   phy #(.USE_IODELAY(DELAY), .STATIC_DELAY_TAPS(32)) link (
-      .CLK_REF(CLK_REF), .RESET(1'b0), .RST_BYTE(RST_BYTE),
+      .CLK_REF(CLK_REF), .RESET(RESET), .RST_BYTE(RST_BYTE), .LOCK_RAW(LOCK_RAW),
       .HS_REQ(HS_REQ), .CLK_REQ(CLK_REQ), .LP_P(LP_P), .LP_N(LP_N),
       .HS_BYTE0(HS_BYTE0), .HS_BYTE1(HS_BYTE1), .CLK_BYTE(CLK_BYTE), .LOCK(LOCK), .READY(READY),
       .LP_D0_P(LP_D0_P), .LP_D0_N(LP_D0_N), .LP_D1_P(LP_D1_P), .LP_D1_N(LP_D1_N),

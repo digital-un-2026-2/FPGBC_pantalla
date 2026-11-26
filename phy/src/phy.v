@@ -9,9 +9,10 @@ module phy #(
     input [7:0] HS_BYTE0, HS_BYTE1,
     output CLK_BYTE, LOCK, READY,
     output LP_D0_P, LP_D0_N, LP_D1_P, LP_D1_N, LP_CLK_P, LP_CLK_N,
-    output HS_D0_P, HS_D0_N, HS_D1_P, HS_D1_N, HS_CLK_P, HS_CLK_N
+    output HS_D0_P, HS_D0_N, HS_D1_P, HS_D1_N, HS_CLK_P, HS_CLK_N,
+    output LOCK_RAW
 );
-  wire CLK_HS, LOCK_RAW;
+  wire CLK_HS;
   wire HS_D0, HS_D1, HS_CLK;
   wire HS_EN, CLK_EN, CLK_TOGGLE;
   (* keep *) wire ISO;
