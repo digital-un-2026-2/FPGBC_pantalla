@@ -12,7 +12,9 @@ from gateware.platforms.fpgbc import Platform
 
 
 class LPInitTarget(Module):
-    def __init__(self, platform, *, enable_lp=False):
+    def __init__(self, platform, *, enable_lp=False, enable_backlight=False):
+        if enable_backlight and not enable_lp:
+            raise ValueError("El backlight requiere la inicialización LP activa")
         # No usar el packer sin la corrección de pads usados y su auditoría.
         platform.toolchain.packer_cmd = (
             f"{shlex.quote(sys.executable)} "
@@ -41,6 +43,28 @@ class LPInitTarget(Module):
         platform.add_period_constraint(clk_pad, platform.default_clk_period)
         self.submodules.init = LPInit(platform)
 
+        if enable_backlight:
+            # 40 MHz / 40 000 = 1 kHz; mitad del periodo en alto.
+            period = 40_000
+            counter = Signal(max=period)
+            enabled = Signal()
+            pwm = Signal()
+            ready = Signal()
+            # Registrar el fin de INIT evita habilitar por transitorios de su decodificador.
+            self.comb += ready.eq(enabled & ~self.init.fallo & ~self.cd_sys.rst)
+            self.sync += [
+                enabled.eq(self.init.init_completa & ~self.init.fallo),
+                If(
+                    ready,
+                    If(counter == period - 1, counter.eq(0)).Else(counter.eq(counter + 1)),
+                    pwm.eq(counter < period // 2),
+                ).Else(counter.eq(0), pwm.eq(0)),
+            ]
+            self.specials += [
+                Instance("OBUF", i_I=ready, o_O=platform.request("backlight_en")),
+                Instance("OBUF", i_I=ready & pwm, o_O=platform.request("backlight_pwm")),
+            ]
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -49,10 +73,16 @@ def main():
         "--enable-lp", action="store_true",
         help="Exportar la variante activa para revisión; NO autoriza carga en placa",
     )
+    parser.add_argument(
+        "--enable-backlight", action="store_true",
+        help="Añadir EN y PWM de backlight; requiere --enable-lp",
+    )
     args = parser.parse_args()
+    if args.enable_backlight and not args.enable_lp:
+        parser.error("--enable-backlight requiere --enable-lp")
 
     platform = Platform(toolchain="apicula")
-    top = LPInitTarget(platform, enable_lp=args.enable_lp)
+    top = LPInitTarget(platform, enable_lp=args.enable_lp, enable_backlight=args.enable_backlight)
     platform.build(
         top, build_dir=args.output_dir, build_name="fpgbc_lp_init", run=False,
         timingstrict=True,

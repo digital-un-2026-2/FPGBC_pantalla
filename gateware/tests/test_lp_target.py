@@ -13,7 +13,7 @@ class LPTargetTest(unittest.TestCase):
     def export(self, active):
         directory = ROOT / "build" / "gateware_tests" / ("active" if active else "isolated")
         platform = Platform()
-        top = LPInitTarget(platform, enable_lp=active)
+        top = LPInitTarget(platform, enable_lp=active, enable_backlight=active)
         platform.build(
             top, build_dir=str(directory), build_name="fpgbc_lp_init", run=False,
             timingstrict=True,
@@ -25,6 +25,9 @@ class LPTargetTest(unittest.TestCase):
         cst = (directory / "fpgbc_lp_init.cst").read_text()
         self.assertIn('IO_LOC "global_rst_n" 120;', cst)
         self.assertIn('IO_PORT "global_rst_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;', cst)
+        for port, pin in (("backlight_en", 46), ("backlight_pwm", 47)):
+            self.assertIn(f'IO_LOC "{port}" {pin};', cst)
+            self.assertIn(f'IO_PORT "{port}" IO_TYPE=LVCMOS33 PULL_MODE=NONE;', cst)
         for polarity, pins in (("p", (122, 124, 126)), ("n", (123, 125, 128))):
             for lane, pin in enumerate(pins):
                 self.assertIn(f'IO_LOC "dsi_lp_{polarity}[{lane}]" {pin};', cst)
@@ -56,6 +59,8 @@ class LPTargetTest(unittest.TestCase):
         if not shutil.which("iverilog") or not shutil.which("vvp"):
             self.skipTest("Se requieren iverilog y vvp")
         directory = self.export(active)
+        if not active:
+            self.assertNotIn("backlight_", (directory / "fpgbc_lp_init.cst").read_text())
         output = directory / "test.out"
         sources = [
             ROOT / "gateware/tests/lp_target_TB.v",
@@ -63,8 +68,9 @@ class LPTargetTest(unittest.TestCase):
             directory / "fpgbc_lp_init.v",
             *(ROOT / path for path in RTL_SOURCES),
         ]
+        defines = ["-DTEST_BACKLIGHT"] if active else []
         subprocess.run(
-            ["iverilog", "-g2012", "-s", "lp_target_TB",
+            ["iverilog", "-g2012", *defines, "-s", "lp_target_TB",
              f"-Plp_target_TB.ENABLE_LP={int(active)}", "-o", str(output),
              *map(str, sources)], check=True, timeout=30,
         )

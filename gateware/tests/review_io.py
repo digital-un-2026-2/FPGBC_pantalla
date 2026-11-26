@@ -20,6 +20,13 @@ PINOUT = {
     "dsi_hs_p": (117, 115, 113),
     "dsi_hs_n": (116, 114, 112),
 }
+BACKLIGHT_PINS = {"backlight_en": (46,), "backlight_pwm": (47,)}
+
+
+def reviewed_pinout(ports):
+    if BACKLIGHT_PINS.keys() & ports:
+        return {**PINOUT, **BACKLIGHT_PINS}
+    return PINOUT
 
 
 def load_reference():
@@ -75,7 +82,7 @@ def review(design, db, defaults, provenance):
     missing_drive = False
     missing_slew = False
 
-    for port, pin_numbers in PINOUT.items():
+    for port, pin_numbers in reviewed_pinout(top["ports"].keys()).items():
         bits = top["ports"][port]["bits"]
         if len(bits) != len(pin_numbers):
             raise ValueError(f"Anchura incorrecta: {port}")
@@ -133,6 +140,9 @@ def review(design, db, defaults, provenance):
                 entry["packer_net_oen_metadata"] = params.get("NET_OEN")
                 if params.get("NET_OEN") != "VCC":
                     errors.append(f"Pin {number}: metadata de apagado HS ausente o contradictoria")
+            elif port in BACKLIGHT_PINS:
+                if bank != 5 or standard != "LVCMOS33" or cell["type"] != "OBUF" or pull != "NONE":
+                    errors.append(f"Pin {number}: backlight sin BANK5/LVCMOS33/OBUF y pull desactivado")
             elif standard != "LVCMOS33" or cell["type"] != "IBUF":
                 errors.append(f"{port} sin IBUF/LVCMOS33")
             if port == "global_rst_n" and pull != "UP":

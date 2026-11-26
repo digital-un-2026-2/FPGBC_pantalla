@@ -1,7 +1,7 @@
 import unittest
 
 from gateware.tests.review_fuses import validate_attributes, validate_input
-from gateware.tests.review_io import PINOUT
+from gateware.tests.review_io import BACKLIGHT_PINS, PINOUT
 
 
 class FuseReviewTest(unittest.TestCase):
@@ -60,6 +60,34 @@ class FuseReviewTest(unittest.TestCase):
         }}}
         with self.assertRaises(ValueError):
             validate_input(design)
+
+    def test_backlight_requires_both_outputs(self):
+        pinout = {**PINOUT, **BACKLIGHT_PINS}
+        cell_types = ["IBUF"] * 2 + ["TBUF"] * 6 + ["IOBUF"] * 6 + ["OBUF"] * 2
+        top = {
+            "ports": dict.fromkeys(pinout),
+            "cells": {str(index): {"type": kind} for index, kind in enumerate(cell_types)},
+        }
+        design = {"modules": {"top": top}}
+        self.assertEqual(validate_input(design), pinout)
+        del top["ports"]["backlight_pwm"]
+        with self.assertRaises(ValueError):
+            validate_input(design)
+
+    def test_backlight_attributes(self):
+        attrs = {
+            "IO_TYPE": "LVCMOS33", "BANK_VCCIO": "3.3", "ODMUX_1": "1",
+            "PULLMODE": "NONE", "LVDS_OUT": "OFF", "OPENDRAIN": "OFF",
+        }
+        pads = self.pads + [
+            {"pin": pins[0], "port": port, "effective_attributes": attrs.copy(),
+             "selected_fuses_present": True}
+            for port, pins in BACKLIGHT_PINS.items()
+        ]
+        self.assertEqual(validate_attributes(pads), [])
+        self.assertTrue(validate_attributes(pads[:-1]))
+        pads[-1]["effective_attributes"]["ODMUX_1"] = "0"
+        self.assertTrue(validate_attributes(pads))
 
 
 if __name__ == "__main__":

@@ -104,3 +104,34 @@ Ninguno certifica eléctricamente la placa ni se comunica con ella.
 
 No sintetizar ni programar bitstreams antiguos de `build/` como si
 correspondieran a esta arquitectura.
+
+## Variante LP con backlight
+
+`--enable-backlight` añade dos salidas activas en alto al target LP existente:
+`backlight_en` (pin 46, IOB14A) y `backlight_pwm` (pin 47, IOB14B), según
+`FPGBC_digital_UN/docs/identified_pins/gowin_ar_lv18e144pc.csv`.
+Ambas permanecen en cero hasta `init_completa` y se apagan por reset o fallo.
+El primer pulso PWM comienza un ciclo de 40 MHz después de subir EN.
+El brillo es fijo: **1 kHz, 50 %**. El secuenciador y sus ROM no cambian.
+El CSV no da el voltaje de VCCIO5 ni las polaridades: **LVCMOS33 y activo
+en alto son supuestos del candidato**, por confirmar en placa.
+
+Desde la raíz, generar el `.fs` con las herramientas de Pixi:
+
+```sh
+pixi run --locked python -m gateware.targets.fpgbc_lp_init \
+  --enable-lp --enable-backlight --output-dir build/fpgbc_lp_backlight
+pixi run --locked bash -c '
+  cd build/fpgbc_lp_backlight &&
+  yosys -l fpgbc_lp_init.rpt fpgbc_lp_init.ys &&
+  yowasp-nextpnr-himbaechel-gowin --json fpgbc_lp_init.json \
+    --write fpgbc_lp_init_routed.json --top fpgbc_lp_init \
+    --device GW2AR-LV18EQ144PC8/I7 --vopt family=GW2A-18C \
+    --vopt cst=fpgbc_lp_init.cst --freq 40 --seed 1 &&
+  python ../../scripts/pack_lp_checked.py -d GW2A-18C \
+    -o fpgbc_lp_init.fs fpgbc_lp_init_routed.json
+'
+```
+
+Resultado: `build/fpgbc_lp_backlight/fpgbc_lp_init.fs`. El empaquetador
+comprueba también los dos pads del backlight y no sobrescribe un `.fs` existente.

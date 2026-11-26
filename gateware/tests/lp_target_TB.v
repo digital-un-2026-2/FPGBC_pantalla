@@ -5,6 +5,7 @@ module lp_target_TB;
   reg reset_n = 1;
   always #12.5 clk = ~clk;
   wire [2:0] lp_p, lp_n, hs_p, hs_n;
+  wire backlight_en, backlight_pwm;
   wire [1:0] d0 = {lp_p[0], lp_n[0]};
   integer p, b, bit_n, c, n, offset, fin_datos, total;
   integer bytes_ok = 0;
@@ -15,6 +16,9 @@ module lp_target_TB;
   fpgbc_lp_init dut(
       .clk40(clk), .global_rst_n(reset_n), .dsi_lp_p(lp_p), .dsi_lp_n(lp_n),
       .dsi_hs_p(hs_p), .dsi_hs_n(hs_n)
+`ifdef TEST_BACKLIGHT
+      , .backlight_en(backlight_en), .backlight_pwm(backlight_pwm)
+`endif
   );
   // Solo se acorta la espera inicial de alimentación. Las esperas de 9/65 ms,
   // los timeouts y el reposo inicial LP conservan sus valores de producción.
@@ -111,6 +115,9 @@ module lp_target_TB;
     end else $fatal(1, "OE indeterminado");
     if (dut.terminado && d0 !== 2'b11)
       $fatal(1, "Terminado antes del retorno físico simulado a LP-11");
+    if (ENABLE_LP && (!dut.init_completa || dut.sys_rst || dut.fallo) &&
+        {backlight_en, backlight_pwm} !== 2'b00)
+      $fatal(1, "Backlight activo antes de terminar INIT o durante reset/fallo");
   end
 
   initial begin
@@ -174,6 +181,21 @@ module lp_target_TB;
       $display("PASS: pads paso %0d, %0d bytes", p, n);
     end
     wait (dut.init_completa === 1);
+    @(posedge clk);
+    #1;
+    if ({backlight_en, backlight_pwm} !== 2'b10)
+      $fatal(1, "Enable debe subir antes del primer pulso PWM");
+    @(posedge clk);
+    for (c = 0; c < 80001; c = c + 1) begin
+      @(negedge clk); #2;
+      if (backlight_en !== 1'b1 || backlight_pwm !== (c % 40000 < 20000))
+        $fatal(1, "Backlight: PWM incorrecto en el ciclo %0d", c);
+    end
+    force dut.fallo = 1'b1;
+    #1;
+    if ({backlight_en, backlight_pwm} !== 2'b00)
+      $fatal(1, "El fallo no apagó el backlight durante un pulso");
+    release dut.fallo;
     repeat (10) begin
       @(negedge clk); #2;
       if (lp_p !== 3'b111 || lp_n !== 3'b111 || dut.solicitud || dut.fallo)

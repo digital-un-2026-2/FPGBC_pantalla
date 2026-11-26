@@ -13,7 +13,7 @@ from collections import Counter
 from apycula import attrids, gowin_pack as pack
 from apycula import bitmatrix
 
-from gateware.tests.review_io import DEVICE, PINOUT, expected_bel
+from gateware.tests.review_io import BACKLIGHT_PINS, DEVICE, expected_bel, reviewed_pinout
 
 
 class _StopBeforeSerialization(Exception):
@@ -22,26 +22,32 @@ class _StopBeforeSerialization(Exception):
 
 def validate_input(design):
     top = design["modules"]["top"]
-    if set(top["ports"]) != set(PINOUT):
+    pinout = reviewed_pinout(top["ports"].keys())
+    if top["ports"].keys() != pinout.keys():
         raise ValueError("El empaquetador solo admite los puertos del top LP revisado")
-    io_types = {"IBUF", "OBUF", "TBUF", "IOBUF", "TLVDS_TBUF"}
+    io_types = {"IBUF", "OBUF", "TBUF", "IOBUF", "TLVDS_TBUF", "TLVDS_OBUF"}
     counts = Counter(cell["type"] for cell in top["cells"].values()
                      if cell["type"] in io_types)
-    if counts != Counter({"IBUF": 2, "TBUF": 6, "IOBUF": 6}):
-        raise ValueError("Top distinto: se requieren dos IBUF, seis TBUF y seis IOBUF")
+    expected = Counter({"IBUF": 2, "TBUF": 6, "IOBUF": 6})
+    if BACKLIGHT_PINS.keys() <= pinout.keys():
+        expected["OBUF"] = 2
+    if counts != expected:
+        raise ValueError(f"Buffers del top LP incorrectos: {counts}, esperados {expected}")
+    return pinout
 
 
-def validate_attributes(pads):
+def validate_attributes(pads, pinout=None):
+    if pinout is None:
+        pinout = reviewed_pinout({pad["port"] for pad in pads})
     errors = []
-    if len(pads) != 14 or {pad["pin"] for pad in pads} != {
-        pin for pins in PINOUT.values() for pin in pins
-    }:
-        errors.append("No se verificaron los doce pads DSI, reloj y reset")
+    expected_pads = {(port, pin) for port, pins in pinout.items() for pin in pins}
+    if len(pads) != len(expected_pads) or {(pad["port"], pad["pin"]) for pad in pads} != expected_pads:
+        errors.append("No se verificaron todos los pads del top LP")
     for pad in pads:
         pin, port, attrs = pad["pin"], pad["port"], pad["effective_attributes"]
         if not pad["selected_fuses_present"]:
             errors.append(f"Pin {pin}: fusibles seleccionados ausentes del mapa final")
-        if port.startswith("dsi_"):
+        if port.startswith("dsi_") or port in BACKLIGHT_PINS:
             for key, value in {"PULLMODE": "NONE", "LVDS_OUT": "OFF", "OPENDRAIN": "OFF"}.items():
                 if attrs.get(key) != value:
                     errors.append(f"Pin {pin}: {key} no conserva {value}")
@@ -57,6 +63,8 @@ def validate_attributes(pads):
                 attrs.get("ODMUX") != "TRIMUX" or attrs.get("TO") != "SIG"
             ):
                 errors.append(f"Pin {pin}: habilitación LP no es OFF ni OEN dinámico")
+        elif port in BACKLIGHT_PINS:
+            expected = {"IO_TYPE": "LVCMOS33", "BANK_VCCIO": "3.3", "ODMUX_1": "1"}
         else:
             expected = {"IO_TYPE": "LVCMOS33", "DRIVE": "0"}
             if port == "global_rst_n":
@@ -70,7 +78,7 @@ def validate_attributes(pads):
 def probe(path, output=None):
     path = Path(path).resolve()
     source = path.read_bytes()
-    validate_input(json.loads(source))
+    pinout = validate_input(json.loads(source))
     captures, final = {}, {}
     original = pack.get_longval_fuses
     original_bels = pack.get_bels
@@ -104,7 +112,7 @@ def probe(path, output=None):
             return bits
         package, variant, _ = db.packages[DEVICE]
         locations = {}
-        for port, numbers in PINOUT.items():
+        for port, numbers in pinout.items():
             for index, number in enumerate(numbers):
                 pin_name = db.pinout[variant][package][str(number)][0]
                 _, row, col, polarity = expected_bel(db, pin_name)
@@ -169,7 +177,7 @@ def probe(path, output=None):
         )
         pads.append(entry)
     pads.sort(key=lambda entry: entry["pin"])
-    errors = validate_attributes(pads)
+    errors = validate_attributes(pads, pinout)
     packer_path = Path(pack.__file__)
     report = {
         "status": "PAD_FUSE_CHECKS_PASS" if not errors else "PAD_FUSE_CHECKS_FAIL",
