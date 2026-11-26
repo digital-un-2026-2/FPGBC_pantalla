@@ -1,0 +1,416 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram id="dphy-pads-datapath" name="Datapath">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1240" pageHeight="1150">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="DPHY_PADS — drivers y pines Gowin" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=26;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="25" y="18" width="1185" height="34" />
+        </mxCell>
+        <mxCell id="subtitle" value="GW2AR-LV18EQ144PC8/I7 · Trazo grueso: bus; fino: 1 bit" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=16;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="25" y="56" width="1185" height="24" />
+        </mxCell>
+        <mxCell id="boundary" value="" vertex="1" parent="1" style="rounded=0;fillColor=#f7fafc;strokeColor=#526775;">
+          <mxGeometry as="geometry" x="280" y="95" width="930" height="825" />
+        </mxCell>
+        <mxCell id="boundary-name" value="DPHY_PADS" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=17;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="294" y="103" width="180" height="24" />
+        </mxCell>
+        <mxCell id="lp-block" value="" vertex="1" parent="1" style="rounded=0;fillColor=#f4f1dd;strokeColor=#526775;">
+          <mxGeometry as="geometry" x="310" y="136" width="525" height="228" />
+        </mxCell>
+        <mxCell id="control-block" value="" vertex="1" parent="1" style="rounded=0;fillColor=#e2edf3;strokeColor=#526775;">
+          <mxGeometry as="geometry" x="310" y="409" width="525" height="205" />
+        </mxCell>
+        <mxCell id="hs-block" value="" vertex="1" parent="1" style="rounded=0;fillColor=#f4f1dd;strokeColor=#526775;">
+          <mxGeometry as="geometry" x="310" y="659" width="525" height="234" />
+        </mxCell>
+        <mxCell id="lp-bank" value="" vertex="1" parent="1" style="rounded=0;fillColor=#e9f1de;strokeColor=#526775;">
+          <mxGeometry as="geometry" x="885" y="136" width="302" height="228" />
+        </mxCell>
+        <mxCell id="hs-bank" value="" vertex="1" parent="1" style="rounded=0;fillColor=#e9f1de;strokeColor=#526775;">
+          <mxGeometry as="geometry" x="885" y="659" width="302" height="234" />
+        </mxCell>
+        <mxCell id="lp-block-title" value="LP_DRIVERS" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="326" y="145" width="245" height="26" />
+        </mxCell>
+        <mxCell id="lp-description" value="6 × TBUF&lt;br&gt;LVCMOS12" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=16;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="485" y="213" width="140" height="46" />
+        </mxCell>
+        <mxCell id="control-title" value="Selección de drivers" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="492" y="470" width="314" height="26" />
+        </mxCell>
+        <mxCell id="control-description" value="Modos LP y OEN por grupo&lt;br&gt;Corte combinacional por ISO" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=16;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="492" y="498" width="314" height="50" />
+        </mxCell>
+        <mxCell id="hs-block-title" value="HS_DRIVERS" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=19;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="326" y="710" width="245" height="26" />
+        </mxCell>
+        <mxCell id="hs-description" value="3 × TLVDS_TBUF&lt;br&gt;LVDS25 (TLVDS)" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=16;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="485" y="761" width="140" height="46" />
+        </mxCell>
+        <mxCell id="lp-bank-title" value="BANK0 · 1,21 V medidos" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=17;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="903" y="147" width="272" height="24" />
+        </mxCell>
+        <mxCell id="hs-bank-title" value="BANK1 · 2,52 V medidos" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=17;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="903" y="670" width="272" height="24" />
+        </mxCell>
+        <mxCell id="ext-lp_p" value="PHY_IF · LP_P[2:0]" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#2164a3;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="181" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-lp_p" style="rounded=0;strokeWidth=3.4;strokeColor=#2164a3;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="192" />
+            <mxPoint as="targetPoint" x="310" y="192" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-lp_p" value="LP_P[2:0] → I P" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#2164a3;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="181" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-lp_n" value="PHY_IF · LP_N[2:0]" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#845120;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="215" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-lp_n" style="rounded=0;strokeWidth=3.4;strokeColor=#845120;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="226" />
+            <mxPoint as="targetPoint" x="310" y="226" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-lp_n" value="LP_N[2:0] → I N" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#845120;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="215" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-lp_dat_mode" value="PHY_CTRL · LP_DAT_MODE[1:0]" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#2e654c;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="442" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-lp_dat_mode" style="rounded=0;strokeWidth=3.4;strokeColor=#2e654c;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="453" />
+            <mxPoint as="targetPoint" x="310" y="453" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-lp_dat_mode" value="LP_DAT_MODE[1:0]" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#2e654c;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="442" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-lp_clk_mode" value="PHY_CTRL · LP_CLK_MODE[1:0]" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#21578c;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="471" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-lp_clk_mode" style="rounded=0;strokeWidth=3.4;strokeColor=#21578c;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="482" />
+            <mxPoint as="targetPoint" x="310" y="482" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-lp_clk_mode" value="LP_CLK_MODE[1:0]" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#21578c;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="471" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-hs_en" value="PHY_CTRL · HS_EN" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#305b6d;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="500" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-hs_en" style="rounded=0;strokeWidth=1.7;strokeColor=#305b6d;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="511" />
+            <mxPoint as="targetPoint" x="310" y="511" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-hs_en" value="HS_EN" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#305b6d;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="500" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-clk_en" value="PHY_CTRL · CLK_EN" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#a33d75;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="529" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-clk_en" style="rounded=0;strokeWidth=1.7;strokeColor=#a33d75;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="540" />
+            <mxPoint as="targetPoint" x="310" y="540" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-clk_en" value="CLK_EN" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#a33d75;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="529" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-iso" value="PHY_CTRL · ISO" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#bf3f1b;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="558" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-iso" style="rounded=0;strokeWidth=1.7;strokeColor=#bf3f1b;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="569" />
+            <mxPoint as="targetPoint" x="310" y="569" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-iso" value="ISO" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#bf3f1b;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="558" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-hs_d0" value="SERIALIZER_D0 · HS_D0" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#a72138;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="743" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-hs_d0" style="rounded=0;strokeWidth=1.7;strokeColor=#a72138;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="754" />
+            <mxPoint as="targetPoint" x="310" y="754" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-hs_d0" value="HS_D0 → I D0" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#a72138;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="743" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-hs_d1" value="SERIALIZER_D1 · HS_D1" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#6536a0;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="782" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-hs_d1" style="rounded=0;strokeWidth=1.7;strokeColor=#6536a0;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="793" />
+            <mxPoint as="targetPoint" x="310" y="793" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-hs_d1" value="HS_D1 → I D1" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#6536a0;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="782" width="168" height="22" />
+        </mxCell>
+        <mxCell id="ext-hs_clk" value="CLOCK_DDR · HS_CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#8f6010;fontStyle=0;">
+          <mxGeometry as="geometry" x="20" y="821" width="236" height="22" />
+        </mxCell>
+        <mxCell id="wire-hs_clk" style="rounded=0;strokeWidth=1.7;strokeColor=#8f6010;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="266" y="832" />
+            <mxPoint as="targetPoint" x="310" y="832" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="in-hs_clk" value="HS_CLK → I CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#8f6010;fontStyle=0;">
+          <mxGeometry as="geometry" x="321" y="821" width="168" height="22" />
+        </mxCell>
+        <mxCell id="out-DRIVE_DAT" value="DRIVE_DAT" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#15606d;fontStyle=0;">
+          <mxGeometry as="geometry" x="313" y="412" width="126" height="22" />
+        </mxCell>
+        <mxCell id="in-DRIVE_DAT" value="DRIVE_DAT" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#15606d;fontStyle=0;">
+          <mxGeometry as="geometry" x="313" y="339" width="126" height="22" />
+        </mxCell>
+        <mxCell id="wire-DRIVE_DAT" style="rounded=0;strokeWidth=1.7;strokeColor=#15606d;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="376" y="409" />
+            <mxPoint as="targetPoint" x="376" y="364" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="out-DRIVE_CLK" value="DRIVE_CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#7e4751;fontStyle=0;">
+          <mxGeometry as="geometry" x="442" y="412" width="126" height="22" />
+        </mxCell>
+        <mxCell id="in-DRIVE_CLK" value="DRIVE_CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#7e4751;fontStyle=0;">
+          <mxGeometry as="geometry" x="442" y="339" width="126" height="22" />
+        </mxCell>
+        <mxCell id="wire-DRIVE_CLK" style="rounded=0;strokeWidth=1.7;strokeColor=#7e4751;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="505" y="409" />
+            <mxPoint as="targetPoint" x="505" y="364" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="out-OEN_LP_DAT" value="OEN_LP_DAT" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#7c3d22;fontStyle=0;">
+          <mxGeometry as="geometry" x="571" y="412" width="126" height="22" />
+        </mxCell>
+        <mxCell id="in-OEN_LP_DAT" value="OEN_LP_DAT" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#7c3d22;fontStyle=0;">
+          <mxGeometry as="geometry" x="571" y="339" width="126" height="22" />
+        </mxCell>
+        <mxCell id="wire-OEN_LP_DAT" style="rounded=0;strokeWidth=1.7;strokeColor=#7c3d22;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="634" y="409" />
+            <mxPoint as="targetPoint" x="634" y="364" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="out-OEN_LP_CLK" value="OEN_LP_CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#426940;fontStyle=0;">
+          <mxGeometry as="geometry" x="700" y="412" width="126" height="22" />
+        </mxCell>
+        <mxCell id="in-OEN_LP_CLK" value="OEN_LP_CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#426940;fontStyle=0;">
+          <mxGeometry as="geometry" x="700" y="339" width="126" height="22" />
+        </mxCell>
+        <mxCell id="wire-OEN_LP_CLK" style="rounded=0;strokeWidth=1.7;strokeColor=#426940;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="763" y="409" />
+            <mxPoint as="targetPoint" x="763" y="364" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="out-OEN_HS_DAT" value="OEN_HS_DAT" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#4b3a81;fontStyle=0;">
+          <mxGeometry as="geometry" x="442" y="589" width="126" height="22" />
+        </mxCell>
+        <mxCell id="in-OEN_HS_DAT" value="OEN_HS_DAT" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#4b3a81;fontStyle=0;">
+          <mxGeometry as="geometry" x="442" y="662" width="126" height="22" />
+        </mxCell>
+        <mxCell id="wire-OEN_HS_DAT" style="rounded=0;strokeWidth=1.7;strokeColor=#4b3a81;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="505" y="614" />
+            <mxPoint as="targetPoint" x="505" y="659" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="out-OEN_HS_CLK" value="OEN_HS_CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#9a312a;fontStyle=0;">
+          <mxGeometry as="geometry" x="571" y="589" width="126" height="22" />
+        </mxCell>
+        <mxCell id="in-OEN_HS_CLK" value="OEN_HS_CLK" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#9a312a;fontStyle=0;">
+          <mxGeometry as="geometry" x="571" y="662" width="126" height="22" />
+        </mxCell>
+        <mxCell id="wire-OEN_HS_CLK" style="rounded=0;strokeWidth=1.7;strokeColor=#9a312a;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="634" y="614" />
+            <mxPoint as="targetPoint" x="634" y="659" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="out-LP_D0_P" value="O · LP_D0_P" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#13698c;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="179" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-LP_D0_P" style="rounded=0;strokeWidth=1.7;strokeColor=#13698c;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="190" />
+            <mxPoint as="targetPoint" x="885" y="190" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-LP_D0_P" value="LP_D0_P · pin 122" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#13698c;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="179" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-HS_D0_P" value="O · HS_D0_P" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#94296d;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="700" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-HS_D0_P" style="rounded=0;strokeWidth=1.7;strokeColor=#94296d;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="711" />
+            <mxPoint as="targetPoint" x="885" y="711" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-HS_D0_P" value="HS_D0_P · pin 117" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#94296d;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="700" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-LP_D0_N" value="O · LP_D0_N" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#4668a5;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="204" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-LP_D0_N" style="rounded=0;strokeWidth=1.7;strokeColor=#4668a5;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="215" />
+            <mxPoint as="targetPoint" x="885" y="215" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-LP_D0_N" value="LP_D0_N · pin 123" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#4668a5;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="204" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-HS_D0_N" value="OB · HS_D0_N" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#93462e;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="727" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-HS_D0_N" style="rounded=0;strokeWidth=1.7;strokeColor=#93462e;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="738" />
+            <mxPoint as="targetPoint" x="885" y="738" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-HS_D0_N" value="HS_D0_N · pin 116" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#93462e;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="727" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-LP_D1_P" value="O · LP_D1_P" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#0b716b;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="229" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-LP_D1_P" style="rounded=0;strokeWidth=1.7;strokeColor=#0b716b;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="240" />
+            <mxPoint as="targetPoint" x="885" y="240" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-LP_D1_P" value="LP_D1_P · pin 124" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#0b716b;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="229" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-HS_D1_P" value="O · HS_D1_P" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#73418b;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="754" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-HS_D1_P" style="rounded=0;strokeWidth=1.7;strokeColor=#73418b;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="765" />
+            <mxPoint as="targetPoint" x="885" y="765" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-HS_D1_P" value="HS_D1_P · pin 115" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#73418b;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="754" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-LP_D1_N" value="O · LP_D1_N" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#1c7960;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="254" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-LP_D1_N" style="rounded=0;strokeWidth=1.7;strokeColor=#1c7960;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="265" />
+            <mxPoint as="targetPoint" x="885" y="265" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-LP_D1_N" value="LP_D1_N · pin 125" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#1c7960;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="254" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-HS_D1_N" value="OB · HS_D1_N" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#795324;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="781" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-HS_D1_N" style="rounded=0;strokeWidth=1.7;strokeColor=#795324;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="792" />
+            <mxPoint as="targetPoint" x="885" y="792" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-HS_D1_N" value="HS_D1_N · pin 114" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#795324;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="781" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-LP_CLK_P" value="O · LP_CLK_P" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#4f661b;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="279" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-LP_CLK_P" style="rounded=0;strokeWidth=1.7;strokeColor=#4f661b;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="290" />
+            <mxPoint as="targetPoint" x="885" y="290" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-LP_CLK_P" value="LP_CLK_P · pin 126" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#4f661b;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="279" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-HS_CLK_P" value="O · HS_CLK_P" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#455381;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="808" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-HS_CLK_P" style="rounded=0;strokeWidth=1.7;strokeColor=#455381;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="819" />
+            <mxPoint as="targetPoint" x="885" y="819" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-HS_CLK_P" value="HS_CLK_P · pin 113" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#455381;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="808" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-LP_CLK_N" value="O · LP_CLK_N" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#646829;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="304" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-LP_CLK_N" style="rounded=0;strokeWidth=1.7;strokeColor=#646829;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="315" />
+            <mxPoint as="targetPoint" x="885" y="315" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-LP_CLK_N" value="LP_CLK_N · pin 128" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#646829;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="304" width="269" height="22" />
+        </mxCell>
+        <mxCell id="out-HS_CLK_N" value="OB · HS_CLK_N" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=right;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#624057;fontStyle=0;">
+          <mxGeometry as="geometry" x="678" y="835" width="147" height="22" />
+        </mxCell>
+        <mxCell id="wire-HS_CLK_N" style="rounded=0;strokeWidth=1.7;strokeColor=#624057;endArrow=block;endFill=1;endSize=7;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="835" y="846" />
+            <mxPoint as="targetPoint" x="885" y="846" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pad-HS_CLK_N" value="HS_CLK_N · pin 112" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#624057;fontStyle=0;">
+          <mxGeometry as="geometry" x="897" y="835" width="269" height="22" />
+        </mxCell>
+        <mxCell id="controls" value="" vertex="1" parent="1" style="rounded=0;fillColor=#edf4f8;strokeColor=#526775;">
+          <mxGeometry as="geometry" x="25" y="940" width="1185" height="177" />
+        </mxCell>
+        <mxCell id="controls-title" value="Habilitación física y ramas de la placa" vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=17;fontColor=#172c3a;fontStyle=1;">
+          <mxGeometry as="geometry" x="42" y="949" width="1100" height="24" />
+        </mxCell>
+        <mxCell id="note-0" value="Por grupo: modo 00/11 = Z; 01 = símbolo LP; 10 = polarización 00. DRIVE indica modo 01 y selecciona LP_P / LP_N en I." vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="42" y="981" width="1135" height="23" />
+        </mxCell>
+        <mxCell id="note-1" value="Con modo 01 y petición HS se aíslan ambos drivers del grupo. HS solo conduce en modo 10 y con su OE lógico activo." vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="42" y="1008" width="1135" height="23" />
+        </mxCell>
+        <mxCell id="note-2" value="OEN=0 conduce; OEN=1 deja Z. ISO domina los cuatro OEN combinacionalmente, incluso con ambos relojes detenidos." vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="42" y="1035" width="1135" height="23" />
+        </mxCell>
+        <mxCell id="note-3" value="Por conductor: pad LP → 100 Ω → nodo del panel; pad HS → mismo nodo. Los números son pines de la FPGA." vertex="1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;spacing=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Helvetica;fontSize=15;fontColor=#172c3a;fontStyle=0;">
+          <mxGeometry as="geometry" x="42" y="1062" width="1135" height="23" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
