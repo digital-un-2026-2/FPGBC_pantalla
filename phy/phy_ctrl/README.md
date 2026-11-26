@@ -1,5 +1,9 @@
 # PHY_CTRL — control de modo dentro del PHY
 
+La [integración Gowin](../README.md) usa `phy_ctrl_gowin` con modos y OE
+por grupo. Este documento describe `phy_ctrl`, la implementación de slots
+del PR #12 que se conserva con su banco aislado. Ambos usan `phy_ctrl_guard`.
+
 [Diseño editable: Flujo, Datapath y FSM](docs/PHY_CTRL.drawio).
 [`phy_ctrl`](src/phy_ctrl.v) controla la habilitación de los drivers LP, de
 datos HS y del reloj reenviado. No es `PHY_IF`, no recibe datos ni implementa
@@ -11,7 +15,7 @@ para la interfaz lógica con `MIPI_TX`.
 |---|---|
 | `CLK_BYTE`, `RST_BYTE` | Reloj compartido, independiente de `CLK_REQ`. Reset común activo en 1; el supervisor debe cubrir un ↑ y el ↓ siguiente válidos. |
 | `HS_REQ`, `CLK_REQ` | Peticiones de `LINK_FSM` en `CLK_BYTE`; cambian después de ↑ y se muestrean en ↓. `CLK_REQ` reserva el reloj físico, no el reloj de byte. |
-| `LOCK_RAW` | Estado crudo del generador de reloj, local al PHY. Debe caer incluso si se detiene `CLK_BYTE`. |
+| `LOCK_RAW` | Estado crudo del generador de reloj, local al PHY. Su caída corta incluso sin `CLK_BYTE`; puede quedarse alto ante una parada. |
 | `LOCK`, `READY` | Retornos en `CLK_BYTE`. `LOCK` se cualifica en dos ↓; `READY` anuncia LP disponible y sin reserva HS, incluso antes de ambas peticiones. `LINK_FSM` arbitra los paquetes LPDT; `PHY_CTRL` no deduce actividad LPDT de sus símbolos. |
 | `LP_EN`, `HS_EN`, `CLK_EN` | Habilitaciones lógicas activas en 1. `LP_EN` corresponde a los tres pares LP, `HS_EN` a HS de D0/D1 y `CLK_EN` a HS del par CLK. No se solapan LP y HS/CLK. |
 | `CLK_ARM`, `ISO`, `SER_MODE[1:0]` | Solo dentro del PHY. Preparación del reloj; corte con prioridad sobre las habilitaciones y descarte de la carga; y selección de slot del serializador: `00` OFF, `01` ZERO, `10` WORD, `11` TRAIL. |
@@ -80,8 +84,8 @@ no serialización DDR ni temporización física.
   traspaso ↓ a ↓. Si la primitiva requiere otro flanco o su latencia cruza un
   slot, hay que demostrar un adaptador compatible o revisar el contrato antes
   de desplazar SoT, CRC o trail.
-- Confirmar `LOCK_RAW` fiable sin reloj, sincronización y condiciones de
-  rearme; llevar `ISO` hasta el OE real, incluso si algún adaptador guarda una
+- Supervisar la actividad de reloj independientemente de `LOCK_RAW`;
+  llevar `ISO` hasta el OE real, incluso si algún adaptador guarda una
   habilitación. Revisar que se preserven las ventanas de conducción sin pulsos
   tras síntesis y enrutado.
 - Confirmar un OE de reloj independiente de datos HS, modo del reloj,

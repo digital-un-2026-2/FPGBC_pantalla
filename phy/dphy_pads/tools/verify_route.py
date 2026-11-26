@@ -237,9 +237,13 @@ def main():
     parser.add_argument("build", type=Path)
     parser.add_argument("variant", choices=("direct", "delay"))
     parser.add_argument("--fuses", action="store_true")
+    parser.add_argument("--phy-prefix", default="")
     args = parser.parse_args()
     path = args.build / "probe_routed.json"
     top = json.loads(path.read_text())["modules"]["top"]
+    if args.phy_prefix:
+        for key in ("cells", "netnames"):
+            top[key] = {name.removeprefix(args.phy_prefix): entry for name, entry in top[key].items()}
     db, _, provenance = load_reference()
     pads = verify_route(top, db, args.variant)
     print(f"PASS {args.variant}: 6 TBUF, 3 TLVDS_TBUF, Q0 locales, OEN dinámicos e ISO", flush=True)

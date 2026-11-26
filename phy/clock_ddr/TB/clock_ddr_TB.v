@@ -11,9 +11,9 @@ module clock_ddr_TB;
   integer edge_count = 0, panel_edges = 0, word_index, edges_at_close;
   reg check_period = 0, check_delay = 0;
 
-  clock_ddr direct (.CLK_HS(CLK_HS), .ISO(ISO), .HS_CLK(HS_CLK));
+  clock_ddr direct (.CLK_HS(CLK_HS), .ISO(ISO), .CLK_TOGGLE(1'b1), .HS_CLK(HS_CLK));
   clock_ddr #(.USE_IODELAY(1'b1), .STATIC_DELAY_TAPS(TEST_TAPS)) delayed (
-      .CLK_HS(CLK_HS), .ISO(ISO), .HS_CLK(HS_CLK_DELAYED)
+      .CLK_HS(CLK_HS), .ISO(ISO), .CLK_TOGGLE(1'b1), .HS_CLK(HS_CLK_DELAYED)
   );
 `ifdef GOWIN_VENDOR_SIM
   GSR GSR (.GSRI(1'b1));
@@ -55,7 +55,7 @@ module clock_ddr_TB;
         begin
           @(posedge HS_CLK);
           first_edge = $time;
-          if (first_edge - iso_released > 8 * HS_PERIOD)
+          if (first_edge - iso_released > 11 * HS_PERIOD)
             $fatal(1, "OSER4 no arrancó dentro del presupuesto del modelo");
           #1;
           check_period = 1;

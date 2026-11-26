@@ -1,16 +1,32 @@
-`timescale 1ns / 1ps
+`timescale 1ns / 1fs
 
 module mipi_tx_TB #(
-    parameter integer PROFILE = 0
+    parameter integer PROFILE = 0,
+    parameter integer INIT_HZ = 55_000_000,
+    parameter DELAY = 1'b0
 );
+`ifdef PHY_GOWIN
+  localparam integer P = INIT_HZ / 1000;
+  localparam realtime BYTE_PERIOD = 1000.0 / 55.0;
+  localparam integer LP_DIV = 6, T_LPX = 4, T_PREP = 3, T_ZERO = 7,
+                     T_TRAIL = 4, C_LINE = 1166, T_CLK_START = 27;
+  reg CLK_REF = 0, RESET = 1;
+  always #12.5 CLK_REF = !CLK_REF;
+  wire CLK_BYTE;
+`else
   localparam integer P = (PROFILE == 0) ? 1 : 5;  // Ciclos de CLK_BYTE por ms simulado.
   localparam integer HALF_NS = 500_000 / P;
+  localparam realtime BYTE_PERIOD = 2 * HALF_NS;
   localparam integer LP_DIV = (PROFILE == 0) ? 1 : 3;
   localparam integer T_LPX = (PROFILE == 0) ? 1 : 5;
   localparam integer T_PREP = (PROFILE == 0) ? 1 : 3;
   localparam integer T_ZERO = (PROFILE == 0) ? 1 : 7;
   localparam integer T_TRAIL = (PROFILE == 0) ? 1 : 4;
   localparam integer C_LINE = (PROFILE == 0) ? 1091 : 1166;
+  localparam integer T_CLK_START = 0;
+  reg CLK_BYTE = 0;
+  always #(HALF_NS) CLK_BYTE = !CLK_BYTE;
+`endif
 
   localparam integer PACKETS = 18, DSI_BYTES = 204, ROM_WORDS = 223;
   localparam [2:0] ROM_BYTE = 3'b000, ROM_WAIT = 3'b011;  // {OP, LAST}.
@@ -19,8 +35,6 @@ module mipi_tx_TB #(
   localparam integer CRC_TAKE = 1 + 2 + PIX_WORDS;  // Índice de consumo: SoT, W0, W1, PIX, CRC.
   localparam integer HS_WORDS = CRC_TAKE + 1, ABORT_READS = 17;
 
-  reg CLK_BYTE = 0;
-  always #(HALF_NS) CLK_BYTE = !CLK_BYTE;
   reg RST_BYTE = 1;
   integer cycle = 0;
   always @(negedge CLK_BYTE) cycle <= cycle + 1;
@@ -28,14 +42,13 @@ module mipi_tx_TB #(
   wire INIT_REQ, INIT_READY, INIT_LAST, INIT_NEXT, INIT_DONE_TX, INIT_DONE;
   wire [7:0] INIT_BYTE;
   wire VID_REQ, VID_LINE_RDY, VID_RD;
-  wire [15:0] VID_WORD;
+  wire [15:0] VID_WORD, source_word;
   wire HS_REQ, CLK_REQ, READY, LOCK;
   wire [2:0] LP_P, LP_N;
   wire [7:0] HS_BYTE0, HS_BYTE1;
 
   wire [1:0] D0_LP, D1_LP, CLK_LP;
-  wire phy_take, phy_last, phy_trail;
-  wire [15:0] taken_word;
+  wire hs_activity;
   wire [15:0] registered_word = {HS_BYTE1, HS_BYTE0};
 
   // Referencia para el comparador, jamás alimenta el RTL. Se lee el HEX
@@ -52,12 +65,12 @@ module mipi_tx_TB #(
 
   video_source video (
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE), .INIT_DONE(INIT_DONE),
-      .VID_REQ(VID_REQ), .VID_LINE_RDY(VID_LINE_RDY), .VID_WORD(VID_WORD), .VID_RD(VID_RD)
+      .VID_REQ(VID_REQ), .VID_LINE_RDY(VID_LINE_RDY), .VID_WORD(source_word), .VID_RD(VID_RD)
   );
 
   mipi_tx #(
       .LP_DIV(LP_DIV), .T_LPX(T_LPX), .T_PREP(T_PREP), .T_ZERO(T_ZERO),
-      .T_TRAIL(T_TRAIL), .C_LINE(C_LINE)
+      .T_TRAIL(T_TRAIL), .C_LINE(C_LINE), .T_CLK_START(T_CLK_START)
   ) dut (
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE),
       .INIT_REQ(INIT_REQ), .INIT_READY(INIT_READY), .INIT_DONE_TX(INIT_DONE_TX),
@@ -67,12 +80,35 @@ module mipi_tx_TB #(
       .LP_P(LP_P), .LP_N(LP_N), .HS_BYTE0(HS_BYTE0), .HS_BYTE1(HS_BYTE1)
   );
 
+`ifdef PHY_GOWIN
+  wire [1:0] D0_HS, D1_HS, CLK_HS_PAD;
+  reg white_line = 0;
+  assign VID_WORD = white_line ? 16'hffff : source_word;
+  assign hs_activity = {D0_HS, D1_HS, CLK_HS_PAD} !== 6'bzzzzzz;
+  phy #(.USE_IODELAY(DELAY), .STATIC_DELAY_TAPS(32)) phy (
+      .CLK_REF(CLK_REF), .RESET(RESET), .RST_BYTE(RST_BYTE),
+      .HS_REQ(HS_REQ), .CLK_REQ(CLK_REQ), .CLK_BYTE(CLK_BYTE), .READY(READY), .LOCK(LOCK),
+      .LP_P(LP_P), .LP_N(LP_N), .HS_BYTE0(HS_BYTE0), .HS_BYTE1(HS_BYTE1),
+      .LP_D0_P(D0_LP[1]), .LP_D0_N(D0_LP[0]), .LP_D1_P(D1_LP[1]), .LP_D1_N(D1_LP[0]),
+      .LP_CLK_P(CLK_LP[1]), .LP_CLK_N(CLK_LP[0]),
+      .HS_D0_P(D0_HS[1]), .HS_D0_N(D0_HS[0]), .HS_D1_P(D1_HS[1]), .HS_D1_N(D1_HS[0]),
+      .HS_CLK_P(CLK_HS_PAD[1]), .HS_CLK_N(CLK_HS_PAD[0])
+  );
+`ifdef GOWIN_VENDOR_SIM
+  GSR GSR (.GSRI(1'b1));
+`endif
+`else
+  wire phy_take, phy_last, phy_trail;
+  wire [15:0] taken_word;
+  assign VID_WORD = source_word;
+  assign hs_activity = phy_take || phy_trail;
   mipi_tx_phy_model #(.T_ZERO(T_ZERO), .T_TRAIL(T_TRAIL)) phy (
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE), .HS_REQ(HS_REQ), .CLK_REQ(CLK_REQ),
       .LP_P(LP_P), .LP_N(LP_N), .HS_BYTE0(HS_BYTE0), .HS_BYTE1(HS_BYTE1),
       .READY(READY), .LOCK(LOCK), .D0_LP(D0_LP), .D1_LP(D1_LP), .CLK_LP(CLK_LP),
       .TAKE(phy_take), .LAST(phy_last), .TRAIL(phy_trail), .TAKEN_WORD(taken_word)
   );
+`endif
 
   always @(posedge CLK_BYTE) begin
     if (RST_BYTE) init_next_count <= 0;
@@ -91,6 +127,7 @@ module mipi_tx_TB #(
     #1;
   endtask
 
+`ifndef PHY_GOWIN
   task automatic reset_link(input bit aborting);
     reg [15:0] before_reset;
     before_reset = registered_word;
@@ -107,15 +144,20 @@ module mipi_tx_TB #(
       $fatal(1, "ciclo %0d: el reset no descartó datos, consumo o posiciones parciales", cycle);
     RST_BYTE = 0;
   endtask
+`endif
 
-  // LP: se decodifican los niveles registrados de PHY_IF, no el bus INIT_BYTE.
-  task automatic sample_lp;
-    sample_negedge();
+  // LP: se decodifican las salidas del PHY (pads en la prueba Gowin).
+  task automatic check_lp_idle_lanes;
     if ({D1_LP, CLK_LP} !== 4'b1111)
       $fatal(1, "ciclo %0d: LPDT debe mantener D1 y CLK en LP11", cycle);
     if ({INIT_DONE, VID_REQ, VID_LINE_RDY, vid_rd_sample, VID_RD, HS_REQ, CLK_REQ,
-         phy_take, phy_trail} !== 0 || registered_word !== 16'h0000)
+         hs_activity} !== 0 || registered_word !== 16'h0000)
       $fatal(1, "ciclo %0d: actividad de vídeo antes del WAIT final y END", cycle);
+  endtask
+
+  task automatic sample_lp;
+    sample_negedge();
+    check_lp_idle_lanes();
   endtask
 
   task automatic expect_d0(input [1:0] pn);
@@ -155,7 +197,9 @@ module mipi_tx_TB #(
   // un ↓ antes del ↑ en que el secuenciador lee INIT_DONE_TX.
   task automatic receive_lp_packet(input integer packet, inout integer addr, bytes_seen);
     reg [7:0] data;
-    sample_lp();
+    sample_negedge();
+    while (packet == 1 && !READY) sample_negedge();
+    check_lp_idle_lanes();
     expect_d0(2'b11);
     @(posedge CLK_BYTE);
     if ({INIT_REQ, INIT_READY} !== 2'b11 || reference_rom[addr][10:8] !== ROM_BYTE)
@@ -204,7 +248,7 @@ module mipi_tx_TB #(
 
   task automatic check_wait(input integer packet, addr);
     integer ms, wait_cycles;
-    time ack;
+    realtime ack, expected_ns;
     bit final_packet;
     final_packet = packet == PACKETS;
     ms = int'(reference_rom[addr][7:0]);
@@ -214,7 +258,8 @@ module mipi_tx_TB #(
       $fatal(1, "paquete %0d: esperaba WAIT válido en dir. %0d", packet, addr);
 
     @(posedge CLK_BYTE);
-    ack = $time;
+    ack = $realtime;
+    expected_ns = wait_cycles * BYTE_PERIOD;
     if ({INIT_DONE_TX, INIT_REQ, INIT_NEXT, INIT_DONE} !== 4'b1000)
       $fatal(1, "ciclo %0d: falta el fin de paquete %0d antes del WAIT", cycle, packet);
     expect_rom_entry(addr);
@@ -231,7 +276,8 @@ module mipi_tx_TB #(
       if (seq.DONE_DELAY !== (t == wait_cycles))
         $fatal(1, "paquete %0d: fin de WAIT %0d ms incorrecto a %0d/%0d ciclos de INIT_DONE_TX",
                packet, ms, t, wait_cycles);
-      if (t == wait_cycles && $time - ack != ms * 1_000_000)
+      if (t == wait_cycles &&
+          ($realtime - ack < expected_ns - BYTE_PERIOD || $realtime - ack > expected_ns + BYTE_PERIOD))
         $fatal(1, "paquete %0d: WAIT de %0d ms no coincide con el reloj del banco", packet, ms);
       #1;
       expect_wait_idle();
@@ -262,8 +308,8 @@ module mipi_tx_TB #(
     if (addr != ROM_WORDS - 1 || bytes_seen != DSI_BYTES || long_waits != 2)
       $fatal(1, "Totales LP incorrectos: %0d bytes, %0d WAIT largos, dir. final %0d",
              bytes_seen, long_waits, addr);
-    $display("PASS p%0d LP (%s): 18 paquetes, 18 selectores 87, 204 bytes DSI, 18 WAIT exactos y END",
-             PROFILE, etapa);
+    $display("PASS LP (%s, %0d ciclos/ms): 18 paquetes, 18 selectores 87, 204 bytes DSI, 18 WAIT exactos y END",
+             etapa, P);
   endtask
 
   // Referencia por píxel y componente, no por fase de palabra del RTL.
@@ -305,6 +351,9 @@ module mipi_tx_TB #(
     for (integer b = 0; b < 16; b = b + 1) reflect16[b] = crc[15-b];
   endfunction
 
+`ifdef PHY_GOWIN
+  `include "check_hs_pads.vh"
+`else
   task automatic sample_hs;
     sample_negedge();
     if ({INIT_DONE, INIT_REQ, INIT_NEXT, INIT_DONE_TX} !== 4'b1000 || CLK_LP !== 2'b11)
@@ -449,4 +498,5 @@ module mipi_tx_TB #(
     repeat (60_000) @(posedge CLK_BYTE);
     $fatal(1, "Tiempo agotado en mipi_tx_TB");
   end
+`endif
 endmodule

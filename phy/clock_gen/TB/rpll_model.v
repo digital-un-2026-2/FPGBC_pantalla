@@ -30,6 +30,7 @@ module rPLL #(
   reg OSC_HS = 0, OSC_BYTE = 0;
   integer DIV_COUNT = 0;
   reg DROP_LOCK = 0;  // Inyección de estado crudo, no un detector de reloj.
+  reg PAUSE_OUTPUTS = 0;  // Fallo de prueba: parar ambos relojes conservando LOCK.
   wire RUNNING = (REF_EDGES != 0);
 
   initial begin
@@ -52,7 +53,7 @@ module rPLL #(
   always begin
     wait (RUNNING);
     #(HALF_HS_PS);
-    OSC_HS = RUNNING && !OSC_HS;
+    if (!PAUSE_OUTPUTS) OSC_HS = RUNNING && !OSC_HS;
   end
 
   always @(negedge OSC_HS or negedge RUNNING) begin
