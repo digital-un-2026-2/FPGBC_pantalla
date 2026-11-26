@@ -12,7 +12,7 @@ module route_probe #(parameter DELAY = 1'b0) (
 
   clock_gen clocks (CLK_REF, 1'b0, CLK_BYTE, CLK_HS, LOCK_RAW);
   clock_ddr #(.USE_IODELAY(DELAY), .STATIC_DELAY_TAPS(32)) forwarded (
-      .CLK_HS(CLK_HS), .ISO(ISO), .HS_CLK(HS_CLK)
+      .CLK_HS(CLK_HS), .ISO(ISO), .CLK_TOGGLE(1'b1), .HS_CLK(HS_CLK)
   );
   always @(negedge CLK_BYTE) begin
     if (RST_BYTE) stimulus <= 0;

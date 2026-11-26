@@ -5,7 +5,8 @@ module link_fsm #(
     parameter integer T_PREP = 1,
     parameter integer T_ZERO = 1,
     parameter integer T_TRAIL = 1,
-    parameter integer C_LINE = 1091
+    parameter integer C_LINE = 1091,
+    parameter integer T_CLK_START = 0
 ) (
     input CLK_BYTE,
     input RST_BYTE,  // Síncrono activo en 1: cubrir un ↑ y el ↓ siguiente.
@@ -31,21 +32,21 @@ module link_fsm #(
 
   localparam [3:0] LINE_WAIT = 4'd0, LP_BEGIN = 4'd1, LP_RUN = 4'd2, LP_ACK = 4'd3,
                    LP01 = 4'd4, LP00_PREP = 4'd5, LP00_ZERO = 4'd6, SOT = 4'd7,
-                   DATA0 = 4'd8, DATA = 4'd9, EOT = 4'd10, LP11 = 4'd11;
+                   DATA0 = 4'd8, DATA = 4'd9, EOT = 4'd10, LP11 = 4'd11, CLK_PRE = 4'd12;
 
   localparam integer N_DRAIN = 1;  // Latencia de cierre del modelo, por validar con el PHY.
   localparam integer N_EOT = N_DRAIN + T_TRAIL;
   localparam integer SOT_DATA_DRAIN = 1 + 1083 + N_DRAIN;
   // La suma ancha permite detectar un presupuesto inviable antes de recortar.
   localparam [34:0] C_ACTIVE = {3'b0, T_LPX} + {3'b0, T_PREP} + {3'b0, T_ZERO}
-                            + {3'b0, SOT_DATA_DRAIN} + {3'b0, T_TRAIL};
+                            + {3'b0, SOT_DATA_DRAIN} + {3'b0, T_TRAIL} + {3'b0, T_CLK_START};
   localparam integer T_GAP = C_LINE - C_ACTIVE[31:0] - 1;  // Un ciclo para LINE_WAIT.
 
   function integer max_ticks(input integer a, b);
     max_ticks = (a > b) ? a : b;
   endfunction
 
-  localparam integer N_MAX = max_ticks(max_ticks(T_LPX, T_PREP),
+  localparam integer N_MAX = max_ticks(max_ticks(T_CLK_START, max_ticks(T_LPX, T_PREP)),
                               max_ticks(T_ZERO, max_ticks(N_EOT, T_GAP)));
   localparam integer W = (N_MAX > 1) ? $clog2(N_MAX + 1) : 1;
 
@@ -75,13 +76,17 @@ module link_fsm #(
         LINE_WAIT: if (PHY_AVAILABLE) begin
           if (INIT_REQ) STATE <= LP_BEGIN;
           else if (VID_REQ && VID_LINE_RDY) begin
-            STATE <= LP01;
+            STATE <= (T_CLK_START == 0) ? LP01 : CLK_PRE;
             ENTER_T <= 1'b1;
           end
         end
         LP_BEGIN: STATE <= LP_RUN;
         LP_RUN: if (LP_DONE) STATE <= LP_ACK;
         LP_ACK: STATE <= LINE_WAIT;
+        CLK_PRE: if (TIMER_DONE) begin
+          STATE <= LP01;
+          ENTER_T <= 1'b1;
+        end
         LP01: if (TIMER_DONE) begin
           STATE <= LP00_PREP;
           ENTER_T <= 1'b1;
@@ -129,6 +134,11 @@ module link_fsm #(
           LP_START = (STATE == LP_BEGIN);
         end
         LP_ACK: INIT_DONE_TX = 1'b1;
+        CLK_PRE: begin
+          CLK_REQ = 1'b1;
+          CNT_EN = 1'b1;
+          N = T_CLK_START[W-1:0];
+        end
         LP01: begin
           SEL_OUT = FORZADO;
           LP_FORCE = 2'b01;
@@ -170,6 +180,7 @@ module link_fsm #(
 
 `ifndef SYNTHESIS
   initial begin
+    if (T_CLK_START < 0) $fatal(1, "T_CLK_START debe ser >= 0");
     if (T_LPX < 1 || T_PREP < 1 || T_ZERO < 1 || T_TRAIL < 1)
       $fatal(1, "T_LPX, T_PREP, T_ZERO y T_TRAIL deben ser >= 1");
     if (C_LINE < 1 || {3'b0, C_LINE} < C_ACTIVE + 35'd2)

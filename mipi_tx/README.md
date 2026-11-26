@@ -20,7 +20,11 @@ registros ni retardos. No es un TOP de placa.
 es síncrono activo en 1: debe cubrir un `↑` y el `↓` siguiente.
 `LP_DIV` se pasa a `LP_TX`; `T_LPX`, `T_PREP`, `T_ZERO`, `T_TRAIL` y `C_LINE`
 se pasan a `LINK_FSM`. Los valores por defecto son los de los bloques;
-no son ajustes de placa.
+no son ajustes de placa. `T_CLK_START` (por defecto `0`) también se pasa
+a `LINK_FSM`: reserva el par CLK mediante `CLK_REQ` antes del LP01 de
+datos y se cuenta dentro de `C_LINE`. La
+[integración Gowin](../phy/README.md) ensaya `T_CLK_START=27` sin añadir
+puertos a `MIPI_TX`.
 
 ## Contrato de consumo del PHY simulado
 

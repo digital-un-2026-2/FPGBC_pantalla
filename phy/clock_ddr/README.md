@@ -10,10 +10,13 @@ tiempos de conducción en el panel siguen pendientes de validación.**
 
 `MIPI_PHY_bloques.pdf` define `CLK_HS`, `ENABLE` y `HS_CLK`. El diseño
 aprobado resuelve ese `ENABLE` en el **OE del driver de reloj**, con el
-`CLK_EN` ya generado por `PHY_CTRL`. `CLOCK_DDR` recibe
-`CLK_HS` e `ISO` (1 bit cada uno) y entrega `HS_CLK` (1 bit). `CLK_ARM`
-reserva la ventana de preparación con el driver todavía aislado; no se
-muestrea dentro del bloque. Así se evita reiniciar el divisor al armar,
+`CLK_EN` generado por `PHY_CTRL`. `CLOCK_DDR` recibe `CLK_HS`, `ISO`
+y `CLK_TOGGLE` (1 bit cada uno) y entrega `HS_CLK` (1 bit).
+En la [integración](../docs/tabla_flancos.md), `CLK_TOGGLE` llega a `OSER4`
+por dos registros en ↓`PCLK_110`, con borrado asíncrono a cero por
+`RST_LOCAL`. Selecciona `0101` (alternar) o `0000` (HS-0). El OE queda
+activo hasta terminar el último pulso y el HS-0 de cierre.
+Así se evita reiniciar el divisor al armar,
 cortar un pulso con una compuerta en `Q0` o usar `Q1` como única vía de
 aborto. No hay otra FSM, reloj de byte local ni puerto nuevo en `MIPI_TX`.
 
@@ -51,11 +54,12 @@ del gearbox no garantizan los del enlace completo.
 | Tiempo nominal desde el primero | 0 UI | 1 UI | 2 UI | 3 UI | 4 UI |
 | Bit de `OSER4` en `Q0` | `D0=1` | `D1=0` | `D2=1` | `D3=0` | `D0=1` de la siguiente carga |
 
-## Tabla de flancos: arranque, ráfaga y cierre
+## Referencia de flancos del diseño aislado
 
 `B = Tbyte = 18,182 ns`. `↓z` es el ↓`CLK_BYTE` que muestrea la subida de
-`HS_REQ`. Los eventos de `PHY_CTRL` siguen su RTL actual; las condiciones
-en la columna derecha son para la integración. `Pᵢ` es ↑`CLK_BYTE` tras
+`HS_REQ`. Esta tabla documenta el control lógico de slots del PR #12.
+Para las ventanas de la integración y el cambio de patrón, consultar la
+[tabla del PHY Gowin](../docs/tabla_flancos.md). `Pᵢ` es ↑`CLK_BYTE` tras
 `↓i`; `Fᵢ` lanza el primer bit del slot correspondiente en `OSER8.Q0`.
 
 | Flanco o evento | Reloj reenviado | D0/D1 y condición de integración |
@@ -202,10 +206,13 @@ pixi run --locked make -C phy/clock_ddr test \
   PRIMITIVES=/ruta/absoluta/a/gw2a/prim_sim.v BUILD_DIR=../../build/clock_ddr_vendor
 ```
 
-El mismo banco pasó con el [modelo local](TB/primitives_model.v) y
+En el PR #16 el banco pasó con el [modelo local](TB/primitives_model.v) y
 con el [modelo Gowin GW2A 1.9.14][model]. Verifica `/2`, alternancia a
 una UI por nivel, y arranque desde `ISO↓` hasta el primer flanco de `Q0`
-en **27,275–29,548 ns** para las tres liberaciones ensayadas. Comprueba
+en **27,275–29,548 ns** para las tres liberaciones ensayadas, antes de
+introducir los dos registros para `CLK_TOGGLE`. El banco aislado mantiene
+`CLK_TOGGLE=1`; el cierre con cambio de patrón se verifica desde pads en
+el banco de la integración. El banco aislado comprueba
 un slot de adelanto, continuidad durante los slots que representan SoT,
 1083 palabras, trail y retención, cierre normal del OE ideal en fase
 baja, y aborto con `CLK_HS` detenido tanto en alto como en bajo, seguido
