@@ -29,6 +29,8 @@
     integer first_line, second_line;
     if (!$value$plusargs("init_hex=%s", init_hex)) $fatal(1, "Falta ROM de referencia");
     $readmemh(init_hex, reference_rom);
+    if ($test$plusargs("short_waits"))
+      $display("WAIT intermedios acortados en el banco; WAIT final de 385 000 ciclos sin alterar");
 
     #500 GLOBAL_RST_N = 1;
     #10000;

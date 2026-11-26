@@ -27,18 +27,21 @@ TB := $(MIPI)/TB/mipi_tx_TB.v
 TEST_INCLUDES := $(PHY)/TB/check_hs_pads.vh $(PHY)/phy_supervisor/TB/supervised_link.vh \
 	$(wildcard $(ROOT)/gateware/tests/white_target_*.vh)
 
-.PHONY: test test-white test-bars sim wave synth route audit
+.PHONY: test test-final-wait test-white test-bars sim wave synth route audit
 .DELETE_ON_ERROR:
 .PRECIOUS: $(BUILD)/%/$(TOP).v $(BUILD)/%/$(TOP).ys $(BUILD)/%/$(TOP).cst
 .SECONDARY: $(BUILD)/$(VARIANT)/$(TOP).json
 
 test: test-white test-bars
 
+test-final-wait: VVP_ARGS = +short_waits
+test-final-wait: test-white test-bars
+
 test-white: $(BUILD)/$(VARIANT)/test.out
-	cd "$(BUILD)/$(VARIANT)" && $(VVP) test.out "+init_hex=$(ROM)"
+	cd "$(BUILD)/$(VARIANT)" && $(VVP) -i test.out "+init_hex=$(ROM)" $(VVP_ARGS)
 
 test-bars: $(BUILD)/bars/test.out
-	cd "$(BUILD)/bars" && $(VVP) test.out "+init_hex=$(ROM)"
+	cd "$(BUILD)/bars" && $(VVP) -i test.out "+init_hex=$(ROM)" $(VVP_ARGS)
 
 sim: $(BUILD)/$(VARIANT)/test.out
 	cd "$(BUILD)/$(VARIANT)" && $(VVP) test.out -fst "+init_hex=$(ROM)" +waves

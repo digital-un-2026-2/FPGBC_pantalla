@@ -52,15 +52,19 @@ físico tras el retorno del reloj.
 Desde la raíz:
 
 ```sh
+pixi run --locked make -C gateware -j2 test-final-wait
 pixi run --locked make -C gateware -j2 test
 pixi run --locked make -C gateware audit
 pixi run --locked make -C gateware audit VARIANT=delay
 pixi run --locked test-gateware
 ```
 
-`test` usa el TOP exportado y los modelos de primitivas, con las esperas
-reales de la ROM. Reconstruye los paquetes LP y comprueba dos líneas
-desde los pads: SoT `B8/B8`, cabecera `3E 70 08 13`, 1080 lecturas,
+Ambas pruebas usan el TOP exportado y los modelos de primitivas. `test`
+ejecuta las esperas reales completas. `test-final-wait` abrevia los ticks
+de las 17 esperas LP intermedias en el banco y conserva intactos los
+385 000 ciclos (7 ms) de la espera final. Ambas reconstruyen los paquetes
+LP y comprueban dos líneas desde los pads: SoT `B8/B8`, cabecera
+`3E 70 08 13`, 1080 lecturas,
 2160 bytes `FF` y CRC `25/34` en D0/D1. Las barras dan `EE/7E`.
 Comprueba PWM y corta `CLK_REF` y `CLK_BYTE` por separado con `LOCK_RAW`
 alto; en ambos casos comprueba aislamiento, backlight apagado y

@@ -289,12 +289,16 @@ module mipi_tx_TB #(
   endtask
 
   task automatic check_wait(input integer packet, addr);
-    integer ms, wait_cycles;
+    integer ms, wait_cycles, cycles_per_ms;
     realtime ack, expected_ns;
     bit final_packet;
     final_packet = packet == PACKETS;
     ms = int'(reference_rom[addr][7:0]);
-    wait_cycles = ms * P;
+    cycles_per_ms = P;
+`ifdef FPGBC_WHITE
+    if (!final_packet && $test$plusargs("short_waits")) cycles_per_ms = 5;
+`endif
+    wait_cycles = ms * cycles_per_ms;
     if (reference_rom[addr][10:8] !== ROM_WAIT ||
         (final_packet ? (ms != 7) : (ms != 9 && ms != 65)))
       $fatal(1, "paquete %0d: esperaba WAIT válido en dir. %0d", packet, addr);
@@ -310,6 +314,12 @@ module mipi_tx_TB #(
       $fatal(1, "ciclo %0d: el ↑ de INIT_DONE_TX no armó la carga del WAIT", cycle);
     expect_wait_idle();
     for (integer t = 1; t <= wait_cycles; t = t + 1) begin
+`ifdef FPGBC_WHITE
+      // Atajo opt-in de simulación: solo acorta la fase de cada tick previo
+      // al WAIT final. La ROM, todos los relojes y los 7 ms finales se conservan.
+      if (cycles_per_ms != P && t % cycles_per_ms == 0)
+        $deposit(`TB_SEQ.d_count.PHASE, P - 1);
+`endif
       sample_lp();
       expect_d0(2'b11);
       expect_rom_entry(addr);
@@ -350,7 +360,7 @@ module mipi_tx_TB #(
     if (addr != ROM_WORDS - 1 || bytes_seen != DSI_BYTES || long_waits != 2)
       $fatal(1, "Totales LP incorrectos: %0d bytes, %0d WAIT largos, dir. final %0d",
              bytes_seen, long_waits, addr);
-    $display("PASS LP (%s, %0d ciclos/ms): 18 paquetes, 18 selectores 87, 204 bytes DSI, 18 WAIT exactos y END",
+    $display("PASS LP (%s, %0d ciclos/ms): 18 paquetes, 18 selectores 87, 204 bytes DSI, 18 WAIT y END",
              etapa, P);
   endtask
 
