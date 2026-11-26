@@ -205,7 +205,11 @@
 
   task automatic full_line(input bit white, output integer first_lp01);
     integer reads_before;
+`ifdef FPGBC_WHITE
+    if (white != WHITE) $fatal(1, "Patrón de prueba distinto de la variante exportada");
+`else
     white_line = white;
+`endif
     @(posedge CLK_REQ);
     if (!READY || !INIT_DONE) $fatal(1, "La reserva no llegó desde un reposo disponible");
     reads_before = total_reads;

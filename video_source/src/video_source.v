@@ -1,5 +1,7 @@
 // Fuente de payload RGB888 en CLK_BYTE; no arma paquetes DSI.
-module video_source (
+module video_source #(
+    parameter WHITE = 1'b0
+) (
     input CLK_BYTE,
     input RST_BYTE,  // Síncrono en ↓ para el datapath; común con los vecinos.
     input INIT_DONE,
@@ -23,7 +25,13 @@ module video_source (
       .ADDR(ADDR), .RGB_PHASE(RGB_PHASE), .AT_START(AT_START)
   );
 
-  video_mem mem (
-      .ADDR(ADDR), .RGB_PHASE(RGB_PHASE), .VID_WORD(VID_WORD)
-  );
+  generate
+    if (WHITE) begin : fixed_white
+      assign VID_WORD = 16'hffff;
+    end else begin : bars
+      video_mem mem (
+          .ADDR(ADDR), .RGB_PHASE(RGB_PHASE), .VID_WORD(VID_WORD)
+      );
+    end
+  endgenerate
 endmodule

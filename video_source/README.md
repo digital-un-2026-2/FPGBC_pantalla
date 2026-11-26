@@ -4,7 +4,10 @@
 [`video_source`](src/video_source.v) conecta
 [`VIDEO_TIMING`](src/video_timing.v), [`V_COUNT`](src/v_count.v) y
 [`VIDEO_MEM`](src/video_mem.v). Entrega solo los 2160 bytes de píxeles de
-una línea, no la cabecera, el SoT ni el CRC. No está conectado al TOP ni al PHY.
+una línea, no la cabecera, el SoT ni el CRC. El parámetro estático `WHITE=1`
+selecciona `16'hFFFF` sin cambiar las lecturas ni el contador de palabras;
+el valor predeterminado conserva las barras. El
+[TOP de FPGBC](../gateware/docs/fpgbc_white.md) usa blanco por defecto.
 
 ## Interfaz
 

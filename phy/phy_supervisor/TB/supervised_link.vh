@@ -10,11 +10,14 @@
     byte_edges = byte_edges + 1;
     last_byte_edge = $realtime;
   end
-  always @(phy.CLK_HS) hs_edges = hs_edges + 1;
+  always @(`TB_PHY.CLK_HS) hs_edges = hs_edges + 1;
 
   task automatic expect_isolated;
     if ({RST_BYTE, READY, all_pads} !== {2'b10, {12{1'bz}}})
       $fatal(1, "Corte incompleto: RST_BYTE=%b, READY=%b, pads=%b", RST_BYTE, READY, all_pads);
+`ifdef FPGBC_WHITE
+    if ({BL_EN, BL_PWM} !== 2'b00) $fatal(1, "Backlight activo durante aislamiento");
+`endif
   endtask
 
   always @(all_pads or RST_BYTE or READY) begin
@@ -23,18 +26,18 @@
   end
 
   task automatic check_rearm(input realtime stable_since);
-    wait (supervisor.ALLOW === 1'b1);
+    wait (`TB_SUPERVISOR.ALLOW === 1'b1);
     if ($realtime - stable_since < 2_000_000 || RESET !== 1'b0)
       $fatal(1, "Permiso antes de 2 ms continuos: %0.3f ns", $realtime - stable_since);
 
     // P2 ya pasó; estos son el par explícito P3 ↑/↓ y el ↑ P4 de salida.
-    @(posedge supervisor.rearm.PERMIT[1]);
+    @(posedge `TB_SUPERVISOR.rearm.PERMIT[1]);
     @(posedge CLK_BYTE);
     if ({RST_BYTE, LOCK_RAW} !== 2'b11) $fatal(1, "No hubo reset y lock en P3 ↑");
     @(negedge CLK_BYTE);
     if ({RST_BYTE, LOCK_RAW} !== 2'b11) $fatal(1, "No hubo reset y lock en P3 ↓");
     #(SETTLE);
-    if (seq.ADDR !== 8'd0 || video.ADDR !== 11'd0 || registered_word !== 16'd0)
+    if (`TB_SEQ.ADDR !== 8'd0 || `TB_VIDEO.ADDR !== 11'd0 || registered_word !== 16'd0)
       $fatal(1, "El par de rearme no descartó la posición o el paquete anterior");
     @(posedge CLK_BYTE);
     if (RST_BYTE !== 1'b1) $fatal(1, "RST_BYTE se anticipó a P4 ↑");
@@ -58,10 +61,10 @@
     realtime last_edge;
     @(negedge CLK_BYTE);
     #1;
-    phy.clocks.pll.HOLD_LOCK_HIGH = 1'b1;
+    `TB_PHY.clocks.pll.HOLD_LOCK_HIGH = 1'b1;
     byte_before = byte_edges;
     if (stop_byte) begin
-      phy.clocks.pll.PAUSE_BYTE = 1'b1;
+      `TB_PHY.clocks.pll.PAUSE_BYTE = 1'b1;
       other_before = hs_edges;
       last_edge = last_byte_edge;
     end else begin
@@ -76,8 +79,8 @@
       $fatal(1, "Fallo mal inyectado: el reloj restante y LOCK_RAW deben seguir activos");
 
     @(posedge RESET);
-    if (LOCK_RAW !== 1'b1 || (stop_byte ? supervisor.BYTE_OK : supervisor.REF_OK) !== 1'b0 ||
-        (stop_byte ? supervisor.REF_OK : supervisor.BYTE_OK) !== 1'b1)
+    if (LOCK_RAW !== 1'b1 || (stop_byte ? `TB_SUPERVISOR.BYTE_OK : `TB_SUPERVISOR.REF_OK) !== 1'b0 ||
+        (stop_byte ? `TB_SUPERVISOR.REF_OK : `TB_SUPERVISOR.BYTE_OK) !== 1'b1)
       $fatal(1, "El watchdog debe detectar el reloj detenido por sí solo, con LOCK_RAW=1");
     #(SETTLE);
     expect_isolated();
@@ -87,14 +90,17 @@
              stop_byte ? "CLK_BYTE" : "CLK_REF ", $realtime - last_edge);
     #500;
     expect_isolated();
-    phy.clocks.pll.HOLD_LOCK_HIGH = 1'b0;
+    `TB_PHY.clocks.pll.HOLD_LOCK_HIGH = 1'b0;
     #(SETTLE);
-    if (stop_byte) phy.clocks.pll.PAUSE_BYTE = 1'b0;
+    if (stop_byte) `TB_PHY.clocks.pll.PAUSE_BYTE = 1'b0;
     else REF_ENABLED = 1'b1;
     wait (LOCK_RAW === 1'b1);
     check_rearm($realtime);
   endtask
 
+`ifdef FPGBC_WHITE
+  `include "white_target_scenario.vh"
+`else
   initial begin : scenario
     string init_hex;
     realtime started;
@@ -162,7 +168,6 @@
     $display("PASS reset durante HS: descarta lo parcial, repite ROM y reinicia SoT/W0/P0");
     $finish;
   end
-
   initial begin
     if ($test$plusargs("waves")) begin
       $dumpfile("phy_supervisor.fst");
@@ -172,3 +177,4 @@
     #(4 * 272 * P * BYTE_PERIOD + 50_000_000);
     $fatal(1, "Tiempo agotado en la prueba del supervisor a %0d Hz", OSC_HZ);
   end
+`endif

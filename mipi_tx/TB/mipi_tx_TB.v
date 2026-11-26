@@ -1,11 +1,26 @@
 `timescale 1ns / 1fs
 
+`ifdef FPGBC_WHITE
+  `define TB_SEQ board.seq
+  `define TB_VIDEO board.video
+  `define TB_PHY board.link
+  `define TB_SUPERVISOR board.supervisor
+`else
+  `define TB_SEQ seq
+  `define TB_VIDEO video
+  `define TB_PHY phy
+  `define TB_SUPERVISOR supervisor
+`endif
+
 module mipi_tx_TB #(
     parameter integer PROFILE = 0,
     parameter integer INIT_HZ = 55_000_000,
     parameter DELAY = 1'b0
 `ifdef PHY_SUPERVISED
     , parameter integer OSC_HZ = 25_000_000
+`endif
+`ifdef FPGBC_WHITE
+    , parameter bit WHITE = 1
 `endif
 );
 `ifdef PHY_GOWIN
@@ -16,14 +31,17 @@ module mipi_tx_TB #(
   reg CLK_REF = 0;
   wire CLK_BYTE;
 `ifdef PHY_SUPERVISED
-  reg REF_ENABLED = 0, RST_SUP = 0, RST_LINK = 0;
+  reg REF_ENABLED = 0;
   wire RESET, RST_BYTE, LOCK_RAW;
   always #12.5 if (REF_ENABLED) CLK_REF = !CLK_REF;
+`ifndef FPGBC_WHITE
+  reg RST_SUP = 0, RST_LINK = 0;
   phy_supervisor supervisor (
       .CLK_REF(CLK_REF), .CLK_BYTE(CLK_BYTE), .LOCK_RAW(LOCK_RAW),
       .RST_SUP(RST_SUP), .RST_LINK(RST_LINK), .RESET(RESET), .RST_BYTE(RST_BYTE)
   );
   defparam supervisor.oscillator.TEST_HZ = OSC_HZ;
+`endif
 `else
   reg RESET = 1;
   always #12.5 CLK_REF = !CLK_REF;
@@ -74,6 +92,9 @@ module mipi_tx_TB #(
   integer init_next_count;
   reg vid_rd_sample;
 
+`ifdef FPGBC_WHITE
+  `include "white_target_link.vh"
+`else
   init_sequencer #(.CLK_BYTE_HZ(1000 * P)) seq (
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE),
       .INIT_REQ(INIT_REQ), .INIT_READY(INIT_READY), .INIT_DONE_TX(INIT_DONE_TX),
@@ -129,6 +150,7 @@ module mipi_tx_TB #(
       .TAKE(phy_take), .LAST(phy_last), .TRAIL(phy_trail), .TAKEN_WORD(taken_word)
   );
 `endif
+`endif
 
   always @(posedge CLK_BYTE) begin
     if (RST_BYTE) init_next_count <= 0;
@@ -183,7 +205,7 @@ module mipi_tx_TB #(
   task automatic expect_d0(input [1:0] pn);
     if (D0_LP !== pn)
       $fatal(1, "ciclo %0d: D0 registrado=%b, esperado %b (dir. de init %0d)",
-             cycle, D0_LP, pn, seq.ADDR);
+             cycle, D0_LP, pn, `TB_SEQ.ADDR);
   endtask
 
   // Empieza con el primer ↓ muestreado de una fase y deja muestreado
@@ -208,9 +230,9 @@ module mipi_tx_TB #(
   endtask
 
   task automatic expect_rom_entry(input integer addr);
-    if (seq.ADDR !== addr[7:0] || {seq.OP, INIT_LAST, INIT_BYTE} !== reference_rom[addr])
+    if (`TB_SEQ.ADDR !== addr[7:0] || {`TB_SEQ.OP, INIT_LAST, INIT_BYTE} !== reference_rom[addr])
       $fatal(1, "ciclo %0d: ROM dir. %0d=%03h; esperada dir. %0d=%03h",
-             cycle, seq.ADDR, {seq.OP, INIT_LAST, INIT_BYTE}, addr, reference_rom[addr]);
+             cycle, `TB_SEQ.ADDR, {`TB_SEQ.OP, INIT_LAST, INIT_BYTE}, addr, reference_rom[addr]);
   endtask
 
   // Se entra tras el ↑ que presenta INIT_REQ y se sale en LP11,
@@ -267,12 +289,16 @@ module mipi_tx_TB #(
   endtask
 
   task automatic check_wait(input integer packet, addr);
-    integer ms, wait_cycles;
+    integer ms, wait_cycles, cycles_per_ms;
     realtime ack, expected_ns;
     bit final_packet;
     final_packet = packet == PACKETS;
     ms = int'(reference_rom[addr][7:0]);
-    wait_cycles = ms * P;
+    cycles_per_ms = P;
+`ifdef FPGBC_WHITE
+    if (!final_packet && $test$plusargs("short_waits")) cycles_per_ms = 5;
+`endif
+    wait_cycles = ms * cycles_per_ms;
     if (reference_rom[addr][10:8] !== ROM_WAIT ||
         (final_packet ? (ms != 7) : (ms != 9 && ms != 65)))
       $fatal(1, "paquete %0d: esperaba WAIT válido en dir. %0d", packet, addr);
@@ -284,16 +310,22 @@ module mipi_tx_TB #(
       $fatal(1, "ciclo %0d: falta el fin de paquete %0d antes del WAIT", cycle, packet);
     expect_rom_entry(addr);
     #1;
-    if (seq.START_DELAY !== 1'b1)
+    if (`TB_SEQ.START_DELAY !== 1'b1)
       $fatal(1, "ciclo %0d: el ↑ de INIT_DONE_TX no armó la carga del WAIT", cycle);
     expect_wait_idle();
     for (integer t = 1; t <= wait_cycles; t = t + 1) begin
+`ifdef FPGBC_WHITE
+      // Atajo opt-in de simulación: solo acorta la fase de cada tick previo
+      // al WAIT final. La ROM, todos los relojes y los 7 ms finales se conservan.
+      if (cycles_per_ms != P && t % cycles_per_ms == 0)
+        $deposit(`TB_SEQ.d_count.PHASE, P - 1);
+`endif
       sample_lp();
       expect_d0(2'b11);
       expect_rom_entry(addr);
       expect_wait_idle();
       @(posedge CLK_BYTE);
-      if (seq.DONE_DELAY !== (t == wait_cycles))
+      if (`TB_SEQ.DONE_DELAY !== (t == wait_cycles))
         $fatal(1, "paquete %0d: fin de WAIT %0d ms incorrecto a %0d/%0d ciclos de INIT_DONE_TX",
                packet, ms, t, wait_cycles);
       if (t == wait_cycles &&
@@ -328,7 +360,7 @@ module mipi_tx_TB #(
     if (addr != ROM_WORDS - 1 || bytes_seen != DSI_BYTES || long_waits != 2)
       $fatal(1, "Totales LP incorrectos: %0d bytes, %0d WAIT largos, dir. final %0d",
              bytes_seen, long_waits, addr);
-    $display("PASS LP (%s, %0d ciclos/ms): 18 paquetes, 18 selectores 87, 204 bytes DSI, 18 WAIT exactos y END",
+    $display("PASS LP (%s, %0d ciclos/ms): 18 paquetes, 18 selectores 87, 204 bytes DSI, 18 WAIT y END",
              etapa, P);
   endtask
 
@@ -520,3 +552,8 @@ module mipi_tx_TB #(
   end
 `endif
 endmodule
+
+`undef TB_SEQ
+`undef TB_VIDEO
+`undef TB_PHY
+`undef TB_SUPERVISOR
