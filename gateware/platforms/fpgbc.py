@@ -3,11 +3,10 @@ from litex.build.gowin.platform import GowinPlatform
 
 
 _dsi_hs_pins = {"p": "117 115 113", "n": "116 114 112"}
+_dsi_lp_pins = {"p": "122 124 126", "n": "123 125 128"}
 
 _io = [
     ("clk40", 0, Pins("11"), IOStandard("LVCMOS33")),
-    # Misma entrada de reset de FPGBC_digital_UN/soc/FPGBC_unal_platform.py.
-    ("global_rst_n", 0, Pins("120"), IOStandard("LVCMOS33"), Misc("PULL_MODE=UP")),
     # BANK5: LVCMOS33 candidato; el CSV identifica los pines, no mide VCCIO5.
     ("backlight_en", 0, Pins("46"), IOStandard("LVCMOS33"), Misc("PULL_MODE=NONE")),
     ("backlight_pwm", 0, Pins("47"), IOStandard("LVCMOS33"), Misc("PULL_MODE=NONE")),
@@ -32,8 +31,8 @@ _io = [
     (
         "dsi_lp",
         0,
-        Subsignal("p", Pins("122 124 126")),
-        Subsignal("n", Pins("123 125 128")),
+        Subsignal("p", Pins(_dsi_lp_pins["p"])),
+        Subsignal("n", Pins(_dsi_lp_pins["n"])),
         IOStandard("LVCMOS12"),
         Misc("PULL_MODE=NONE"),
         # Perfil explícito: conserva los defaults del packer ya usados.
@@ -52,18 +51,34 @@ _io = [
 ]
 
 
+def _mixed_dsi_resources():
+    for mode, pins, standard, extras in (
+        ("LP", _dsi_lp_pins, "LVCMOS12", (Misc("DRIVE=8"), Misc("SLEW_RATE=FAST"))),
+        ("HS", _dsi_hs_pins, "LVDS25", ()),
+    ):
+        for side, numbers in pins.items():
+            for lane, pin in zip(("D0", "D1", "CLK"), numbers.split()):
+                yield (f"{mode}_{lane}_{side.upper()}", 0, Pins(pin), IOStandard(standard),
+                       Misc("PULL_MODE=NONE"), *extras)
+
+
 class Platform(GowinPlatform):
     default_clk_name = "clk40"
     default_clk_period = 1e9 / 40e6  # Periodo de 25ns / 40MHz
 
-    def __init__(self, toolchain="apicula"):
+    def __init__(self, toolchain="apicula", *, mixed_phy=False):
+        # The button is on BANK1; match the LP/HS probe for the mixed variant.
+        reset_standard = "LVCMOS25" if mixed_phy else "LVCMOS33"
+        io = [*_io, ("global_rst_n", 0, Pins("120"), IOStandard(reset_standard), Misc("PULL_MODE=UP"))]
         GowinPlatform.__init__(
             self,
             "GW2AR-LV18EQ144PC8/I7",
-            _io,
+            io,
             toolchain=toolchain,
             devicename="GW2AR-18C",
         )
+        if mixed_phy:
+            self.add_extension(list(_mixed_dsi_resources()))
         if toolchain == "apicula":
             # synth_gowin usa gw1n por defecto; necesitamos las celdas GW2A.
             self.toolchain._synth_opts += " -family gw2a"

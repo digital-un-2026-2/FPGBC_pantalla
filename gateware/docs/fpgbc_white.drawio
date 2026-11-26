@@ -1,0 +1,64 @@
+<mxfile>
+  <diagram name="TOP y dominios">
+    <mxGraphModel page="1" pageWidth="1320" pageHeight="900" grid="1" gridSize="10">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="frame" parent="1" vertex="1" value="fpgbc_white — TOP LiteX/Migen" style="swimlane;startSize=28;fontStyle=1;fillColor=#f5f5f5;">
+          <mxGeometry x="50" y="40" width="1200" height="780" as="geometry"/>
+        </mxCell>
+        <mxCell id="clk" parent="1" vertex="1" value="Pin 11&lt;br&gt;CLK_REF · 40 MHz" style="rounded=1;html=1;">
+          <mxGeometry x="90" y="90" width="165" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="btn" parent="1" vertex="1" value="Pin 120&lt;br&gt;global_rst_n" style="rounded=1;html=1;">
+          <mxGeometry x="90" y="190" width="165" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="control" parent="1" vertex="1" value="&lt;b&gt;CONTROL DE PLACA&lt;/b&gt;&lt;br&gt;CLK_REF / CLK_BYTE&lt;br&gt;global_rst_n → RST_SUP&lt;br&gt;INIT_DONE → CDC a 40 MHz&lt;br&gt;RST_SUP | RST_BYTE | ISO → corte&lt;br&gt;BL_EN / BL_PWM" style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;">
+          <mxGeometry x="325" y="138" width="244" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="bl" parent="1" vertex="1" value="Backlight&lt;br&gt;EN 46 / PWM 47" style="rounded=1;html=1;">
+          <mxGeometry x="90" y="307" width="165" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="wd" parent="1" vertex="1" value="&lt;b&gt;PHY_SUPERVISOR&lt;/b&gt;&lt;br&gt;OSC → BUFG → CLK_WD&lt;br&gt;CLK_REF / CLK_BYTE / LOCK_RAW&lt;br&gt;RST_SUP / RST_LINK=0&lt;br&gt;RESET / RST_BYTE" style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;">
+          <mxGeometry x="805" y="138" width="250" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="seq" parent="1" vertex="1" value="&lt;b&gt;INIT_SEQUENCER&lt;/b&gt;&lt;br&gt;CLK_BYTE / RST_BYTE&lt;br&gt;INIT_MEM: BYTE / WAIT / END&lt;br&gt;INIT_DONE / INIT_REQ / INIT_LAST&lt;br&gt;INIT_BYTE[7:0]&lt;br&gt;INIT_READY / INIT_NEXT / INIT_DONE_TX" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;">
+          <mxGeometry x="118" y="400" width="288" height="132" as="geometry"/>
+        </mxCell>
+        <mxCell id="video" parent="1" vertex="1" value="&lt;b&gt;VIDEO_SOURCE&lt;/b&gt;&lt;br&gt;CLK_BYTE / RST_BYTE / INIT_DONE&lt;br&gt;VID_REQ / VID_LINE_RDY&lt;br&gt;VID_WORD[15:0] / VID_RD&lt;br&gt;Blanco fijo o barras" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;">
+          <mxGeometry x="118" y="654" width="288" height="114" as="geometry"/>
+        </mxCell>
+        <mxCell id="tx" parent="1" vertex="1" value="&lt;b&gt;MIPI_TX&lt;/b&gt;&lt;br&gt;CLK_BYTE / RST_BYTE&lt;br&gt;INIT_REQ / INIT_LAST / INIT_BYTE[7:0]&lt;br&gt;INIT_READY / INIT_NEXT / INIT_DONE_TX&lt;br&gt;VID_REQ / VID_LINE_RDY / VID_WORD[15:0] / VID_RD&lt;br&gt;HS_REQ / CLK_REQ / LP_P[2:0] / LP_N[2:0]&lt;br&gt;HS_BYTE0[7:0] / HS_BYTE1[7:0] / LOCK / READY" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;">
+          <mxGeometry x="590" y="514" width="307" height="146" as="geometry"/>
+        </mxCell>
+        <mxCell id="phy" parent="1" vertex="1" value="&lt;b&gt;PHY GOWIN&lt;/b&gt;&lt;br&gt;CLK_REF / RESET (rPLL)&lt;br&gt;CLK_BYTE / LOCK_RAW / RST_BYTE / ISO&lt;br&gt;HS_REQ / CLK_REQ / LP_P[2:0] / LP_N[2:0]&lt;br&gt;HS_BYTE0[7:0] / HS_BYTE1[7:0]&lt;br&gt;LOCK / READY — DPHY_PADS" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;">
+          <mxGeometry x="949" y="514" width="268" height="146" as="geometry"/>
+        </mxCell>
+        <mxCell id="pads" parent="1" vertex="1" value="Pads D0 / D1 / CLK&lt;br&gt;6 LP + 6 HS" style="rounded=1;html=1;">
+          <mxGeometry x="990" y="730" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock_note" parent="1" vertex="1" value="CLK_BYTE y RST_BYTE se distribuyen a PHY, INIT_SEQUENCER, VIDEO_SOURCE y MIPI_TX.&lt;br&gt;El control de placa también recibe CLK_BYTE y RST_BYTE para el backlight." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;">
+          <mxGeometry x="420" y="765" width="580" height="43" as="geometry"/>
+        </mxCell>
+        <mxCell id="c1" parent="1" edge="1" source="clk" target="control" value="CLK_REF" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;exitX=1;exitY=.8;entryX=.15;entryY=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c2" parent="1" edge="1" source="clk" target="wd" value="CLK_REF" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;exitX=1;exitY=.25;entryX=.4;entryY=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c3" parent="1" edge="1" source="clk" target="phy" value="CLK_REF" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;exitX=1;exitY=.1;entryX=.9;entryY=0;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1190" y="95"/></Array></mxGeometry></mxCell>
+        <mxCell id="rst" parent="1" edge="1" source="btn" target="control" value="global_rst_n" style="edgeStyle=orthogonalEdgeStyle;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="en" parent="1" edge="1" source="control" target="bl" value="EN / PWM" style="edgeStyle=orthogonalEdgeStyle;exitX=.15;exitY=1;entryX=1;entryY=.5;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="sup" parent="1" edge="1" source="control" target="wd" value="RST_SUP" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rstphy" parent="1" edge="1" source="wd" target="phy" value="RESET / RST_BYTE" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;exitX=.8;exitY=1;entryX=.65;entryY=0;"><mxGeometry x=".55" relative="1" as="geometry"><mxPoint x="0" y="0" as="offset"/></mxGeometry></mxCell>
+        <mxCell id="ret" parent="1" edge="1" source="phy" target="wd" value="CLK_BYTE / LOCK_RAW" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;exitX=.2;exitY=0;entryX=.4;entryY=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="iso" parent="1" edge="1" source="phy" target="control" value="ISO" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;exitX=.15;exitY=0;entryX=1;entryY=.85;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="989" y="326"/><mxPoint x="600" y="326"/></Array></mxGeometry></mxCell>
+        <mxCell id="done" parent="1" edge="1" source="seq" target="control" value="INIT_DONE" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;exitX=.9;exitY=0;entryX=.33;entryY=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="donevideo" parent="1" edge="1" source="seq" target="video" value="INIT_DONE" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="init_tx" parent="1" edge="1" source="seq" target="tx" value="INIT_REQ / BYTE[7:0] / LAST" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;strokeWidth=2;exitX=1;exitY=.42;entryX=.25;entryY=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="init_fb" parent="1" edge="1" source="tx" target="seq" value="READY / NEXT / DONE_TX" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;exitX=0;exitY=.18;entryX=1;entryY=.8;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="vid_tx" parent="1" edge="1" source="video" target="tx" value="VID_REQ / LINE_RDY / WORD[15:0]" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=2;exitX=1;exitY=.24;entryX=0;entryY=.8;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="vid_rd" parent="1" edge="1" source="tx" target="video" value="VID_RD" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;exitX=.32;exitY=1;entryX=1;entryY=.76;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="tx_phy" parent="1" edge="1" source="tx" target="phy" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=2;exitX=1;exitY=.37;entryX=0;entryY=.37;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="phy_tx" parent="1" edge="1" source="phy" target="tx" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;exitX=0;exitY=.73;entryX=1;entryY=.73;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="phy_pads" parent="1" edge="1" source="phy" target="pads" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=2;strokeColor=#82b366;"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

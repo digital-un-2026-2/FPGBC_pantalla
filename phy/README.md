@@ -85,8 +85,8 @@ la base del dispositivo y el codificador original y adaptado. Son
 resultados de empaquetado en memoria. La auditoría del target LP
 sigue usando el codificador original, también para backlight.
 
-Para el TOP de vídeo: conectar el supervisor, coordinar el reset del panel
-y cerrar fase y red eléctrica. Integrar el backlight existente y blanco
-fijo en `VIDEO_SOURCE`. Una línea blanca
-correcta verifica el enlace modelado; aún hay que definir y validar el
-flujo de cuadro completo que acepte el panel.
+El [TOP de FPGBC](../gateware/docs/fpgbc_white.md) conecta supervisor,
+backlight y blanco fijo. `ISO` se expone para apagar el backlight si el
+PHY aísla el enlace. Una línea blanca correcta verifica el enlace
+modelado. Quedan la coordinación física del arranque del LCD, el cierre
+de fase y red eléctrica y la validación de una receta de cuadro completo.

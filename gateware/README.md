@@ -1,4 +1,9 @@
-# Integración LP con LiteX/Migen
+# Targets FPGBC con LiteX/Migen
+
+El [target `fpgbc_white`](docs/fpgbc_white.md) integra LP y HS para
+verificar offline líneas RGB888 blancas. El target LP se describe abajo.
+
+## Integración LP
 
 Esta integración conecta los RTL existentes sin CPU, CSR, UART ni LiteScope:
 
