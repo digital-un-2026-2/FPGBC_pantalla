@@ -68,11 +68,21 @@ del OE ni niveles eléctricos.
 
 ## Fusibles y trabajos pendientes
 
-**La auditoría en memoria falla en ambas variantes con Apicula 0.32**:
-`BANK_VCCIO=1.2` en banco 1/HS y `DRIVE=UNKNOWN` en los seis pads LP. Los
-informes quedan en `build/phy/{direct,delay}/fuse_review.json`. Son
-atributos emitidos por el empaquetador, no mediciones de tensión.
-La auditoría LP sigue separada. El flujo se detiene antes de serializar.
+Con Apicula 0.32 instalada, ambas variantes pasan `audit` mediante el
+[adaptador mixto](dphy_pads/tools/apicula_mixed.py). El adaptador corrige
+la selección de banco y de drive antes de codificar. La auditoría
+comprueba el banco 0 a 1,2 V y sus seis TBUF LVCMOS12 con DRIVE=8, slew
+FAST y pulls desactivados, y el banco 1 a 2,5 V con los tres pares
+LVDS25/TLVDS_TBUF. Comprueba también los bits seleccionados en el mapa
+final de ambas variantes y se detiene antes de serializar.
+
+Antes del adaptador, el mismo comando daba 13 errores por variante:
+seis `DRIVE=UNKNOWN`, seis `BANK_VCCIO=1.2` en los pads HS y uno en
+el banco 1. Los informes quedan en
+`build/phy/{direct,delay}/fuse_review.json`, con los hashes del JSON,
+la base del dispositivo y el codificador original y adaptado. Son
+resultados de empaquetado en memoria. La auditoría del target LP
+sigue usando el codificador original, también para backlight.
 
 Para el TOP de vídeo: cerrar primero el empaquetado HS y el supervisor
 de reloj/reset, con detección independiente de actividad y rearme seguro.

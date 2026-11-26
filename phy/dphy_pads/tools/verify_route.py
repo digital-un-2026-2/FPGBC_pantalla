@@ -11,7 +11,9 @@ from unittest.mock import patch
 
 from apycula import gowin_pack as pack
 
+from gateware.tests.review_fuses import fuses_present, pack_to_tilemap, verify_iob_encoding
 from gateware.tests.review_io import DEVICE, expected_bel, io_attribute, load_reference
+from phy.dphy_pads.tools.apicula_mixed import mixed_place
 
 
 PINOUT = {
@@ -58,6 +60,7 @@ def verify_serial_route(cells, pair, site, fclk, byte, half):
 
 def verify_route(top, db, variant):
     cells, nets = top["cells"], top["netnames"]
+    require(top["settings"]["packer.partno"] == DEVICE, "Dispositivo enrutado incorrecto")
     package, device, _ = db.packages[DEVICE]
     pins = db.pinout[device][package]
     pads = {}
@@ -88,7 +91,9 @@ def verify_route(top, db, variant):
                 require(io_attribute(pad, "IO_TYPE") == ("LVCMOS12", "LVDS25")[bank]
                         and io_attribute(pad, "PULL_MODE") == "NONE",
                         f"{port}: estándar o pulls incorrectos")
-                pads[row, col, f"IOB{polarity}"] = (port, number, bank)
+                key = row, col, f"IOB{polarity}"
+                require(key not in pads, f"{port}: pad duplicado")
+                pads[key] = (port, number, bank)
                 site = bel.split("/")[0]
 
                 if branch == "HS":
@@ -135,75 +140,71 @@ def verify_route(top, db, variant):
     return pads
 
 
-class StopBeforeBitstream(Exception):
-    pass
-
-
 def audit_fuses(path, pads, provenance):
-    """Registra los atributos reales de Apicula 0.32; no corrige el banco."""
-    observations, bank_choices, result = {}, {}, {}
-    get_bels, get_fuses = pack.get_bels, pack.get_longval_fuses
-    get_bank_fuses = pack.get_bank_fuses
-
-    def register_used(data):
-        # Mismo problema del registro de pines usado por la auditoría LP.
-        # Registrar también N: el codificador procesa el diferencial desde P.
-        db = inspect.currentframe().f_back.f_locals["db"]
-        for item in get_bels(data):
-            kind, row, col, side, *_ = item
-            if kind in {"IBUF", "OBUF", "TBUF", "IOBUF"}:
-                bank = pack.chipdb.loc2bank(db, row - 1, col - 1)
-                name = pack.rc2tbrl(db, row, col, side)
-                pack._banks.setdefault(bank, pack.BankDesc(None, set())).bels.add(name)
-            yield item
+    """Comprueba atributos y fusibles seleccionados por el codificador adaptado."""
+    require(len(pads) == 12, "Auditoría incompleta: se requieren los doce pads del PHY")
+    observations, bank_choices, bank_io_choices = {}, {}, {}
+    get_fuses = pack.get_longval_fuses
+    get_bank_fuses, get_bank_io_fuses = pack.get_bank_fuses, pack.get_bank_io_fuses
+    place, adapted_sha256 = mixed_place()
 
     def observe(db, tile_type, attributes, table):
         bits = get_fuses(db, tile_type, attributes, table)
         frame = inspect.currentframe().f_back
-        if frame.f_code is pack.place.__code__ and table in {"IOBA", "IOBB"}:
+        if frame.f_code is place.__code__ and table in {"IOBA", "IOBB"}:
             local = frame.f_locals
             key = (local.get("row"), local.get("col"), table)
             if key in pads and local.get("iob_attrs") is attributes:
                 require(key not in observations, f"Apicula reprocesó {pads[key][0]}")
-                observations[key] = (dict(local["atr"]), set(bits))
+                effective = dict(local["atr"])
+                verify_iob_encoding(db, effective, attributes)
+                require((local["fuse_row"], local["fuse_col"]) == key[:2],
+                        f"{pads[key][0]}: fusibles fuera de la tesela del pad")
+                observations[key] = (effective, set(bits))
         return bits
 
     def observe_bank(db, tile_type, attributes, table, bank):
         bits = get_bank_fuses(db, tile_type, attributes, table, bank)
         if bank in {0, 1}:
-            local = inspect.currentframe().f_back.f_locals
+            frame = inspect.currentframe().f_back
+            local = frame.f_locals
+            require(frame.f_code is place.__code__ and table == "BANK"
+                    and local["bank_attrs"] is attributes
+                    and (local["brow"], local["bcol"]) == db.bank_tiles[bank],
+                    f"BANK{bank}: origen de fusibles inesperado")
             require(bank not in bank_choices, f"Apicula reprocesó el banco {bank}")
-            bank_choices[bank] = (local["in_bank_attrs"]["BANK_VCCIO"], set(bits))
+            effective = {key: value for key, value in local["in_bank_attrs"].items()
+                         if key in {"BANK_VCCIO", "IO_TYPE", "LVDS_OUT", "DRIVE",
+                                    "OPENDRAIN", "PULL_STRENGTH"}}
+            verify_iob_encoding(db, effective, attributes)
+            bank_choices[bank] = (effective["BANK_VCCIO"], attributes, set(bits))
         return bits
 
-    def stop(db, tilemap):
-        result.update(db=db, tilemap=tilemap)
-        raise StopBeforeBitstream
-
-    def forbid(*args, **kwargs):
-        raise RuntimeError("La auditoría no puede escribir bitstreams")
+    def observe_bank_io(db, tile_type, attributes):
+        bits = get_bank_io_fuses(db, tile_type, attributes)
+        frame = inspect.currentframe().f_back
+        bank = frame.f_locals.get("bank")
+        if frame.f_code is place.__code__ and bank in {0, 1}:
+            require(bank in bank_choices and bank not in bank_io_choices
+                    and bank_choices[bank][1] is attributes,
+                    f"BANK{bank}: selección complementaria sin evidencia de banco")
+            bank_io_choices[bank] = set(bits)
+        return bits
 
     with (
-        patch.object(sys, "argv", ["audit", str(path), "-d", "GW2A-18C"]),
-        patch.object(pack, "get_bels", new=register_used),
+        patch.object(pack, "place", new=place),
         patch.object(pack, "get_longval_fuses", new=observe),
         patch.object(pack, "get_bank_fuses", new=observe_bank),
-        patch.object(pack.chipdb, "fuse_bitmap", new=stop),
-        patch.object(pack.bslib, "write_bitstream", new=forbid),
-        patch.object(pack.bslib, "write_bitstream_with_bsram_init", new=forbid),
+        patch.object(pack, "get_bank_io_fuses", new=observe_bank_io),
     ):
-        try:
-            pack.main()
-        except StopBeforeBitstream:
-            pass
-    require(result and observations.keys() == pads.keys() and bank_choices.keys() == {0, 1},
+        result = pack_to_tilemap(path)
+    require(observations.keys() == pads.keys()
+            and bank_choices.keys() == bank_io_choices.keys() == {0, 1},
             "Auditoría incompleta: faltan pads, bancos o el mapa anterior a serialización")
-
-    def check_fuses(tile, bits):
-        return all(result["tilemap"][tile][row][col] == 1 for row, col in bits)
 
     report = {"bitstream_written": False, "electrical_validation": "NOT_MEASURED",
               "routed_json_sha256": sha256(path.read_bytes()).hexdigest(),
+              "adapted_place_sha256": adapted_sha256,
               **provenance, "pads": {}, "banks": {}, "errors": []}
     for key, (port, number, bank) in pads.items():
         attrs, bits = observations[key]
@@ -211,22 +212,28 @@ def audit_fuses(path, pads, provenance):
             "IO_TYPE": ("LVCMOS12", "LVDS25")[bank],
             "BANK_VCCIO": ("1.2", "2.5")[bank],
             "PULLMODE": "NONE",
+            "OPENDRAIN": "OFF",
+            "ODMUX_1": "UNKNOWN",
             "ODMUX": "TRIMUX",
             "TRIMUX_PADDT": "SIG",
             "TO": "SIG",
             "LVDS_OUT": ("OFF", "ON")[bank],
         }
         expected.update({"DIFFRESISTOR": "OFF"} if bank else {"DRIVE": "8", "SLEWRATE": "FAST"})
-        present = check_fuses(key[:2], bits)
-        report["pads"][port] = {"pin": number, "attributes": attrs, "selected_fuses_present": present}
+        present = bool(bits) and fuses_present(result["tilemap"][key[:2]], bits)
+        report["pads"][port] = {"pin": number, "attributes": attrs,
+                                "selected_fuse_count": len(bits), "selected_fuses_present": present}
         if not present:
             report["errors"].append(f"{port}: faltan fusibles seleccionados")
         for name, value in expected.items():
             if attrs.get(name) != value:
                 report["errors"].append(f"{port}: {name}={attrs.get(name)}, esperado {value}")
-    for bank, (voltage, bits) in bank_choices.items():
-        present = check_fuses(result["db"].bank_tiles[bank], bits)
-        report["banks"][bank] = {"BANK_VCCIO": voltage, "selected_fuses_present": present}
+    for bank, (voltage, _, bits) in bank_choices.items():
+        selected = bits | bank_io_choices[bank]
+        tile = result["tilemap"][result["db"].bank_tiles[bank]]
+        present = bool(bits) and fuses_present(tile, selected)
+        report["banks"][bank] = {"BANK_VCCIO": voltage, "selected_fuse_count": len(selected),
+                                 "selected_fuses_present": present}
         if voltage != ("1.2", "2.5")[bank] or not present:
             report["errors"].append(f"BANK{bank}: tensión o fusibles de banco incorrectos ({voltage} V)")
     return report
