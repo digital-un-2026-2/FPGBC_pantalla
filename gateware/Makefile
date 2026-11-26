@@ -69,7 +69,11 @@ audit: route
 $(BUILD)/%/$(TOP).json: $(BUILD)/%/$(TOP).v $(BUILD)/%/$(TOP).ys $(ROM_INCLUDE)/init_mem_table.vh
 	cd "$(@D)" && $(YOSYS) -Q -q -l synth.log -s $(TOP).ys
 
-$(BUILD)/%/$(TOP)_routed.json: $(BUILD)/%/$(TOP).json $(BUILD)/%/$(TOP).cst $(SDC)
+$(BUILD)/%/$(TOP).sdc: $(SDC)
+	mkdir -p "$(@D)"
+	cp "$<" "$@"
+
+$(BUILD)/%/$(TOP)_routed.json: $(BUILD)/%/$(TOP).json $(BUILD)/%/$(TOP).cst $(BUILD)/%/$(TOP).sdc
 	cd "$(@D)" && $(NEXTPNR) --device GW2AR-LV18EQ144PC8/I7 \
 		--vopt family=GW2A-18C --vopt cst=$(TOP).cst --vopt disable_gp_clock_routing \
-		--sdc "$(SDC)" --json "$(TOP).json" --write "$(@F)" --log route.log --report timing.json
+		--sdc "$(TOP).sdc" --json "$(TOP).json" --write "$(@F)" --log route.log --report timing.json
