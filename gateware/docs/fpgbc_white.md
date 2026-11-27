@@ -9,7 +9,7 @@ calculado sobre los píxeles. No hay framebuffer. El encuadre aprobado usa
 `HS_PACKER`; no añade puertos externos a `MIPI_TX`.
 
 [Diseño de cuadro](fpgbc_frame.drawio) · [Flancos y presupuesto](fpgbc_frame.md)
-· [Revisión de E/S previa a carga](revision_io_frame.md).
+· [Validación y hashes](validacion_frame.md) · [Revisión de E/S previa a carga](revision_io_frame.md).
 
 El perfil de la [sonda](../../phy/README.md) se conserva: `CLK_REF=40 MHz`,
 `CLK_BYTE=55 MHz`, `CLK_HS=220 MHz`, DDR a 440 Mbit/s por carril,
