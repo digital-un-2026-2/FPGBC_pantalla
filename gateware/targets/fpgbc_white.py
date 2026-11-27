@@ -10,7 +10,7 @@ from gateware.platforms.fpgbc import Platform
 
 
 class FPGBCWhiteTarget(Module):
-    def __init__(self, platform, *, white=True, delay=False):
+    def __init__(self, platform, *, white=False, delay=False):
         self.clock_domains.cd_ref = ClockDomain("ref", reset_less=True)
         ref = self.cd_ref.clk
         reset_n = Signal(name="button_rst_n")
@@ -67,7 +67,8 @@ class FPGBCWhiteTarget(Module):
                      **byte_domain, i_INIT_DONE=init_done, i_VID_RD=vid_rd,
                      o_VID_REQ=vid_req, o_VID_LINE_RDY=vid_line_rdy, o_VID_WORD=vid_word),
             Instance("mipi_tx", name="tx", p_LP_DIV=6, p_T_CLK_START=27, p_T_LPX=4,
-                     p_T_PREP=3, p_T_ZERO=7, p_T_TRAIL=4, p_C_LINE=1166, **byte_domain,
+                      p_T_PREP=3, p_T_ZERO=7, p_T_TRAIL=4, p_C_LINE=1168,
+                      p_FRAME_MODE=Instance.PreformattedParam("1'b1"), **byte_domain,
                      i_INIT_REQ=init_req, o_INIT_READY=init_ready, o_INIT_DONE_TX=init_done_tx,
                      i_INIT_BYTE=init_byte, i_INIT_LAST=init_last, o_INIT_NEXT=init_next,
                      i_VID_REQ=vid_req, i_VID_LINE_RDY=vid_line_rdy, i_VID_WORD=vid_word, o_VID_RD=vid_rd,
@@ -83,8 +84,10 @@ class FPGBCWhiteTarget(Module):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", type=Path, default=ROOT / "build/fpgbc_white/direct")
-    parser.add_argument("--bars", action="store_true")
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "build/fpgbc_frame_1168/bars")
+    pattern = parser.add_mutually_exclusive_group()
+    pattern.add_argument("--bars", action="store_true", help="Barras fijas (predeterminado)")
+    pattern.add_argument("--white", action="store_true", help="Blanco fijo, mismo encuadre")
     parser.add_argument("--delay", action="store_true", help="Ensayar el IODELAY de 32 taps")
     args = parser.parse_args()
 
@@ -99,7 +102,7 @@ def main():
             platform.add_source(source)
     platform.add_source(ROOT / "motor_lpdt/src/reg_0.v")
     platform.add_source(ROOT / "gateware/cores/fpgbc_white_control.v")
-    platform.build(FPGBCWhiteTarget(platform, white=not args.bars, delay=args.delay),
+    platform.build(FPGBCWhiteTarget(platform, white=args.white, delay=args.delay),
                    build_dir=str(args.output_dir), build_name="fpgbc_white",
                    run=False, timingstrict=True)
 

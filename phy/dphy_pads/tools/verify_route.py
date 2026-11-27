@@ -7,9 +7,11 @@ import json
 from pathlib import Path
 import re
 import sys
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from apycula import gowin_pack as pack
+from apycula import bitmatrix
 
 from gateware.tests.review_fuses import fuses_present, pack_to_tilemap, verify_iob_encoding
 from gateware.tests.review_io import DEVICE, expected_bel, io_attribute, load_reference
@@ -140,9 +142,41 @@ def verify_route(top, db, variant):
     return pads
 
 
-def audit_fuses(path, pads, provenance):
+def serialize_checked(result, output):
+    """Publica un candidato nuevo solo si su bitmap releído es idéntico."""
+    output = Path(output)
+    review = output.with_suffix(".fs.review.json")
+    require(not output.exists() and not review.exists(),
+            "No se sobrescriben bitstreams ni revisiones anteriores")
+    require(pack.bsram_init_map is None, "La serialización auditada no admite BSRAM inicializada")
+    main_map = pack.chipdb.fuse_bitmap(result["db"], result["tilemap"])
+    pack.header_footer(result["db"], main_map, False)
+    with TemporaryDirectory(prefix="mixed-fs-", dir=output.parent) as temp:
+        candidate = Path(temp) / "candidate.fs"
+        pack.bslib.write_bitstream(str(candidate), main_map, result["db"].cmd_hdr,
+                                  result["db"].cmd_ftr, False, result["extra_slots"])
+        readback, _, _, _ = pack.bslib.read_bitstream(str(candidate))
+        require(bitmatrix.shape(readback) == bitmatrix.shape(main_map)
+                and not bitmatrix.any(bitmatrix.xor(readback, main_map)),
+                "La lectura del .fs no coincide con el mapa auditado")
+        with output.open("xb") as stream:
+            stream.write(candidate.read_bytes())
+    return {"bitstream_written": True, "hardware_accessed": False,
+            "serialized_bitmap_roundtrip": True,
+            "bitstream_sha256": sha256(output.read_bytes()).hexdigest(),
+            "checker_sha256": sha256(Path(__file__).read_bytes()).hexdigest()}
+
+
+def audit_fuses(path, pads, provenance, *, board_pads=None, output=None):
     """Comprueba atributos y fusibles seleccionados por el codificador adaptado."""
     require(len(pads) == 12, "Auditoría incompleta: se requieren los doce pads del PHY")
+    board_pads = board_pads or {}
+    all_pads = {**pads, **board_pads}
+    expected_voltages = {0: "1.2", 1: "2.5", **({5: "3.3"} if board_pads else {})}
+    if output is not None:
+        output = Path(output)
+        require(not output.exists() and not output.with_suffix(".fs.review.json").exists(),
+                "No se sobrescriben bitstreams ni revisiones anteriores")
     observations, bank_choices, bank_io_choices = {}, {}, {}
     get_fuses = pack.get_longval_fuses
     get_bank_fuses, get_bank_io_fuses = pack.get_bank_fuses, pack.get_bank_io_fuses
@@ -154,18 +188,18 @@ def audit_fuses(path, pads, provenance):
         if frame.f_code is place.__code__ and table in {"IOBA", "IOBB"}:
             local = frame.f_locals
             key = (local.get("row"), local.get("col"), table)
-            if key in pads and local.get("iob_attrs") is attributes:
-                require(key not in observations, f"Apicula reprocesó {pads[key][0]}")
+            if key in all_pads and local.get("iob_attrs") is attributes:
+                require(key not in observations, f"Apicula reprocesó {all_pads[key][0]}")
                 effective = dict(local["atr"])
                 verify_iob_encoding(db, effective, attributes)
                 require((local["fuse_row"], local["fuse_col"]) == key[:2],
-                        f"{pads[key][0]}: fusibles fuera de la tesela del pad")
+                        f"{all_pads[key][0]}: fusibles fuera de la tesela del pad")
                 observations[key] = (effective, set(bits))
         return bits
 
     def observe_bank(db, tile_type, attributes, table, bank):
         bits = get_bank_fuses(db, tile_type, attributes, table, bank)
-        if bank in {0, 1}:
+        if bank in expected_voltages:
             frame = inspect.currentframe().f_back
             local = frame.f_locals
             require(frame.f_code is place.__code__ and table == "BANK"
@@ -184,7 +218,7 @@ def audit_fuses(path, pads, provenance):
         bits = get_bank_io_fuses(db, tile_type, attributes)
         frame = inspect.currentframe().f_back
         bank = frame.f_locals.get("bank")
-        if frame.f_code is place.__code__ and bank in {0, 1}:
+        if frame.f_code is place.__code__ and bank in expected_voltages:
             require(bank in bank_choices and bank not in bank_io_choices
                     and bank_choices[bank][1] is attributes,
                     f"BANK{bank}: selección complementaria sin evidencia de banco")
@@ -198,8 +232,8 @@ def audit_fuses(path, pads, provenance):
         patch.object(pack, "get_bank_io_fuses", new=observe_bank_io),
     ):
         result = pack_to_tilemap(path)
-    require(observations.keys() == pads.keys()
-            and bank_choices.keys() == bank_io_choices.keys() == {0, 1},
+    require(observations.keys() == all_pads.keys()
+            and bank_choices.keys() == bank_io_choices.keys() == expected_voltages.keys(),
             "Auditoría incompleta: faltan pads, bancos o el mapa anterior a serialización")
 
     report = {"bitstream_written": False, "electrical_validation": "NOT_MEASURED",
@@ -234,8 +268,26 @@ def audit_fuses(path, pads, provenance):
         present = bool(bits) and fuses_present(tile, selected)
         report["banks"][bank] = {"BANK_VCCIO": voltage, "selected_fuse_count": len(selected),
                                  "selected_fuses_present": present}
-        if voltage != ("1.2", "2.5")[bank] or not present:
+        if voltage != expected_voltages[bank] or not present:
             report["errors"].append(f"BANK{bank}: tensión o fusibles de banco incorrectos ({voltage} V)")
+    for key, (port, number, bank) in board_pads.items():
+        attrs, bits = observations[key]
+        present = bool(bits) and fuses_present(result["tilemap"][key[:2]], bits)
+        report["pads"][port] = {"pin": number, "bank": bank, "attributes": attrs,
+                                "selected_fuse_count": len(bits), "selected_fuses_present": present}
+        # OBUF sin OEN conserva TO=INV del perfil OBUF de Apicula 0.32;
+        # SIG corresponde al OEN dinámico de TBUF, no al dato de salida.
+        expected = {"IO_TYPE": "LVCMOS33", "BANK_VCCIO": "3.3", "PULLMODE": "NONE",
+                    "LVDS_OUT": "OFF", "OPENDRAIN": "OFF", "ODMUX_1": "1", "TO": "INV"}
+        if not present or any(attrs.get(name) != value for name, value in expected.items()):
+            report["errors"].append(f"{port}: fusibles/atributos de backlight incorrectos")
+    if output is not None:
+        require(not report["errors"], "\n".join(report["errors"]))
+        # Serializar exactamente el mapa observado, no una segunda ejecución
+        # del packer. Publicar solo tras releer y comparar todo el bitmap.
+        report.update(serialize_checked(result, output))
+        with output.with_suffix(".fs.review.json").open("x") as stream:
+            stream.write(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     return report
 
 

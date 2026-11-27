@@ -1,14 +1,21 @@
 # LINK_FSM + TIMER — control lógico de MIPI_TX
 
 [Diagrama editable: Flujo, Datapath y FSM](docs/LINK_FSM.drawio).
-[`link_fsm`](src/link_fsm.v) arbitra paquetes LPDT y líneas HS e
-instancia un solo [`link_fsm_timer`](src/link_fsm_timer.v). No está
-conectado al TOP ni habilita drivers físicos. Las referencias son
+[`link_fsm`](src/link_fsm.v) arbitra paquetes LPDT y ráfagas HS e
+instancia un [`link_fsm_timer`](src/link_fsm_timer.v). No habilita
+drivers físicos directamente. Las referencias son
 `MIPI_TX_componentes.pdf`, las dos páginas de `MIPI_TX_bloques.pdf` y
 `MIPI_TX_adopcion.md` de `digital_UN/MIPI_LCD/Docs`. Los flancos de los
 vecinos siguen [LP_TX](../lp_tx/README.md#flancos-acordados-del-primer-paquete),
 [HS_PACKER](../hs_packer/src/hs_packer.v) y
 [PHY_IF](../phy_if/README.md#flancos-acordados).
+
+El modo por defecto `FRAME_MODE=0` conserva la secuencia de líneas
+descrita abajo. La integración de placa usa `FRAME_MODE=1`: instancia
+[`FRAME_TIMING`](../frame_timing/README.md), publica el descriptor interno
+`BURST_KIND[1:0]` y selecciona un GAP distinto para sincronismos y RGB.
+No se añaden estados de FSM. Ver
+[flancos y presupuesto de cuadro](../../gateware/docs/fpgbc_frame.md).
 
 ## Interfaz y admisión
 

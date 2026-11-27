@@ -6,7 +6,8 @@ module link_fsm #(
     parameter integer T_ZERO = 1,
     parameter integer T_TRAIL = 1,
     parameter integer C_LINE = 1091,
-    parameter integer T_CLK_START = 0
+    parameter integer T_CLK_START = 0,
+    parameter FRAME_MODE = 1'b0
 ) (
     input CLK_BYTE,
     input RST_BYTE,  // Síncrono activo en 1: cubrir un ↑ y el ↓ siguiente.
@@ -26,7 +27,8 @@ module link_fsm #(
     output reg CLK_REQ,
     output reg [1:0] SEL_OUT,
     output reg [1:0] LP_FORCE,
-    output reg SOT_EN
+    output reg SOT_EN,
+    output [1:0] BURST_KIND
 );
   localparam [1:0] REPOSO = 2'b00, LPDT = 2'b01, FORZADO = 2'b10, HS = 2'b11;
 
@@ -36,18 +38,19 @@ module link_fsm #(
 
   localparam integer N_DRAIN = 1;  // Latencia de cierre del modelo, por validar con el PHY.
   localparam integer N_EOT = N_DRAIN + T_TRAIL;
-  localparam integer SOT_DATA_DRAIN = 1 + 1083 + N_DRAIN;
+  localparam integer SOT_DATA_DRAIN = 1 + 1083 + (FRAME_MODE ? 8 : 0) + N_DRAIN;
   // La suma ancha permite detectar un presupuesto inviable antes de recortar.
   localparam [34:0] C_ACTIVE = {3'b0, T_LPX} + {3'b0, T_PREP} + {3'b0, T_ZERO}
                             + {3'b0, SOT_DATA_DRAIN} + {3'b0, T_TRAIL} + {3'b0, T_CLK_START};
   localparam integer T_GAP = C_LINE - C_ACTIVE[31:0] - 1;  // Un ciclo para LINE_WAIT.
+  localparam integer T_GAP_SYNC = T_GAP + (FRAME_MODE ? 1089 : 0);
 
   function integer max_ticks(input integer a, b);
     max_ticks = (a > b) ? a : b;
   endfunction
 
   localparam integer N_MAX = max_ticks(max_ticks(T_CLK_START, max_ticks(T_LPX, T_PREP)),
-                              max_ticks(T_ZERO, max_ticks(N_EOT, T_GAP)));
+                              max_ticks(T_ZERO, max_ticks(N_EOT, T_GAP_SYNC)));
   localparam integer W = (N_MAX > 1) ? $clog2(N_MAX + 1) : 1;
 
   wire PHY_AVAILABLE = READY && LOCK;
@@ -56,6 +59,19 @@ module link_fsm #(
   reg LOAD_T, CNT_EN;
   reg [W-1:0] N;
   wire TIMER_DONE;
+
+  generate
+    if (FRAME_MODE) begin : frame
+      wire BURST_START = !RST_BYTE && ENTER_T &&
+                        ((STATE == CLK_PRE) || (T_CLK_START == 0 && STATE == LP01));
+      frame_timing timing (
+          .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE), .BURST_START(BURST_START),
+          .BURST_KIND(BURST_KIND)
+      );
+    end else begin : line_only
+      assign BURST_KIND = 2'b10;
+    end
+  endgenerate
 
   link_fsm_timer #(.W(W)) timer (
       .CLK_BYTE(CLK_BYTE),
@@ -170,7 +186,7 @@ module link_fsm #(
         end
         LP11: begin
           CNT_EN = 1'b1;
-          N = T_GAP[W-1:0];
+          N = (FRAME_MODE && BURST_KIND != 2'b10) ? T_GAP_SYNC[W-1:0] : T_GAP[W-1:0];
         end
         default: begin end
       endcase

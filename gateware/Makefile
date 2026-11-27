@@ -6,14 +6,14 @@ YOSYS ?= yosys
 NEXTPNR ?= yowasp-nextpnr-himbaechel-gowin
 
 ROOT := $(abspath ..)
-BUILD := $(ROOT)/build/fpgbc_white
+BUILD ?= $(ROOT)/build/fpgbc_frame_1168
 PHY := $(ROOT)/phy
 MIPI := $(ROOT)/mipi_tx
 ROM := $(ROOT)/init_sequencer/src/init_mem.hex
 ROM_INCLUDE := $(ROOT)/build/init_sequencer
-VARIANT ?= direct
-ifneq ($(VARIANT),$(filter $(VARIANT),direct delay))
-$(error VARIANT debe ser direct o delay)
+VARIANT ?= bars
+ifneq ($(VARIANT),$(filter $(VARIANT),bars white delay))
+	$(error VARIANT debe ser bars, white o delay)
 endif
 SDC := $(ROOT)/gateware/targets/fpgbc_white.sdc
 TOP := fpgbc_white
@@ -25,11 +25,11 @@ MODELS := $(PHY)/clock_gen/TB/rpll_model.v $(PHY)/clock_ddr/TB/primitives_model.
 	$(PHY)/phy_supervisor/TB/osc_model.v $(ROOT)/gateware/tests/gowin_pad_models.v
 TB := $(MIPI)/TB/mipi_tx_TB.v
 TEST_INCLUDES := $(PHY)/TB/check_hs_pads.vh $(PHY)/phy_supervisor/TB/supervised_link.vh \
-	$(wildcard $(ROOT)/gateware/tests/white_target_*.vh)
+	$(wildcard $(ROOT)/gateware/tests/white_target_*.vh) tests/frame_target_checks.vh
 
-.PHONY: test test-final-wait test-white test-bars sim wave synth route audit
+.PHONY: test test-final-wait test-white test-bars sim wave synth route audit fs
 .DELETE_ON_ERROR:
-.PRECIOUS: $(BUILD)/%/$(TOP).v $(BUILD)/%/$(TOP).ys $(BUILD)/%/$(TOP).cst
+.PRECIOUS: $(BUILD)/%/$(TOP).v $(BUILD)/%/$(TOP).ys $(BUILD)/%/$(TOP).cst $(BUILD)/%/$(TOP).sdc
 .SECONDARY: $(BUILD)/$(VARIANT)/$(TOP).json
 
 test: test-white test-bars
@@ -37,8 +37,8 @@ test: test-white test-bars
 test-final-wait: VVP_ARGS = +short_waits
 test-final-wait: test-white test-bars
 
-test-white: $(BUILD)/$(VARIANT)/test.out
-	cd "$(BUILD)/$(VARIANT)" && $(VVP) -i test.out "+init_hex=$(ROM)" $(VVP_ARGS)
+test-white: $(BUILD)/white/test.out
+	cd "$(BUILD)/white" && $(VVP) -i test.out "+init_hex=$(ROM)" $(VVP_ARGS)
 
 test-bars: $(BUILD)/bars/test.out
 	cd "$(BUILD)/bars" && $(VVP) -i test.out "+init_hex=$(ROM)" $(VVP_ARGS)
@@ -56,18 +56,22 @@ $(ROM_INCLUDE)/init_mem_table.vh: $(ROM) ../init_sequencer/tools/gen_init_mem_ta
 
 $(BUILD)/%/$(TOP).v $(BUILD)/%/$(TOP).ys $(BUILD)/%/$(TOP).cst &: targets/fpgbc_white.py platforms/fpgbc.py $(RTL) Makefile
 	cd "$(ROOT)" && $(PYTHON) -m gateware.targets.fpgbc_white --output-dir "$(@D)" \
-		$(if $(filter bars,$*),--bars) $(if $(filter delay,$*),--delay)
+		$(if $(filter white,$*),--white,--bars) $(if $(filter delay,$*),--delay)
 
 $(BUILD)/%/test.out: $(BUILD)/%/$(TOP).v $(RTL) $(MODELS) $(TB) $(TEST_INCLUDES) $(ROM_INCLUDE)/init_mem_table.vh
-	$(IVERILOG) -g2012 -Wall -Wno-timescale -DFPGBC_WHITE -DPHY_GOWIN -DPHY_SUPERVISED \
+	$(IVERILOG) -g2012 -Wall -Wno-timescale -DFPGBC_WHITE -DFPGBC_FRAME -DPHY_GOWIN -DPHY_SUPERVISED \
 		-I"$(ROM_INCLUDE)" -I"$(PHY)/TB" -I"$(PHY)/phy_supervisor/TB" -Itests \
-		-s mipi_tx_TB -Pmipi_tx_TB.WHITE=$(if $(filter bars,$*),0,1) \
+		-s mipi_tx_TB -Pmipi_tx_TB.WHITE=$(if $(filter white,$*),1,0) \
 		-o "$@" $(TB) $(MODELS) "$(BUILD)/$*/$(TOP).v" $(RTL)
 
 synth: $(BUILD)/$(VARIANT)/$(TOP).json
 route: $(BUILD)/$(VARIANT)/$(TOP)_routed.json
 audit: route
-	cd "$(ROOT)" && $(PYTHON) -m gateware.tests.review_white "$(BUILD)/$(VARIANT)" "$(VARIANT)"
+	cd "$(ROOT)" && $(PYTHON) -m gateware.tests.review_white "$(BUILD)/$(VARIANT)" "$(if $(filter delay,$(VARIANT)),delay,direct)"
+
+fs: route
+	cd "$(ROOT)" && $(PYTHON) -m gateware.tests.review_white "$(BUILD)/$(VARIANT)" \
+		"$(if $(filter delay,$(VARIANT)),delay,direct)" --output "$(BUILD)/$(VARIANT)/$(TOP).fs"
 
 $(BUILD)/%/$(TOP).json: $(BUILD)/%/$(TOP).v $(BUILD)/%/$(TOP).ys $(ROM_INCLUDE)/init_mem_table.vh
 	cd "$(@D)" && $(YOSYS) -Q -q -l synth.log -s $(TOP).ys

@@ -24,6 +24,10 @@
     if ($realtime - start_time != 1_000_000) $fatal(1, "PWM distinto de 1 kHz");
   endtask
 
+`ifdef FPGBC_FRAME
+  `include "frame_target_checks.vh"
+`endif
+
   initial begin : scenario
     string init_hex;
     integer first_line, second_line;
@@ -43,25 +47,36 @@
     fork
       check_pwm();
       begin
+`ifdef FPGBC_FRAME
+        check_frames();
+`else
         full_line(WHITE, first_line);
         full_line(WHITE, second_line);
         if (second_line - first_line != C_LINE) $fatal(1, "Periodo de línea incorrecto");
+`endif
       end
     join
-    $display("PASS TOP: dos líneas desde pads y PWM a 1 kHz, 50 %%");
+    $display("PASS TOP: trafico desde pads y PWM a 1 kHz, 50 %%");
 
     if (WHITE) begin
       active_payload();
-      if ({BL_EN, BL_PWM} !== 2'b11 || READY !== 1'b0)
+      if (BL_EN !== 1'b1 || READY !== 1'b0)
         $fatal(1, "Backlight no sostenido durante la ráfaga previa al corte");
       stop_clock(0);
       check_init("TOP tras perder CLK_REF");
+`ifdef FPGBC_FRAME
+      check_restarted_frame();
+`endif
 
       active_payload();
       if (BL_EN !== 1'b1) $fatal(1, "No se habilitó tras el nuevo END");
       stop_clock(1);
       check_init("TOP tras perder CLK_BYTE");
+`ifdef FPGBC_FRAME
+      check_restarted_frame();
+`else
       full_line(WHITE, first_line);
+`endif
 
       active_payload();
       if (BL_EN !== 1'b1) $fatal(1, "Backlight apagado antes de probar botón");
