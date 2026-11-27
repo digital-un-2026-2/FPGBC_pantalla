@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram id="frame-timing-datapath" name="Datapath">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="1" pageScale="1" pageWidth="1560" pageHeight="1000" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="FRAME_TIMING — encuadre experimental de MIPI_TX" style="text;html=1;align=left;fontSize=28;fontStyle=1;fontColor=#20313F;" vertex="1" parent="1">
+          <mxGeometry x="30" y="20" width="1500" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Componente interno de LINK_FSM + TIMER · datapath en ↓CLK_BYTE · sin FSM ni temporizador de línea" style="text;html=1;align=left;fontSize=17;fontColor=#344654;" vertex="1" parent="1">
+          <mxGeometry x="30" y="75" width="1500" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="scope" value="FRAME_TIMING" style="container=1;collapsible=0;recursiveResize=0;rounded=0;html=1;fillColor=#F7F9FA;strokeColor=#8798A4;strokeWidth=1.5;dashed=1;align=left;verticalAlign=top;spacingLeft=15;spacingTop=10;fontSize=23;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="150" width="1010" height="520" as="geometry"/>
+        </mxCell>
+        <mxCell id="count" value="&lt;b&gt;FRAME_TIMING_COUNT&lt;/b&gt;&lt;br&gt;&lt;br&gt;Contador de 10 bits · ↓CLK_BYTE&lt;br&gt;EN = BURST_START&lt;br&gt;RST_BYTE = 1: síncrono ↓, valor 0&lt;br&gt;0…742 → 0" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#E5F0E2;strokeColor=#3B505C;strokeWidth=2;align=center;verticalAlign=middle;fontSize=17;" vertex="1" parent="scope">
+          <mxGeometry x="60" y="210" width="350" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="kind" value="&lt;b&gt;FRAME_TIMING_KIND&lt;/b&gt;&lt;br&gt;&lt;br&gt;Rangos combinacionales&lt;br&gt;+ descriptor de 2 bits · ↓CLK_BYTE&lt;br&gt;EN = BURST_START&lt;br&gt;RST_BYTE = 1: síncrono ↓, VSS (00)" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#D8EAF0;strokeColor=#3B505C;strokeWidth=2;align=center;verticalAlign=middle;fontSize=17;" vertex="1" parent="scope">
+          <mxGeometry x="580" y="210" width="370" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="link" value="&lt;b&gt;LINK_FSM&lt;/b&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#EBEFF3;strokeColor=#3B505C;strokeWidth=2;fontSize=17;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="150" width="190" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="start-source" value="BURST_START" style="text;html=1;align=right;fontSize=15;fontColor=#674594;" vertex="1" parent="1">
+          <mxGeometry x="70" y="195" width="140" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="start-junction" style="ellipse;fillColor=#674594;strokeColor=#674594;" vertex="1" parent="1">
+          <mxGeometry x="506" y="217" width="8" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="start-count-label" value="BURST_START" style="text;html=1;align=center;fontSize=15;fontColor=#674594;" vertex="1" parent="1">
+          <mxGeometry x="435" y="324" width="150" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="start-kind-label" value="BURST_START" style="text;html=1;align=center;fontSize=15;fontColor=#674594;" vertex="1" parent="1">
+          <mxGeometry x="965" y="324" width="150" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="start-in" style="endArrow=none;strokeColor=#674594;strokeWidth=1.5;exitX=1;exitY=0.71;" edge="1" parent="1" source="link" target="start-junction">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="start-count" style="endArrow=block;endFill=1;strokeColor=#674594;strokeWidth=1.5;entryX=0.486;entryY=0;" edge="1" parent="1" source="start-junction" target="count">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="start-kind" style="endArrow=block;endFill=1;strokeColor=#674594;strokeWidth=1.5;entryX=0.486;entryY=0;" edge="1" parent="1" source="start-junction" target="kind">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1040" y="221"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="clock-terminal" value="CLK_BYTE" style="text;html=1;align=left;fontSize=17;fontColor=#46525F;" vertex="1" parent="1">
+          <mxGeometry x="30" y="255" width="170" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock-junction" style="ellipse;fillColor=#46525F;strokeColor=#46525F;" vertex="1" parent="1">
+          <mxGeometry x="396" y="262" width="8" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock-in" style="endArrow=none;strokeColor=#46525F;strokeWidth=1.5;" edge="1" parent="1" target="clock-junction">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="200" y="266" as="sourcePoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="clock-count" style="endArrow=block;strokeColor=#46525F;strokeWidth=1.5;entryX=0.17;entryY=0;" edge="1" parent="1" source="clock-junction" target="count"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="clock-kind" style="endArrow=block;strokeColor=#46525F;strokeWidth=1.5;entryX=0.16;entryY=0;jumpStyle=arc;" edge="1" parent="1" source="clock-junction" target="kind">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="920" y="266"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="clock-count-label" value="CLK_BYTE" style="text;html=1;align=center;fontSize=15;fontColor=#46525F;" vertex="1" parent="1"><mxGeometry x="345" y="324" width="110" height="25" as="geometry"/></mxCell>
+        <mxCell id="clock-kind-label" value="CLK_BYTE" style="text;html=1;align=center;fontSize=15;fontColor=#46525F;" vertex="1" parent="1"><mxGeometry x="865" y="324" width="110" height="25" as="geometry"/></mxCell>
+        <mxCell id="reset-terminal" value="RST_BYTE" style="text;html=1;align=left;fontSize=17;fontColor=#A7303D;" vertex="1" parent="1"><mxGeometry x="30" y="295" width="170" height="30" as="geometry"/></mxCell>
+        <mxCell id="reset-junction" style="ellipse;fillColor=#A7303D;strokeColor=#A7303D;" vertex="1" parent="1"><mxGeometry x="626" y="302" width="8" height="8" as="geometry"/></mxCell>
+        <mxCell id="reset-in" style="endArrow=none;strokeColor=#A7303D;strokeWidth=1.5;jumpStyle=arc;" edge="1" parent="1" target="reset-junction"><mxGeometry relative="1" as="geometry"><mxPoint x="200" y="306" as="sourcePoint"/></mxGeometry></mxCell>
+        <mxCell id="reset-count" style="endArrow=block;strokeColor=#A7303D;strokeWidth=1.5;entryX=0.829;entryY=0;" edge="1" parent="1" source="reset-junction" target="count"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="reset-kind" style="endArrow=block;strokeColor=#A7303D;strokeWidth=1.5;entryX=0.811;entryY=0;jumpStyle=arc;" edge="1" parent="1" source="reset-junction" target="kind"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1160" y="306"/></Array></mxGeometry></mxCell>
+        <mxCell id="reset-count-label" value="RST_BYTE" style="text;html=1;align=center;fontSize=15;fontColor=#A7303D;" vertex="1" parent="1"><mxGeometry x="575" y="324" width="110" height="25" as="geometry"/></mxCell>
+        <mxCell id="reset-kind-label" value="RST_BYTE" style="text;html=1;align=center;fontSize=15;fontColor=#A7303D;" vertex="1" parent="1"><mxGeometry x="1105" y="324" width="110" height="25" as="geometry"/></mxCell>
+        <mxCell id="period-out-label" value="NEXT_PERIOD[9:0]" style="text;html=1;align=right;fontSize=15;fontColor=#53670C;" vertex="1" parent="1"><mxGeometry x="510" y="550" width="180" height="25" as="geometry"/></mxCell>
+        <mxCell id="period-in-label" value="NEXT_PERIOD[9:0]" style="text;html=1;align=left;fontSize=15;fontColor=#53670C;" vertex="1" parent="1"><mxGeometry x="870" y="550" width="180" height="25" as="geometry"/></mxCell>
+        <mxCell id="period-wire" style="endArrow=block;strokeColor=#53670C;strokeWidth=3;exitX=1;exitY=0.85;entryX=0;entryY=0.85;" edge="1" parent="1" source="count" target="kind"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="kind-out-label" value="BURST_KIND[1:0]" style="text;html=1;align=right;fontSize=15;fontColor=#137987;" vertex="1" parent="1"><mxGeometry x="1060" y="550" width="185" height="25" as="geometry"/></mxCell>
+        <mxCell id="consumer" value="&lt;b&gt;LINK_FSM /&lt;br&gt;HS_PACKER&lt;/b&gt;" style="rounded=0;html=1;fillColor=#F3F2DB;strokeColor=#3B505C;strokeWidth=2;fontSize=18;verticalAlign=top;spacingTop=15;" vertex="1" parent="1"><mxGeometry x="1350" y="475" width="180" height="160" as="geometry"/></mxCell>
+        <mxCell id="consumer-label" value="BURST_KIND[1:0]" style="text;html=1;align=left;fontSize=15;fontColor=#137987;" vertex="1" parent="1"><mxGeometry x="1360" y="550" width="170" height="25" as="geometry"/></mxCell>
+        <mxCell id="kind-wire" style="endArrow=block;strokeColor=#137987;strokeWidth=3;exitX=1;exitY=0.85;entryX=0;entryY=0.45;" edge="1" parent="1" source="kind" target="consumer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="recipe" value="&lt;b&gt;Decodificación del índice previo al ↓&lt;/b&gt;&lt;br&gt;0…2: VSS (00) · 3…10: HSS (01) · 11…730: RGB (10) · 731…742: HSS (01)&lt;br&gt;Hipótesis de ensayo aprobada; no es una decodificación de la captura." style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFF8E6;strokeColor=#B7A46A;fontSize=18;align=left;spacing=15;" vertex="1" parent="1"><mxGeometry x="30" y="710" width="1500" height="100" as="geometry"/></mxCell>
+        <mxCell id="timing" value="&lt;b&gt;Flancos y retención&lt;/b&gt;&lt;br&gt;↑ LINK_FSM admite → BURST_START combinacional → ↓ captura tipo actual y avanza índice.&lt;br&gt;Sin inicio, ambos registros retienen. Reset tiene prioridad; no hay reset por paquete.&lt;br&gt;El descriptor se usa tras capturarlo, no en el mismo ↓. Camino ↑→↓: medio ciclo (~9,09 ns a 55 MHz)." style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#8798A4;fontSize=18;align=left;spacing=15;" vertex="1" parent="1"><mxGeometry x="30" y="835" width="1500" height="135" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
