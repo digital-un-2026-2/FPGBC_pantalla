@@ -26,6 +26,14 @@ datos y se cuenta dentro de `C_LINE`. La
 [integración Gowin](../phy/README.md) ensaya `T_CLK_START=27` sin añadir
 puertos a `MIPI_TX`.
 
+El TOP de cuadro usa el parámetro opt-in `FRAME_MODE=1`: integra
+[`FRAME_TIMING`](frame_timing/README.md) dentro de `LINK_FSM + TIMER`
+y amplía `HS_PACKER` con sincronismos y prefijo HSS/Blanking. No cambia
+las interfaces externas ni el datapath RGB original. El modo por defecto
+`0` conserva las regresiones descritas aquí. Consultar
+[la integración de cuadro y sus flancos](../gateware/docs/fpgbc_frame.md)
+para la receta experimental de 743 periodos y `C_LINE=1168`.
+
 ## Contrato de consumo del PHY simulado
 
 En LP, `PHY_IF` registra cada símbolo de `LP_TX` un `↓` después de que se

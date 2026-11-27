@@ -4,7 +4,7 @@
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="frame" parent="1" vertex="1" value="fpgbc_white — TOP LiteX/Migen" style="swimlane;startSize=28;fontStyle=1;fillColor=#f5f5f5;">
+        <mxCell id="frame" parent="1" vertex="1" value="fpgbc_white — TOP LiteX/Migen · FRAME_MODE=1 · C_LINE=1168" style="swimlane;startSize=28;fontStyle=1;fillColor=#f5f5f5;">
           <mxGeometry x="50" y="40" width="1200" height="780" as="geometry"/>
         </mxCell>
         <mxCell id="clk" parent="1" vertex="1" value="Pin 11&lt;br&gt;CLK_REF · 40 MHz" style="rounded=1;html=1;">
@@ -25,7 +25,7 @@
         <mxCell id="seq" parent="1" vertex="1" value="&lt;b&gt;INIT_SEQUENCER&lt;/b&gt;&lt;br&gt;CLK_BYTE / RST_BYTE&lt;br&gt;INIT_MEM: BYTE / WAIT / END&lt;br&gt;INIT_DONE / INIT_REQ / INIT_LAST&lt;br&gt;INIT_BYTE[7:0]&lt;br&gt;INIT_READY / INIT_NEXT / INIT_DONE_TX" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;">
           <mxGeometry x="118" y="400" width="288" height="132" as="geometry"/>
         </mxCell>
-        <mxCell id="video" parent="1" vertex="1" value="&lt;b&gt;VIDEO_SOURCE&lt;/b&gt;&lt;br&gt;CLK_BYTE / RST_BYTE / INIT_DONE&lt;br&gt;VID_REQ / VID_LINE_RDY&lt;br&gt;VID_WORD[15:0] / VID_RD&lt;br&gt;Blanco fijo o barras" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;">
+        <mxCell id="video" parent="1" vertex="1" value="&lt;b&gt;VIDEO_SOURCE&lt;/b&gt;&lt;br&gt;CLK_BYTE / RST_BYTE / INIT_DONE&lt;br&gt;VID_REQ / VID_LINE_RDY&lt;br&gt;VID_WORD[15:0] / VID_RD&lt;br&gt;Barras por defecto / --white" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;">
           <mxGeometry x="118" y="654" width="288" height="114" as="geometry"/>
         </mxCell>
         <mxCell id="tx" parent="1" vertex="1" value="&lt;b&gt;MIPI_TX&lt;/b&gt;&lt;br&gt;CLK_BYTE / RST_BYTE&lt;br&gt;INIT_REQ / INIT_LAST / INIT_BYTE[7:0]&lt;br&gt;INIT_READY / INIT_NEXT / INIT_DONE_TX&lt;br&gt;VID_REQ / VID_LINE_RDY / VID_WORD[15:0] / VID_RD&lt;br&gt;HS_REQ / CLK_REQ / LP_P[2:0] / LP_N[2:0]&lt;br&gt;HS_BYTE0[7:0] / HS_BYTE1[7:0] / LOCK / READY" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;">

@@ -23,6 +23,7 @@ module hs_packer_TB;
   reg [15:0] palabra_phy;
 
   hs_packer dut (
+      .BURST_KIND(2'b10),
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE), .PK_START(PK_START),
       .VID_WORD(VID_WORD), .VID_RD(VID_RD), .PK_DONE(PK_DONE), .WORD(WORD)
   );

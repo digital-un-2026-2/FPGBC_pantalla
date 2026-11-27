@@ -18,6 +18,7 @@ def verify_board_pins(top, db):
         ("backlight_en", BACKLIGHT_PINS["backlight_en"][0], "en_buf", "OBUF", "O", "LVCMOS33", "NONE"),
         ("backlight_pwm", BACKLIGHT_PINS["backlight_pwm"][0], "pwm_buf", "OBUF", "O", "LVCMOS33", "NONE"),
     )
+    board_pads = {}
     for port, number, name, primitive, terminal, standard, pull in expected:
         cell = top["cells"][name]
         bel, *_ = expected_bel(db, pins[str(number)][0])
@@ -25,7 +26,13 @@ def verify_board_pins(top, db):
                 and cell["connections"][terminal] == top["ports"][port]["bits"]
                 and io_attribute(cell, "IO_TYPE") == standard
                 and io_attribute(cell, "PULL_MODE") == pull,
-                f"{port}: pin, buffer o atributos incorrectos")
+                 f"{port}: pin, buffer o atributos incorrectos")
+        if port.startswith("backlight_"):
+            pin_name = pins[str(number)][0]
+            _, row, col, polarity = expected_bel(db, pin_name)
+            require(db.pin_bank[pin_name] == 5, f"{port}: no pertenece a BANK5")
+            board_pads[row, col, f"IOB{polarity}"] = (port, number, 5)
+    return board_pads
 
 
 def verify_board_clocks(top):
@@ -68,11 +75,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("build", type=Path)
     parser.add_argument("variant", choices=("direct", "delay"))
+    parser.add_argument("--output", type=Path, help="Escribir .fs nuevo tras auditar y verificar lectura")
     args = parser.parse_args()
     routed = args.build / "fpgbc_white_routed.json"
     top = json.loads(routed.read_text())["modules"]["top"]
     db, _, provenance = load_reference()
-    verify_board_pins(top, db)
+    board_pads = verify_board_pins(top, db)
     verify_board_clocks(top)
 
     # nextpnr conserva un solo nombre para cada red. Presentar las señales
@@ -87,7 +95,7 @@ def main():
     pads = verify_route(phy_view, db, args.variant)
     print("PASS TOP: pines, relojes dedicados, serializadores locales y OEN dominados por ISO")
 
-    report = audit_fuses(routed, pads, provenance)
+    report = audit_fuses(routed, pads, provenance, board_pads=board_pads, output=args.output)
     output = args.build / "fuse_review.json"
     output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     require(not report["errors"], "\n".join(report["errors"]))

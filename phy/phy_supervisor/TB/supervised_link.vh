@@ -39,6 +39,11 @@
     #(SETTLE);
     if (`TB_SEQ.ADDR !== 8'd0 || `TB_VIDEO.ADDR !== 11'd0 || registered_word !== 16'd0)
       $fatal(1, "El par de rearme no descartó la posición o el paquete anterior");
+`ifdef FPGBC_FRAME
+    if (board.tx.link.frame.timing.NEXT_PERIOD !== 0 ||
+        board.tx.BURST_KIND !== 2'b00)
+      $fatal(1, "El rearme no reinicio el encuadre desde el periodo 0");
+`endif
     @(posedge CLK_BYTE);
     if (RST_BYTE !== 1'b1) $fatal(1, "RST_BYTE se anticipó a P4 ↑");
     #(SETTLE);
@@ -48,9 +53,18 @@
 
   task automatic active_payload;
     integer reads_before;
+`ifdef FPGBC_FRAME
+    // Los primeros periodos son sincronismos. Esperar lecturas reales, no
+    // interpretar como RGB la primera reserva de reloj del cuadro.
+    wait (VID_RD === 1'b0);
+    @(posedge VID_RD);
+    reads_before = total_reads;
+    repeat (ABORT_READS) begin @(negedge CLK_BYTE); #(SETTLE); end
+`else
     @(posedge CLK_REQ);
     reads_before = total_reads;
     decode_words(3 + ABORT_READS);
+`endif
     if (total_reads - reads_before < ABORT_READS || !LOCK_RAW || !VID_RD ||
         D0_HS === PAD_Z || D1_HS === PAD_Z || CLK_HS_PAD === PAD_Z)
       $fatal(1, "Se requiere tráfico HS real en curso antes del fallo de prueba");
