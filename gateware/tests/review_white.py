@@ -35,12 +35,20 @@ def verify_board_pins(top, db):
     return board_pads
 
 
-def verify_board_clocks(top):
+def verify_board_clocks(top, *, data_only=False):
     cells, nets = top["cells"], top["netnames"]
     pll = cells["link.clocks.pll"]["connections"]
     require(pll["CLKIN"] == cells["clk40_buf"]["connections"]["O"] == nets["ref_clk"]["bits"],
             "La referencia de la PLL no viene del pin de 40 MHz")
-    require(pll["RESET"] == nets["reset_pll"]["bits"] and pll["RESET"] != nets["rst_byte"]["bits"],
+    # nextpnr puede conservar otro alias para rst_byte. Identificar además
+    # su fuente real, sin depender de qué nombre sobrevivió al aplanado.
+    rearm = cells["supervisor.rearm.RST_BYTE_DFFP_Q"]
+    require(rearm["type"] == "DFFP" and rearm["connections"]["CLK"] == nets["clk_byte"]["bits"],
+            "RST_BYTE no sale del registro de rearme en CLK_BYTE")
+    byte_reset = rearm["connections"]["Q"]
+    if "rst_byte" in nets:
+        require(nets["rst_byte"]["bits"] == byte_reset, "RST_BYTE tiene otra fuente")
+    require(pll["RESET"] == nets["reset_pll"]["bits"] and pll["RESET"] != byte_reset,
             "Se mezclaron el reset de PLL y el reset de byte")
     require(pll["LOCK"] == nets["lock_raw"]["bits"], "LOCK_RAW no sale de la PLL")
 
@@ -55,7 +63,12 @@ def verify_board_clocks(top):
             and any(re.search(r"/SPINE\d+/BLBDCLK\d+$", pip) for pip in route_pips(wd_net)),
             "CLK_WD no entra en la red global por OSC y BUFG")
 
-    for clock in ("ref_clk", "clk_byte", "supervisor.CLK_WD", "link.CLK_HS", "link.forwarded.PCLK_110"):
+    clocks = ["ref_clk", "clk_byte", "supervisor.CLK_WD"]
+    if not data_only:
+        clocks.extend(("link.CLK_HS", "link.forwarded.PCLK_110"))
+    # DATA_ONLY no tiene registros de fabric en CLK_HS: solo OSER8.
+    # verify_serial_route comprueba ese camino dedicado HCLK por carril.
+    for clock in clocks:
         net = nets[clock]
         global_sites = {
             pip.split("/")[0] for pip in route_pips(net)
@@ -74,14 +87,14 @@ def verify_board_clocks(top):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("build", type=Path)
-    parser.add_argument("variant", choices=("direct", "delay"))
+    parser.add_argument("variant", choices=("direct", "delay", "data-only"))
     parser.add_argument("--output", type=Path, help="Escribir .fs nuevo tras auditar y verificar lectura")
     args = parser.parse_args()
     routed = args.build / "fpgbc_white_routed.json"
     top = json.loads(routed.read_text())["modules"]["top"]
     db, _, provenance = load_reference()
     board_pads = verify_board_pins(top, db)
-    verify_board_clocks(top)
+    verify_board_clocks(top, data_only=args.variant == "data-only")
 
     # nextpnr conserva un solo nombre para cada red. Presentar las señales
     # de frontera del TOP con los nombres que usa la auditoría DPHY_PADS.
@@ -95,7 +108,8 @@ def main():
     pads = verify_route(phy_view, db, args.variant)
     print("PASS TOP: pines, relojes dedicados, serializadores locales y OEN dominados por ISO")
 
-    report = audit_fuses(routed, pads, provenance, board_pads=board_pads, output=args.output)
+    report = audit_fuses(routed, pads, provenance, board_pads=board_pads, output=args.output,
+                         data_only=args.variant == "data-only")
     output = args.build / "fuse_review.json"
     output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     require(not report["errors"], "\n".join(report["errors"]))

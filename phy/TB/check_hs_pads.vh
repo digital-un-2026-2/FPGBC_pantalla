@@ -7,6 +7,36 @@
   bit track_clock = 0;
   realtime first_clock, last_clock, data_off, clock_off, last_crc;
   reg prev_clock = 1'bz;
+  bit eye_active = 0;
+`ifdef DATA_ONLY
+  // Oscilador del instrumento simulado: NO es una salida ni un receptor
+  // implementado. Se inicia desde la habilitación observada de D0.
+  reg instrument_tick = 0;
+  reg instrument_last = 0;
+  reg expected_clk_idle = 1;
+  always @(negedge CLK_BYTE) begin
+    if (RST_BYTE) expected_clk_idle <= 1;
+    else if (CLK_REQ) expected_clk_idle <= 0;
+  end
+  initial forever begin
+    wait (D0_HS !== PAD_Z);
+    #(UI / 2.0);
+    while (D0_HS !== PAD_Z) begin
+      instrument_tick = !instrument_tick;
+      #(UI);
+    end
+  end
+  always @(CLK_HS_PAD or CLK_LP or `TB_PHY.ISO or expected_clk_idle) begin
+    #(SETTLE);
+    if (CLK_HS_PAD !== PAD_Z)
+      $fatal(1, "DATA_ONLY: se excito HS_CLK");
+    if (`TB_PHY.ISO === 1'b0 && CLK_LP !== {2{expected_clk_idle}})
+      $fatal(1, "DATA_ONLY: LP_CLK debe ser 11 en init y 00 durante video");
+  end
+`endif
+  realtime last_data_change0, last_data_change1;
+  always @(D0_HS) last_data_change0 = $realtime;
+  always @(D1_HS) last_data_change1 = $realtime;
 
   always @(negedge CLK_BYTE) if (VID_RD) total_reads <= total_reads + 1;
 
@@ -131,11 +161,34 @@
   endtask
 
   task automatic sample_bit(output reg [1:0] bits);
+    realtime sample_edge, change0, change1;
+`ifdef DATA_ONLY
+    // Si los drivers se retiran, permitir que el comprobador vea Z sin
+    // esperar un pulso de instrumento que ya no debe existir.
+    wait (D0_HS === PAD_Z || instrument_tick !== instrument_last);
+    instrument_last = instrument_tick;
+`else
     @(CLK_HS_PAD[1]);
+`endif
+    sample_edge = $realtime;
     #(SETTLE);
+`ifndef DATA_ONLY
     if (CLK_HS_PAD === PAD_Z)
       $fatal(1, "Se retiró CLK antes de terminar los datos");
+`endif
     bits = {D1_HS[1], D0_HS[1]};
+    if (eye_active && $test$plusargs("check_eye")) begin
+      change0 = last_data_change0;
+      change1 = last_data_change1;
+      // Ventana de diagnostico de 0,5 ns a cada lado. No es el requisito
+      // certificado del panel: evita aceptar datos que cambian con CLK.
+      if (sample_edge - change0 < 0.5 || sample_edge - change1 < 0.5)
+        $fatal(1, "Sin margen antes de CLK: D0=%0.3f ns D1=%0.3f ns",
+               sample_edge - change0, sample_edge - change1);
+      #(0.5 - SETTLE);
+      if (last_data_change0 != change0 || last_data_change1 != change1)
+        $fatal(1, "Transicion dentro de 0,5 ns despues de CLK");
+    end
   endtask
 
   task automatic decode_words(input integer words);

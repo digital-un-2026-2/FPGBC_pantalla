@@ -34,6 +34,14 @@ def route_pips(net):
     return net["attributes"]["ROUTING"].split(";")[1::3]
 
 
+def verify_isolated_clock_pad(pad, high):
+    require(pad["type"] == "IOBUF"
+            and pad["connections"].get("OEN") == high
+            and pad["parameters"].get("NET_OEN") == "VCC"
+            and "DIFF_TYPE" not in pad["parameters"],
+            "DATA_ONLY: HS_CLK no es IOBUF con OEN=1 fijo")
+
+
 def verify_serial_route(cells, pair, site, fclk, byte, half):
     if pair == "CLK":
         name, pclk, primitive, outmode, sinks = "forwarded.serializer", half, "OSER4", "ODDRX2", ("CLK0",)
@@ -61,36 +69,50 @@ def verify_serial_route(cells, pair, site, fclk, byte, half):
 
 
 def verify_route(top, db, variant):
+    require(variant in {"direct", "delay", "data-only"}, "Variante de PHY desconocida")
+    data_only = variant == "data-only"
     cells, nets = top["cells"], top["netnames"]
     require(top["settings"]["packer.partno"] == DEVICE, "Dispositivo enrutado incorrecto")
     package, device, _ = db.packages[DEVICE]
     pins = db.pinout[device][package]
     pads = {}
 
-    fclk, byte, half = (nets[name] for name in ("CLK_HS", "CLK_BYTE", "forwarded.PCLK_110"))
+    fclk, byte = (nets[name] for name in ("CLK_HS", "CLK_BYTE"))
+    half = None if data_only else nets["forwarded.PCLK_110"]
     pll = cells["clocks.pll"]["connections"]
-    divider = cells["forwarded.divider"]
-    require(pll["CLKOUT"] == fclk["bits"] and pll["CLKOUTD"] == byte["bits"]
-            and divider["type"] == "CLKDIV" and divider["parameters"]["DIV_MODE"] == "2"
-            and divider["connections"]["HCLKIN"] == fclk["bits"]
-            and divider["connections"]["CLKOUT"] == half["bits"],
+    require(pll["CLKOUT"] == fclk["bits"] and pll["CLKOUTD"] == byte["bits"],
             "Fuentes de reloj incorrectas")
+    if data_only:
+        require(not any(c["type"] in {"OSER4", "CLKDIV", "IODELAY"} for c in cells.values()),
+                "DATA_ONLY conserva un generador de CLK externo")
+    else:
+        divider = cells["forwarded.divider"]
+        require(divider["type"] == "CLKDIV" and divider["parameters"]["DIV_MODE"] == "2"
+                and divider["connections"]["HCLKIN"] == fclk["bits"]
+                and divider["connections"]["CLKOUT"] == half["bits"],
+                "Divisor de CLK incorrecto")
 
     for pair, branches in PINOUT.items():
         group = "clk" if pair == "CLK" else "dat"
         for bank, numbers in enumerate(branches):
             branch = ("LP", "HS")[bank]
-            oen = nets[f"pads.oen_{branch.lower()}_{group}"]
+            isolated = data_only and pair == "CLK" and branch == "HS"
+            oen = None if isolated else (
+                nets["ISO"] if data_only and pair == "CLK" and branch == "LP"
+                else nets[f"pads.oen_{branch.lower()}_{group}"])
             for side, number in zip("PN", numbers):
                 port = f"{branch}_{pair}_{side}"
                 bits = top["ports"][port]["bits"]
-                pad, = (cell for cell in cells.values() if cell["connections"].get("O") == bits)
+                pad, = (cell for cell in cells.values()
+                        if cell["type"] in {"TBUF", "IOBUF", "TLVDS_TBUF", "OBUF"}
+                        and cell["connections"].get("IO" if isolated else "O") == bits)
                 pin_name = pins[str(number)][0]
                 bel, row, col, polarity = expected_bel(db, pin_name)
                 params, attrs, conn = pad["parameters"], pad["attributes"], pad["connections"]
                 require(attrs["NEXTPNR_BEL"] == bel and db.pin_bank[pin_name] == bank,
                         f"{port}: pin, BEL o banco incorrecto")
-                require(io_attribute(pad, "IO_TYPE") == ("LVCMOS12", "LVDS25")[bank]
+                standard = "LVCMOS25" if isolated else ("LVCMOS12", "LVDS25")[bank]
+                require(io_attribute(pad, "IO_TYPE") == standard
                         and io_attribute(pad, "PULL_MODE") == "NONE",
                         f"{port}: estándar o pulls incorrectos")
                 key = row, col, f"IOB{polarity}"
@@ -98,6 +120,9 @@ def verify_route(top, db, variant):
                 pads[key] = (port, number, bank)
                 site = bel.split("/")[0]
 
+                if isolated:
+                    verify_isolated_clock_pad(pad, nets["$PACKER_VCC"]["bits"])
+                    continue
                 if branch == "HS":
                     require(params.get("DIFF_TYPE") == "TLVDS_TBUF" and params.get("DIFF") == side
                             and polarity == ("A" if side == "P" else "B"),
@@ -111,7 +136,10 @@ def verify_route(top, db, variant):
                 else:
                     require(pad["type"] == "TBUF" and io_attribute(pad, "DRIVE") == "8"
                             and io_attribute(pad, "SLEW_RATE") == "FAST",
-                            f"{port}: no es el TBUF LP solicitado")
+                             f"{port}: no es el TBUF LP solicitado")
+                    if data_only and pair == "CLK":
+                        require(conn["I"] == nets["DATA_ONLY_LP_CLK"]["bits"],
+                                f"{port}: LP_CLK no viene del registro 11→00")
 
                 oe_wire = db[row, col].bels[f"IOB{polarity}"].portmap["OE"]
                 require(conn["OEN"] == oen["bits"] and params.get("NET_OEN") == "NET"
@@ -120,8 +148,14 @@ def verify_route(top, db, variant):
 
     iso = nets["ISO"]["bits"]
     outputs = set()
-    for name in ("oen_lp_dat", "oen_lp_clk", "oen_hs_dat", "oen_hs_clk"):
-        oen = nets[f"pads.{name}"]["bits"]
+    names = ("oen_lp_dat", "oen_lp_clk", "oen_hs_dat") if data_only else (
+        "oen_lp_dat", "oen_lp_clk", "oen_hs_dat", "oen_hs_clk")
+    for name in names:
+        oen = iso if data_only and name == "oen_lp_clk" else nets[f"pads.{name}"]["bits"]
+        if data_only and name == "oen_lp_clk":
+            require(oen == iso, "DATA_ONLY: LP_CLK no se aísla directamente con ISO")
+            outputs.update(oen)
+            continue
         lut, = (c for c in cells.values() if c["type"].startswith("LUT")
                 and c["connections"].get("F") == oen)
         index, = (int(port[1:]) for port, signal in lut["connections"].items()
@@ -132,13 +166,14 @@ def verify_route(top, db, variant):
                 and not all((table >> i) & 1 for i in entries if not i & (1 << index)),
                 f"{name}: ISO no domina el OEN activo en bajo")
         outputs.update(oen)
-    require(len(outputs) == 4, "Se fusionaron OEN de grupos distintos")
+    require(len(outputs) == len(names), "Se fusionaron OEN de grupos distintos")
 
-    forwarded = cells["forwarded.serializer"]
-    require((forwarded["attributes"].get("IODELAY"),
-             int(forwarded["parameters"].get("C_STATIC_DLY", "0"), 2))
-            == (("OUT", 32) if variant == "delay" else (None, 0)),
-            "Configuración inesperada del IODELAY de CLK")
+    if not data_only:
+        forwarded = cells["forwarded.serializer"]
+        require((forwarded["attributes"].get("IODELAY"),
+                 int(forwarded["parameters"].get("C_STATIC_DLY", "0"), 2))
+                == (("OUT", 32) if variant == "delay" else (None, 0)),
+                "Configuración inesperada del IODELAY de CLK")
     return pads
 
 
@@ -167,7 +202,7 @@ def serialize_checked(result, output):
             "checker_sha256": sha256(Path(__file__).read_bytes()).hexdigest()}
 
 
-def audit_fuses(path, pads, provenance, *, board_pads=None, output=None):
+def audit_fuses(path, pads, provenance, *, board_pads=None, output=None, data_only=False):
     """Comprueba atributos y fusibles seleccionados por el codificador adaptado."""
     require(len(pads) == 12, "Auditoría incompleta: se requieren los doce pads del PHY")
     board_pads = board_pads or {}
@@ -180,7 +215,7 @@ def audit_fuses(path, pads, provenance, *, board_pads=None, output=None):
     observations, bank_choices, bank_io_choices = {}, {}, {}
     get_fuses = pack.get_longval_fuses
     get_bank_fuses, get_bank_io_fuses = pack.get_bank_fuses, pack.get_bank_io_fuses
-    place, adapted_sha256 = mixed_place()
+    place, adapted_sha256 = mixed_place(data_only=data_only)
 
     def observe(db, tile_type, attributes, table):
         bits = get_fuses(db, tile_type, attributes, table)
@@ -237,6 +272,7 @@ def audit_fuses(path, pads, provenance, *, board_pads=None, output=None):
             "Auditoría incompleta: faltan pads, bancos o el mapa anterior a serialización")
 
     report = {"bitstream_written": False, "electrical_validation": "NOT_MEASURED",
+              "phy_variant": "data-only" if data_only else "forwarded-clock",
               "routed_json_sha256": sha256(path.read_bytes()).hexdigest(),
               "adapted_place_sha256": adapted_sha256,
               **provenance, "pads": {}, "banks": {}, "errors": []}
@@ -254,6 +290,11 @@ def audit_fuses(path, pads, provenance, *, board_pads=None, output=None):
             "LVDS_OUT": ("OFF", "ON")[bank],
         }
         expected.update({"DIFFRESISTOR": "OFF"} if bank else {"DRIVE": "8", "SLEWRATE": "FAST"})
+        if data_only and port.startswith("HS_CLK_"):
+            # IOBUF LVCMOS25: apagado estático, NO transmisor LVDS ni GPIO activo.
+            expected = {"IO_TYPE": "LVCMOS25", "BANK_VCCIO": "2.5",
+                        "PULLMODE": "NONE", "OPENDRAIN": "OFF",
+                        "LVDS_OUT": "OFF", "ODMUX_1": "0"}
         present = bool(bits) and fuses_present(result["tilemap"][key[:2]], bits)
         report["pads"][port] = {"pin": number, "attributes": attrs,
                                 "selected_fuse_count": len(bits), "selected_fuses_present": present}

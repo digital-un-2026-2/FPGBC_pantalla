@@ -10,7 +10,11 @@ from gateware.platforms.fpgbc import Platform
 
 
 class FPGBCWhiteTarget(Module):
-    def __init__(self, platform, *, white=False, delay=False):
+    def __init__(self, platform, *, white=False, delay=False, data_only=False, data_timing=False):
+        if data_timing and (not data_only or delay):
+            raise ValueError("DATA_TIMING requiere DATA_ONLY y no admite --delay")
+        if data_only and delay:
+            raise ValueError("DATA_ONLY no admite retardo de un CLK externo inexistente")
         self.clock_domains.cd_ref = ClockDomain("ref", reset_less=True)
         ref = self.cd_ref.clk
         reset_n = Signal(name="button_rst_n")
@@ -46,7 +50,8 @@ class FPGBCWhiteTarget(Module):
         hs_byte0, hs_byte1 = Signal(8, name="hs_byte0"), Signal(8, name="hs_byte1")
         byte_domain = dict(i_CLK_BYTE=byte, i_RST_BYTE=rst_byte)
         pads = {
-            f"o_{mode}_{lane}_{side}": platform.request(f"{mode}_{lane}_{side}")
+            f"{'io' if data_only and mode == 'HS' and lane == 'CLK' else 'o'}_{mode}_{lane}_{side}":
+                platform.request(f"{mode}_{lane}_{side}")
             for mode in ("LP", "HS") for lane in ("D0", "D1", "CLK") for side in "PN"
         }
 
@@ -66,8 +71,10 @@ class FPGBCWhiteTarget(Module):
             Instance("video_source", name="video", p_WHITE=Instance.PreformattedParam("1'b1" if white else "1'b0"),
                      **byte_domain, i_INIT_DONE=init_done, i_VID_RD=vid_rd,
                      o_VID_REQ=vid_req, o_VID_LINE_RDY=vid_line_rdy, o_VID_WORD=vid_word),
-            Instance("mipi_tx", name="tx", p_LP_DIV=6, p_T_CLK_START=27, p_T_LPX=4,
-                      p_T_PREP=3, p_T_ZERO=7, p_T_TRAIL=4, p_C_LINE=1168,
+            Instance("mipi_tx", name="tx", p_LP_DIV=6,
+                       p_T_CLK_START=0 if data_timing else 27, p_T_LPX=5 if data_timing else 4,
+                       p_T_PREP=3, p_T_ZERO=7, p_T_TRAIL=4, p_C_LINE=1166 if data_timing else 1168,
+                       p_DATA_TIMING=Instance.PreformattedParam("1'b1" if data_timing else "1'b0"),
                       p_FRAME_MODE=Instance.PreformattedParam("1'b1"), **byte_domain,
                      i_INIT_REQ=init_req, o_INIT_READY=init_ready, o_INIT_DONE_TX=init_done_tx,
                      i_INIT_BYTE=init_byte, i_INIT_LAST=init_last, o_INIT_NEXT=init_next,
@@ -75,6 +82,8 @@ class FPGBCWhiteTarget(Module):
                      i_READY=ready, i_LOCK=lock, o_HS_REQ=hs_req, o_CLK_REQ=clk_req,
                      o_LP_P=lp_p, o_LP_N=lp_n, o_HS_BYTE0=hs_byte0, o_HS_BYTE1=hs_byte1),
             Instance("phy", name="link", p_USE_IODELAY=Instance.PreformattedParam("1'b1" if delay else "1'b0"),
+                       p_DATA_ONLY=Instance.PreformattedParam("1'b1" if data_only else "1'b0"),
+                       p_DATA_TIMING=Instance.PreformattedParam("1'b1" if data_timing else "1'b0"),
                      p_STATIC_DELAY_TAPS=32, i_CLK_REF=ref, i_RST_BYTE=rst_byte, i_RESET=reset_pll,
                      i_HS_REQ=hs_req, i_CLK_REQ=clk_req, i_LP_P=lp_p, i_LP_N=lp_n,
                      i_HS_BYTE0=hs_byte0, i_HS_BYTE1=hs_byte1, o_CLK_BYTE=byte, o_LOCK_RAW=lock_raw,
@@ -89,9 +98,17 @@ def main():
     pattern.add_argument("--bars", action="store_true", help="Barras fijas (predeterminado)")
     pattern.add_argument("--white", action="store_true", help="Blanco fijo, mismo encuadre")
     parser.add_argument("--delay", action="store_true", help="Ensayar el IODELAY de 32 taps")
+    parser.add_argument("--data-only", action="store_true",
+                         help="Experimental: HS_CLK aislado, LP_CLK=11 en init y 00 en video")
+    parser.add_argument("--data-timing", action="store_true",
+                        help="Perfil temporal experimental de 1166 ciclos, requiere --data-only")
     args = parser.parse_args()
+    if args.data_only and args.delay:
+        parser.error("--data-only y --delay son incompatibles")
+    if args.data_timing and not args.data_only:
+        parser.error("--data-timing requiere --data-only")
 
-    platform = Platform(mixed_phy=True)
+    platform = Platform(mixed_phy=True, data_only=args.data_only)
     # LiteX exports a build script too. Disable its packaging step for this target.
     platform.toolchain.packer_cmd = "false"
     platform.toolchain._synth_opts += " -nobram"
@@ -102,7 +119,8 @@ def main():
             platform.add_source(source)
     platform.add_source(ROOT / "motor_lpdt/src/reg_0.v")
     platform.add_source(ROOT / "gateware/cores/fpgbc_white_control.v")
-    platform.build(FPGBCWhiteTarget(platform, white=args.white, delay=args.delay),
+    platform.build(FPGBCWhiteTarget(platform, white=args.white, delay=args.delay,
+                                   data_only=args.data_only, data_timing=args.data_timing),
                    build_dir=str(args.output_dir), build_name="fpgbc_white",
                    run=False, timingstrict=True)
 

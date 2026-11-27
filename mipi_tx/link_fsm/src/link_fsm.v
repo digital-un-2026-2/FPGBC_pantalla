@@ -7,7 +7,8 @@ module link_fsm #(
     parameter integer T_TRAIL = 1,
     parameter integer C_LINE = 1091,
     parameter integer T_CLK_START = 0,
-    parameter FRAME_MODE = 1'b0
+    parameter FRAME_MODE = 1'b0,
+    parameter DATA_TIMING = 1'b0
 ) (
     input CLK_BYTE,
     input RST_BYTE,  // Síncrono activo en 1: cubrir un ↑ y el ↓ siguiente.
@@ -37,13 +38,16 @@ module link_fsm #(
                    DATA0 = 4'd8, DATA = 4'd9, EOT = 4'd10, LP11 = 4'd11, CLK_PRE = 4'd12;
 
   localparam integer N_DRAIN = 1;  // Latencia de cierre del modelo, por validar con el PHY.
-  localparam integer N_EOT = N_DRAIN + T_TRAIL;
+  localparam integer RGB_TRAIL = DATA_TIMING ? 28 : T_TRAIL;
+  localparam integer N_EOT = N_DRAIN + RGB_TRAIL;
+  localparam integer N_EOT_SYNC = N_DRAIN + T_TRAIL;
   localparam integer SOT_DATA_DRAIN = 1 + 1083 + (FRAME_MODE ? 8 : 0) + N_DRAIN;
   // La suma ancha permite detectar un presupuesto inviable antes de recortar.
   localparam [34:0] C_ACTIVE = {3'b0, T_LPX} + {3'b0, T_PREP} + {3'b0, T_ZERO}
-                            + {3'b0, SOT_DATA_DRAIN} + {3'b0, T_TRAIL} + {3'b0, T_CLK_START};
+                            + {3'b0, SOT_DATA_DRAIN} + {3'b0, RGB_TRAIL} + {3'b0, T_CLK_START};
   localparam integer T_GAP = C_LINE - C_ACTIVE[31:0] - 1;  // Un ciclo para LINE_WAIT.
-  localparam integer T_GAP_SYNC = T_GAP + (FRAME_MODE ? 1089 : 0);
+  localparam integer T_GAP_SYNC = T_GAP + (FRAME_MODE ? 1089 : 0)
+                               + (DATA_TIMING ? RGB_TRAIL - T_TRAIL : 0);
 
   function integer max_ticks(input integer a, b);
     max_ticks = (a > b) ? a : b;
@@ -182,7 +186,7 @@ module link_fsm #(
           LP_FORCE = 2'b00;
           CLK_REQ = 1'b1;
           CNT_EN = 1'b1;
-          N = N_EOT[W-1:0];
+          N = (FRAME_MODE && BURST_KIND != 2'b10) ? N_EOT_SYNC[W-1:0] : N_EOT[W-1:0];
         end
         LP11: begin
           CNT_EN = 1'b1;
@@ -196,6 +200,9 @@ module link_fsm #(
 
 `ifndef SYNTHESIS
   initial begin
+    if (DATA_TIMING && (!FRAME_MODE || T_CLK_START != 0 || T_LPX != 5 ||
+                       T_PREP != 3 || T_ZERO != 7 || T_TRAIL != 4 || C_LINE != 1166))
+      $fatal(1, "DATA_TIMING requiere el perfil aprobado de 1166 ciclos");
     if (T_CLK_START < 0) $fatal(1, "T_CLK_START debe ser >= 0");
     if (T_LPX < 1 || T_PREP < 1 || T_ZERO < 1 || T_TRAIL < 1)
       $fatal(1, "T_LPX, T_PREP, T_ZERO y T_TRAIL deben ser >= 1");

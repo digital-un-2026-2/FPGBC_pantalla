@@ -58,7 +58,11 @@
     join
     $display("PASS TOP: trafico desde pads y PWM a 1 kHz, 50 %%");
 
+`ifdef DATA_ONLY
+    if (1) begin  // Barras también debe probar watchdogs y botón.
+`else
     if (WHITE) begin
+`endif
       active_payload();
       if (BL_EN !== 1'b1 || READY !== 1'b0)
         $fatal(1, "Backlight no sostenido durante la ráfaga previa al corte");

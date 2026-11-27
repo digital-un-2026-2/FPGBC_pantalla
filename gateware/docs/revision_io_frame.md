@@ -84,5 +84,8 @@ parte de su periodo no es un fallo. El corte por reset/ISO es asíncrono.
    retroiluminación**, **ninguna respuesta**; anotar también patrón,
    hash, alimentación, estado inicial y comportamiento al reiniciar.
 
-**Estado actual de la prueba física: no ejecutada.** Ninguna de esas
-tres observaciones ha sido obtenida en esta entrega.
+**Observación posterior del usuario:** el candidato base
+`build/fpgbc_frame_1168/bars/fpgbc_white.fs` enciende backlight pero no
+muestra imagen. No fue una carga realizada por el agente.
+El candidato corregido de [este diagnóstico](diagnostico_video_sin_imagen.md)
+todavía no tiene resultado físico ni autorización separada de carga.

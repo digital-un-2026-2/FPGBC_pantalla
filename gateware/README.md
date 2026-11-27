@@ -3,6 +3,16 @@
 El [target `fpgbc_white`](docs/fpgbc_white.md) integra LP y HS para
 verificar offline líneas RGB888 blancas. El target LP se describe abajo.
 
+Ensayos locales sin CLK periódico externo:
+[DATA_ONLY](docs/ensayo_data_only.md) y su revisión temporal
+[DATA_TIMING](docs/diseno_data_timed.md). Son variantes experimentales:
+las pruebas offline no equivalen a imagen validada en el LCD.
+
+Está disponible el [ensayo separado DATA_ONLY](docs/ensayo_data_only.md):
+barras sin CLK periódico de salida, CLK P/N en `11` durante init y `00`
+durante vídeo, con la rama HS de CLK siempre aislada. Es experimental;
+no implica que el LCD haya recibido vídeo.
+
 ## Integración LP
 
 Esta integración conecta los RTL existentes sin CPU, CSR, UART ni LiteScope:

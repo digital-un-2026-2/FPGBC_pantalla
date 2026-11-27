@@ -44,11 +44,20 @@ endif
 VERIFY = PYTHONPATH=.. $(PYTHON) dphy_pads/tools/verify_route.py
 
 .DELETE_ON_ERROR:
-.PHONY: test sim wave synth route route-direct route-delay audit audit-direct audit-delay
+.PHONY: test test-phase sim wave synth route route-direct route-delay audit audit-direct audit-delay
 .SECONDARY: $(BUILD_DIR)/direct/probe.json $(BUILD_DIR)/delay/probe.json
 
 test: $(TB_EXEC)
 	cd "$(BUILD_DIR)" && $(VVP) "$(notdir $(TB_EXEC))" "+init_hex=$(INIT_HEX)"
+
+test-phase: $(BUILD_DIR)/phase_$(SIM_LIB).out
+	cd "$(BUILD_DIR)" && $(VVP) "$(notdir $<)"
+
+$(BUILD_DIR)/phase_$(SIM_LIB).out: TB/clock_data_phase_TB.v $(RTL) $(PLL_MODEL) $(IO_MODELS) Makefile
+	mkdir -p "$(@D)"
+	$(IVERILOG) -g2012 -Wall -Wno-timescale $(VENDOR_DEFINE) -s clock_data_phase_TB \
+		-o "$@" TB/clock_data_phase_TB.v clock_gen/src/clock_gen.v \
+		clock_ddr/src/clock_ddr.v hs_serializer/src/hs_serializer.v $(PLL_MODEL) $(IO_MODELS)
 
 sim: $(TB_EXEC)
 	cd "$(BUILD_DIR)" && $(VVP) "$(notdir $(TB_EXEC))" -fst "+init_hex=$(INIT_HEX)" +waves

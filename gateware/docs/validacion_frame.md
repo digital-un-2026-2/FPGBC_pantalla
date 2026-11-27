@@ -76,9 +76,12 @@ banco: exigir PWM alto justo al abortar una ráfaga. Se corrigió a
 exigir EN alto; la prueba independiente de PWM mantiene periodo/duty
 de 1 kHz/50 %. No se cambió el circuito de backlight para acomodarla.
 
-**Prueba final con todas las esperas LP completas: en ejecución.**
-El resultado definitivo se registrará aquí al terminar; no confundir
-la reconstrucción abreviada previa con ese cierre.
+**Prueba de la base con todas las esperas LP completas: PASS.**
+Terminó con dos cuadros por patrón, fallos independientes de referencia
+y byte, dos reinicializaciones LP completas y rearme desde periodo 0.
+Después se detectaron dos carencias no cubiertas por ese banco:
+fase de muestreo y LP11 inicial. Ver el
+[diagnóstico local y candidato corregido](diagnostico_video_sin_imagen.md).
 El log definitivo es `build/fpgbc_frame_1168/test_full.log`.
 
 Regresiones ya completadas:
@@ -100,9 +103,14 @@ Regresiones ya completadas:
 
 ## Prueba física
 
-**No ejecutada; hito no cumplido todavía.**
+Actualización posterior del usuario con el archivo
+`build/fpgbc_frame_1168/bars/fpgbc_white.fs`: **backlight encendido,
+sin imagen**. No fue una carga realizada por el agente.
+El ensayo posterior de PWM fijo alto no enciende el backlight; ver
+[el registro local de ambos archivos](prueba_pwm100.md).
+El hito no está cumplido.
+
 Ver [revisión de E/S](revision_io_frame.md): confirmar VCCIO5 y
 polaridades, estado del LCD al empezar LP y condiciones de configuración.
-Solo después corresponde solicitar autorización separada de carga
-SRAM con FT232RL. No hay evidencia física de barras, solo backlight
-ni ausencia de respuesta obtenida en esta entrega.
+El agente no realiza una carga SRAM con FT232RL sin autorización
+separada. El backlight encendido no valida la recepción del protocolo.

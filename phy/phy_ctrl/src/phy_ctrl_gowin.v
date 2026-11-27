@@ -1,6 +1,9 @@
 // Control de los drivers para el perfil candidato de 55 MHz (tabla_flancos.md).
 // El controlador lógico del PR #12 se conserva para su banco de slots.
-module phy_ctrl_gowin (
+module phy_ctrl_gowin #(
+    parameter integer T_INIT = 11000,  // 200 us de LP11 conducido a 55 MHz.
+    parameter DATA_TIMING = 1'b0
+) (
     input CLK_BYTE, RST_BYTE, LOCK_RAW, HS_REQ, CLK_REQ,
     output LOCK, READY, ISO,
     output reg [1:0] LP_DAT_MODE, LP_CLK_MODE, LP_CLK_PN,
@@ -14,20 +17,26 @@ module phy_ctrl_gowin (
   localparam [1:0] ISOLATE = 0, SYMBOL = 1, BIAS = 2;
   localparam [1:0] SER_OFF = 0, SER_ZERO = 1, SER_WORD = 2, SER_TRAIL = 3;
 
-  localparam [4:0] CLK_START_DONE = 25, DATA_LP01 = 27, DATA_REQ = 7,
+  localparam [4:0] CLK_START_DONE = 25, DATA_LP01 = DATA_TIMING ? 1 : 27, DATA_REQ = 7,
                    DATA_ZERO = 7, DATA_TRAIL = 4, OSER8_LATENCY = 3,
                    CLK_POST = 11, CLK_ZERO_AFTER_STOP = 7, LP11_GUARD = 8;
 
   reg [3:0] CLK_STATE, DAT_STATE, CLK_LAST, DAT_LAST;
   reg [4:0] CLK_AGE, DAT_AGE;
   reg HS_Q, CLK_Q, PROTOCOL_FAULT;
+  reg DAT_LONG;
+  wire [4:0] TRAIL_TICKS = (DATA_TIMING && DAT_LONG) ? 5'd28 : DATA_TRAIL;
+  wire [4:0] RELEASE_LAST = DATA_TIMING ? (DAT_LONG ? 5'd16 : 5'd7) : 5'd3;
+  localparam integer INIT_W = (T_INIT > 1) ? $clog2(T_INIT + 1) : 1;
+  reg [INIT_W-1:0] INIT_AGE;
+  wire INIT_READY = INIT_AGE == T_INIT;
   wire [4:0] CLK_TICK = (CLK_STATE == CLK_LAST) ? CLK_AGE + 1'b1 : 5'd1;
   wire [4:0] DAT_TICK = (DAT_STATE == DAT_LAST) ? DAT_AGE + 1'b1 : 5'd1;
   wire SAFE = CLK_STATE == C_SAFE && DAT_STATE == D_SAFE;
   wire RUN, ISO_GUARD;
   wire RST_CTRL = RST_BYTE || !RUN || PROTOCOL_FAULT;
   wire ADMIT_HS = DAT_STATE == D_PREP && DAT_AGE == DATA_REQ &&
-                  CLK_STATE == C_RUN && CLK_Q;
+                  (DATA_TIMING ? CLK_STATE == C_LP : CLK_STATE == C_RUN) && CLK_Q;
 
   phy_ctrl_guard guard (
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE), .LOCK_RAW(LOCK_RAW),
@@ -35,7 +44,7 @@ module phy_ctrl_gowin (
   );
 
   assign ISO = ISO_GUARD || PROTOCOL_FAULT;
-  assign READY = !ISO && !CLK_Q && !HS_Q && DAT_STATE == D_LP &&
+  assign READY = !ISO && INIT_READY && !CLK_Q && !HS_Q && DAT_STATE == D_LP &&
                  LP_CLK_MODE == SYMBOL && LP_DAT_MODE == SYMBOL &&
                  (CLK_STATE == C_LP || (CLK_STATE == C_RELEASE && CLK_AGE == LP11_GUARD));
 
@@ -53,7 +62,7 @@ module phy_ctrl_gowin (
     end else begin
       case (CLK_STATE)
         C_SAFE: if (!CLK_Q && !HS_Q) CLK_STATE <= C_LP;
-        C_LP: if (CLK_Q && !HS_Q) CLK_STATE <= C_ENTRY;
+        C_LP: if (!DATA_TIMING && CLK_Q && !HS_Q) CLK_STATE <= C_ENTRY;
         C_ENTRY: if (CLK_AGE == CLK_START_DONE) CLK_STATE <= C_RUN;
         // La reserva física no se libera por la caída de CLK_REQ en EOT.
         C_RUN: if (DAT_STATE == D_RELEASE && DAT_AGE == 1) CLK_STATE <= C_POST;
@@ -71,8 +80,8 @@ module phy_ctrl_gowin (
         D_ZERO: if (DAT_AGE == DATA_ZERO) DAT_STATE <= D_WORD;
         // HS_Q se actualiza en el ↓ que aún carga el CRC de PHY_IF.
         D_WORD: if (!HS_Q) DAT_STATE <= D_TRAIL;
-        D_TRAIL: if (DAT_AGE == DATA_TRAIL + OSER8_LATENCY) DAT_STATE <= D_RELEASE;
-        D_RELEASE: if (DAT_AGE == 3) DAT_STATE <= D_LP;
+        D_TRAIL: if (DAT_AGE == TRAIL_TICKS + OSER8_LATENCY) DAT_STATE <= D_RELEASE;
+        D_RELEASE: if (DAT_AGE == RELEASE_LAST) DAT_STATE <= D_LP;
         default: DAT_STATE <= D_SAFE;
       endcase
     end
@@ -83,20 +92,41 @@ module phy_ctrl_gowin (
     else          {HS_Q, CLK_Q} <= {HS_REQ, CLK_REQ};
 
     if (RST_CTRL) begin
+      INIT_AGE <= 0;
+      DAT_LONG <= 0;
       CLK_LAST <= C_SAFE;
       DAT_LAST <= D_SAFE;
       {CLK_AGE, DAT_AGE} <= 0;
       {LP_DAT_MODE, LP_CLK_MODE, HS_EN, CLK_EN, CLK_TOGGLE} <= 0;
       LP_CLK_PN <= 2'b11;
     end else begin
+      // El tiempo con ISO=1 no inicializa el receptor. Contar solo desde
+      // los modos que conducen LP11. MIPI_TX no puede abandonar reposo
+      // antes de READY. Una vez cumplido, retener hasta reset comun.
+      if (!INIT_READY) begin
+        if (CLK_STATE == C_LP && DAT_STATE == D_LP &&
+            LP_CLK_MODE == SYMBOL && LP_DAT_MODE == SYMBOL)
+          INIT_AGE <= INIT_AGE + 1'b1;
+        else INIT_AGE <= 0;
+      end
       CLK_LAST <= CLK_STATE;
       DAT_LAST <= DAT_STATE;
+      // Solo el perfil nuevo clasifica la duración. No se cuentan bytes
+      // ni se adivina el fin de paquete: HS_Q sigue cerrando WORD.
+      if (DAT_STATE == D_SAFE || DAT_STATE == D_LP) DAT_LONG <= 0;
+      else if (DATA_TIMING && DAT_STATE == D_WORD && DAT_LAST == D_WORD && DAT_AGE == 30)
+        DAT_LONG <= 1;
       case (CLK_STATE)
         C_ENTRY, C_POST, C_PARK, C_RELEASE: CLK_AGE <= CLK_TICK;
         default: CLK_AGE <= 0;
       endcase
       case (DAT_STATE)
         D_ENTRY, D_PREP, D_ZERO, D_TRAIL, D_RELEASE: DAT_AGE <= DAT_TICK;
+        D_WORD: begin
+          if (!DATA_TIMING) DAT_AGE <= 0;
+          else if (DAT_STATE != DAT_LAST) DAT_AGE <= 1;
+          else if (DAT_AGE != 31) DAT_AGE <= DAT_TICK;
+        end
         default: DAT_AGE <= 0;
       endcase
 
@@ -135,8 +165,8 @@ module phy_ctrl_gowin (
         D_RELEASE: case (DAT_TICK)
           1: HS_EN <= 0;
           2: LP_DAT_MODE <= ISOLATE;
-          3: LP_DAT_MODE <= SYMBOL;
-          default: ;
+          3: LP_DAT_MODE <= DATA_TIMING ? BIAS : SYMBOL;
+          default: if (DATA_TIMING && DAT_TICK == RELEASE_LAST) LP_DAT_MODE <= SYMBOL;
         endcase
         default: ;
       endcase
@@ -154,4 +184,8 @@ module phy_ctrl_gowin (
       endcase
     end
   end
+
+`ifndef SYNTHESIS
+  initial if (T_INIT < 1) $fatal(1, "T_INIT debe ser al menos un ciclo de byte");
+`endif
 endmodule

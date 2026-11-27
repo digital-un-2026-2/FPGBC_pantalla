@@ -1,10 +1,13 @@
-module dphy_pads (
+module dphy_pads #(
+    parameter DATA_ONLY = 1'b0
+) (
     input [2:0] LP_P, LP_N,
     input HS_D0, HS_D1, HS_CLK,
     input [1:0] LP_DAT_MODE, LP_CLK_MODE,
     input HS_EN, CLK_EN, ISO,
     output LP_D0_P, LP_D0_N, LP_D1_P, LP_D1_N, LP_CLK_P, LP_CLK_N,
-    output HS_D0_P, HS_D0_N, HS_D1_P, HS_D1_N, HS_CLK_P, HS_CLK_N
+    output HS_D0_P, HS_D0_N, HS_D1_P, HS_D1_N,
+    inout HS_CLK_P, HS_CLK_N
 );
   localparam [1:0] LP_DRIVE = 2'b01, LP_BIAS = 2'b10;
 
@@ -29,5 +32,14 @@ module dphy_pads (
 
   TLVDS_TBUF hs_d0 (.I(HS_D0), .OEN(oen_hs_dat), .O(HS_D0_P), .OB(HS_D0_N));
   TLVDS_TBUF hs_d1 (.I(HS_D1), .OEN(oen_hs_dat), .O(HS_D1_P), .OB(HS_D1_N));
-  TLVDS_TBUF hs_clk (.I(HS_CLK), .OEN(oen_hs_clk), .O(HS_CLK_P), .OB(HS_CLK_N));
+  generate
+    if (DATA_ONLY) begin : isolated_clock
+      // GPIO de banco 1 permanentemente en Z, como el target LP aislado.
+      // No depender de la codificación de un OEN constante en un TLVDS.
+      IOBUF p (.I(1'b0), .OEN(1'b1), .O(), .IO(HS_CLK_P));
+      IOBUF n (.I(1'b0), .OEN(1'b1), .O(), .IO(HS_CLK_N));
+    end else begin : differential_clock
+      TLVDS_TBUF hs_clk (.I(HS_CLK), .OEN(oen_hs_clk), .O(HS_CLK_P), .OB(HS_CLK_N));
+    end
+  endgenerate
 endmodule

@@ -51,14 +51,15 @@ _io = [
 ]
 
 
-def _mixed_dsi_resources():
+def _mixed_dsi_resources(*, data_only=False):
     for mode, pins, standard, extras in (
         ("LP", _dsi_lp_pins, "LVCMOS12", (Misc("DRIVE=8"), Misc("SLEW_RATE=FAST"))),
         ("HS", _dsi_hs_pins, "LVDS25", ()),
     ):
         for side, numbers in pins.items():
             for lane, pin in zip(("D0", "D1", "CLK"), numbers.split()):
-                yield (f"{mode}_{lane}_{side.upper()}", 0, Pins(pin), IOStandard(standard),
+                selected = "LVCMOS25" if data_only and mode == "HS" and lane == "CLK" else standard
+                yield (f"{mode}_{lane}_{side.upper()}", 0, Pins(pin), IOStandard(selected),
                        Misc("PULL_MODE=NONE"), *extras)
 
 
@@ -66,7 +67,9 @@ class Platform(GowinPlatform):
     default_clk_name = "clk40"
     default_clk_period = 1e9 / 40e6  # Periodo de 25ns / 40MHz
 
-    def __init__(self, toolchain="apicula", *, mixed_phy=False):
+    def __init__(self, toolchain="apicula", *, mixed_phy=False, data_only=False):
+        if data_only and not mixed_phy:
+            raise ValueError("DATA_ONLY solo esta definido para el PHY mixto")
         # The button is on BANK1; match the LP/HS probe for the mixed variant.
         reset_standard = "LVCMOS25" if mixed_phy else "LVCMOS33"
         io = [*_io, ("global_rst_n", 0, Pins("120"), IOStandard(reset_standard), Misc("PULL_MODE=UP"))]
@@ -78,7 +81,7 @@ class Platform(GowinPlatform):
             devicename="GW2AR-18C",
         )
         if mixed_phy:
-            self.add_extension(list(_mixed_dsi_resources()))
+            self.add_extension(list(_mixed_dsi_resources(data_only=data_only)))
         if toolchain == "apicula":
             # synth_gowin usa gw1n por defecto; necesitamos las celdas GW2A.
             self.toolchain._synth_opts += " -family gw2a"

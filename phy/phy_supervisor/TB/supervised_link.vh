@@ -66,7 +66,11 @@
     decode_words(3 + ABORT_READS);
 `endif
     if (total_reads - reads_before < ABORT_READS || !LOCK_RAW || !VID_RD ||
-        D0_HS === PAD_Z || D1_HS === PAD_Z || CLK_HS_PAD === PAD_Z)
+        D0_HS === PAD_Z || D1_HS === PAD_Z
+`ifndef DATA_ONLY
+        || CLK_HS_PAD === PAD_Z
+`endif
+        )
       $fatal(1, "Se requiere tráfico HS real en curso antes del fallo de prueba");
   endtask
 

@@ -7,7 +7,8 @@ module mipi_tx #(
     parameter integer T_TRAIL = 1,
     parameter integer C_LINE = 1091,
     parameter integer T_CLK_START = 0,
-    parameter FRAME_MODE = 1'b0
+    parameter FRAME_MODE = 1'b0,
+    parameter DATA_TIMING = 1'b0
 ) (
     input CLK_BYTE,
     input RST_BYTE,  // Síncrono activo en 1: cubrir un ↑ y el ↓ siguiente.
@@ -40,7 +41,8 @@ module mipi_tx #(
 
   link_fsm #(
       .T_LPX(T_LPX), .T_PREP(T_PREP), .T_ZERO(T_ZERO), .T_TRAIL(T_TRAIL),
-      .C_LINE(C_LINE), .T_CLK_START(T_CLK_START), .FRAME_MODE(FRAME_MODE)
+      .C_LINE(C_LINE), .T_CLK_START(T_CLK_START), .FRAME_MODE(FRAME_MODE),
+      .DATA_TIMING(DATA_TIMING)
   ) link (
       .CLK_BYTE(CLK_BYTE), .RST_BYTE(RST_BYTE),
       .INIT_REQ(INIT_REQ), .INIT_READY(INIT_READY), .INIT_DONE_TX(INIT_DONE_TX),

@@ -6,6 +6,7 @@ module dphy_pads_TB;
   reg [1:0] LP_DAT_MODE, LP_CLK_MODE;
   reg HS_EN, CLK_EN, ISO;
   wire [2:0] lp_p, lp_n, hs_p, hs_n;
+  wire [2:0] experimental_lp_p, experimental_lp_n, experimental_hs_p, experimental_hs_n;
 
   dphy_pads dut (
       .LP_P(LP_P), .LP_N(LP_N), .HS_D0(serial[0]), .HS_D1(serial[1]), .HS_CLK(serial[2]),
@@ -15,6 +16,20 @@ module dphy_pads_TB;
       .LP_CLK_P(lp_p[2]), .LP_CLK_N(lp_n[2]),
       .HS_D0_P(hs_p[0]), .HS_D0_N(hs_n[0]), .HS_D1_P(hs_p[1]), .HS_D1_N(hs_n[1]),
       .HS_CLK_P(hs_p[2]), .HS_CLK_N(hs_n[2])
+  );
+
+  // Mismo mux estático que PHY(DATA_ONLY=1); entradas de datos idénticas.
+  dphy_pads #(.DATA_ONLY(1'b1)) experimental (
+      .LP_P(LP_P), .LP_N({LP_P[2], LP_N[1:0]}),
+      .HS_D0(serial[0]), .HS_D1(serial[1]), .HS_CLK(serial[2]),
+      .LP_DAT_MODE(LP_DAT_MODE), .LP_CLK_MODE(DRIVE),
+      .HS_EN(HS_EN), .CLK_EN(1'b0), .ISO(ISO),
+      .LP_D0_P(experimental_lp_p[0]), .LP_D0_N(experimental_lp_n[0]),
+      .LP_D1_P(experimental_lp_p[1]), .LP_D1_N(experimental_lp_n[1]),
+      .LP_CLK_P(experimental_lp_p[2]), .LP_CLK_N(experimental_lp_n[2]),
+      .HS_D0_P(experimental_hs_p[0]), .HS_D0_N(experimental_hs_n[0]),
+      .HS_D1_P(experimental_hs_p[1]), .HS_D1_N(experimental_hs_n[1]),
+      .HS_CLK_P(experimental_hs_p[2]), .HS_CLK_N(experimental_hs_n[2])
   );
 
   task check_pair;
@@ -49,6 +64,13 @@ module dphy_pads_TB;
       check_pair(0, LP_DAT_MODE, HS_EN);
       check_pair(1, LP_DAT_MODE, HS_EN);
       check_pair(2, LP_CLK_MODE, CLK_EN);
+      if ({experimental_hs_p[2], experimental_hs_n[2]} !== 2'bzz ||
+          {experimental_lp_p[2], experimental_lp_n[2]} !== (ISO ? 2'bzz : {2{LP_P[2]}}))
+        $fatal(1, "DATA_ONLY: CLK no esta en Z/dato comun segun ISO");
+      if ({experimental_lp_p[1:0], experimental_lp_n[1:0],
+           experimental_hs_p[1:0], experimental_hs_n[1:0]} !==
+          {lp_p[1:0], lp_n[1:0], hs_p[1:0], hs_n[1:0]})
+        $fatal(1, "DATA_ONLY altera los pads de datos");
     end
   endtask
 
@@ -88,6 +110,7 @@ module dphy_pads_TB;
     ISO = 1;
     check_pads;
     $display("PASS DPHY_PADS: P/N, bias, OE independientes e ISO sin flancos");
+    $display("PASS DATA_ONLY: HS_CLK siempre Z, LP_CLK=11/00 segun dato e ISO, datos identicos");
     $finish;
   end
 endmodule

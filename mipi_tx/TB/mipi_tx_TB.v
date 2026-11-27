@@ -26,14 +26,28 @@ module mipi_tx_TB #(
 `ifdef PHY_GOWIN
   localparam integer P = INIT_HZ / 1000;
   localparam realtime BYTE_PERIOD = 1000.0 / 55.0;
-  localparam integer LP_DIV = 6, T_LPX = 4, T_PREP = 3, T_ZERO = 7,
+  localparam integer LP_DIV = 6,
+`ifdef DATA_TIMING
+                     T_LPX = 5,
+`else
+                     T_LPX = 4,
+`endif
+                     T_PREP = 3, T_ZERO = 7,
                      T_TRAIL = 4,
 `ifdef FPGBC_FRAME
+`ifdef DATA_TIMING
+                     C_LINE = 1166,
+`else
                      C_LINE = 1168,
+`endif
 `else
                      C_LINE = 1166,
 `endif
+`ifdef DATA_TIMING
+                     T_CLK_START = 0;
+`else
                      T_CLK_START = 27;
+`endif
   reg CLK_REF = 0;
   wire CLK_BYTE;
 `ifdef PHY_SUPERVISED
